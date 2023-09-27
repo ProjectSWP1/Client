@@ -1,0 +1,17 @@
+.slide_items{
+    width: 1440px;
+    height: 650px;
+}
+
+.slide_items img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 990px) {
+    .slide_items {
+        width: 100%;
+        height: 500px;
+    }
+}

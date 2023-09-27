@@ -1,0 +1,56 @@
+.follow-us{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.title-subscribe{
+    font-size: 1.4cm;
+    font-weight: bold;
+    text-align: center;
+    color: rgb(83, 105, 49)
+}
+.sign-up{
+    background-color: rgb(217, 242, 181);
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+.enter-email{
+    width: 90%;
+    padding: 20px;
+    border-radius: 20px;
+    font-size: 0.6cm;
+}
+.submit-email{
+    margin-left: 5px;
+    padding: 20px 15px;
+    border-radius: 20px;
+    font-size: 0.6cm;
+    background-color: darkgreen;
+    color: white;
+    font-weight: bold;
+}
+
+.follow-title{
+    width: 100%;
+    text-align: center;
+    padding-top: 70px;
+    font-size: 1.6cm;
+    font-weight: bold;
+    color: rgb(83, 105, 49);
+}
+.btn-follow-us{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+.link-follow{
+    padding: 0 30px 70px;
+}
+.link-follow img{
+    width: 50px;
+    height: 50px;
+}

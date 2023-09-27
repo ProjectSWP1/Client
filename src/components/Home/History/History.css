@@ -1,0 +1,125 @@
+.history{
+    background-color: rgb(217, 242, 181);
+    display: flex;
+    border-bottom: 100px solid white;
+    border-top: 100px solid white;
+}
+
+.left-side{
+    padding-top: 150px;
+    width: 50%;  
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+}
+.left-side img {
+    width: 500px;
+    height: 300px;
+    box-shadow: 0.5rem 1rem 3rem 0 black;
+}
+.left-side p {
+    font-size: 0.5cm;
+    width: 500px;
+    font-weight: 500;
+}
+
+.right-side{
+    width: 50%;
+    padding-bottom: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: center;
+}
+.right-side img{
+    width: 550px;
+    height: 300px;
+    box-shadow:0.5rem 1rem 3rem 0 black;
+}
+.right-side p{
+    text-align: start;
+    width: 550px;
+    font-size: 0.5cm;
+    font-weight: 500;
+}
+.right-side h1{
+    width: 550px;
+    text-align: center;
+    font-size: 1.5cm;
+    font-weight: bold;
+    color: rgb(83, 105, 49);
+    text-shadow: rgb(97, 88, 88) 0.05em 0.05em 0.2em;
+    word-spacing: 5px;
+    padding-top: 20px;
+}
+
+@media (max-width: 1100px){
+    .history{
+        display: flex;
+        flex-wrap: wrap-reverse;
+    }
+
+    .right-side {
+        width: 100%;
+        padding-bottom: 0;
+    }
+    .right-side h1{
+        padding: 10px 0;
+        width: 100%;
+    }
+    .right-side p{
+        padding-bottom: 5px;
+    }
+
+    .left-side{
+        width: 100%;
+        padding: 50px 0;
+        display: flex;
+        flex-wrap: wrap-reverse;
+    }
+    .left-side img{
+        width: 550px
+    }
+    .left-side p{
+        width: 550px;
+        padding-bottom: 5px;
+    }
+}
+
+@media (max-width: 770px){
+    .right-side img{
+        width: 450px;
+        height: 250px;
+    }
+    .right-side p {
+        width: 450px
+    }
+    .left-side img{
+        width: 450px;
+        height: 250px;
+    }
+    .left-side p {
+        width: 450px
+    }
+}
+
+@media (max-width: 500px) {
+    .right-side img{
+        width: 350px;
+        height: 200px;
+    }
+    .right-side h1{
+        font-size: 1.3cm;
+    }
+    .right-side p {
+        width: 350px
+    }
+    .left-side img{
+        width: 350px;
+        height: 200px;
+    }
+    .left-side p {
+        width: 350px
+    }
+}

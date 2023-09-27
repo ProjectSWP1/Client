@@ -1,0 +1,79 @@
+
+.bottom{
+    background-color: black;
+    text-align: center;
+    color: white;
+}
+.top-btn{
+    padding: 15px;
+    display: flex;
+    justify-content: space-around
+}
+.menu-btn {
+    text-decoration: none;
+    color: white;
+    font-size: 2rem;
+    font-weight: 700;
+}
+.contact-us {
+    color:rgb(192, 181, 181);
+    font-size: 1.2cm;
+    font-weight: bold;
+}
+.btn-contact-us{
+    display: flex;
+    justify-content: space-evenly;
+    padding: 10px 250px 25px;
+}
+.btn-contact-us img {
+    width: 50px;
+    height: 50px;
+}
+.zookay-park{
+    font-size: 0.5cm;
+    font-weight: 700;
+}
+.address{
+    font-weight: 400;
+    font-size: 0.4cm;
+}
+.phone-number{
+    font-size: 0.42cm;
+    font-weight: 700;
+    color: rgb(192, 86, 86);
+}
+.copyright{
+    text-align: left;
+    padding: 0 0 5px 10px;
+    color: rgb(147, 141, 141);
+    font-size: 0.35cm;
+}
+
+.menu-btn:hover {
+    text-shadow: 0 0 0.2em yellow;
+}
+
+@media (max-width: 990px){
+    .btn-contact-us{
+        padding: 10px 150px 25px;
+    }
+}
+
+@media (max-width: 768px){
+    .menu-btn{
+        font-size: 1.65rem;
+    }
+    .contact-us{
+        font-size: 1cm;
+    }
+    .btn-contact-us{
+        padding: 0 0 20px;
+    }
+    .btn-contact-us img{
+        width: 45px;
+        height: 45px;
+    }
+    .copyright{
+        font-size: 0.31cm;
+    }
+}
