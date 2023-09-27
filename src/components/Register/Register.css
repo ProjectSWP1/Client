@@ -1,0 +1,75 @@
+/* .container-register {
+    background-color: #81C784;
+    height: 100vh;
+} */
+
+.register_first-step {
+    position: relative;
+    background-image: url("./../../assets/images/entrance.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50%;
+    height: 100vh;
+}
+
+.form-register{
+    position: absolute;
+    background-color: whitesmoke;
+    width: 40%;
+    height: 70%;
+    right: 55%;
+    bottom: 15%;
+    border-radius: 10px;
+}
+
+.form{
+    border-radius: 5px;
+    width: 100%;
+    padding: 60px 70px;
+    height: auto;
+
+}
+
+.navbar-register{
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+}
+
+.form-body{
+    text-align: left;
+    padding: 20px 10px;
+}
+
+.form-body > *{
+    padding: 5px;
+}
+
+.form__label{
+    width: 40%;
+}
+
+.form_input{
+    width: 60%;
+}
+
+.footer{
+    text-align: center;
+    border-radius: 5px;
+}
+
+.btn-submit-form{
+    border: none;
+    background-color: green;
+    color: white;
+    font-size: medium;
+    font-weight: 700;
+    padding: 8px;
+    width: 100%;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.btn-submit-form:hover{
+    background-color: darkgreen;
+    transition: 0.3s;
+}
