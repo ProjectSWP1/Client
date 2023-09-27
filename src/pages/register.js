@@ -1,6 +1,6 @@
 import React from 'react';
-import SignUp from '../components/Register/SignUp.js';
-import UserForm from '../components/Register/UserForm.js';
+import SignUp from '../components/Register/UserForm.js';
+import UserForm from '../components/Register/SignUp.js';
 
 const Membership = () => {
 	return (
