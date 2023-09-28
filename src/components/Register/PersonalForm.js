@@ -9,40 +9,8 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://localhost:3000">
-        ZooKay
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
-
-const defaultTheme = createTheme({
-    palette: {
-        mode: 'light',
-        primary: {
-          main: '#1b5e20',
-          dark: '#2e7d32',
-          light: '#7dc381',
-        },
-        secondary: {
-          main: '#9a6213',
-        },
-        background: {
-          default: '#e8e8e0',
-          paper: '#e8e8e0',
-        },
-      },
-});
+import { ThemeProvider } from '@mui/material/styles';
+import { Copyright, defaultTheme } from '../Theme/Theme.js';
 
 export default class PersonalForm extends Component {
     continue = e => {

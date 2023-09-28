@@ -50,7 +50,7 @@ export default function Header() {
                             </a>
                         </li>
                         <li className="nav-menu__item">
-                            <a href="#" className="nav-menu__link">
+                            <a href="/login" className="nav-menu__link">
                                 Login
                             </a>
                         </li>

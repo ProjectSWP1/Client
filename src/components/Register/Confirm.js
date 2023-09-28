@@ -5,52 +5,25 @@ import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import { ListItemText } from '@mui/material';
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://localhost:3000">
-        ZooKay
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
-
-const defaultTheme = createTheme({
-    palette: {
-        mode: 'light',
-        primary: {
-          main: '#1b5e20',
-          dark: '#2e7d32',
-          light: '#7dc381',
-        },
-        secondary: {
-          main: '#9a6213',
-        },
-        background: {
-          default: '#e8e8e0',
-          paper: '#e8e8e0',
-        },
-      },
-});
+import { Copyright, defaultTheme } from '../Theme/Theme.js';
 
 export default class Confirm extends Component {
-    continue = e => {
-        e.preventDefault();
+    continue = event => {
+        event.preventDefault();
         this.props.nextStep()
     }
-    back = e => {
-        e.preventDefault();
+    back = event => {
+        event.preventDefault();
         this.props.prevStep()
+    }
+    handleSubmit = event => {
+        // event.preventDefault();
+        const { values: { username} } = this.props;
+        alert(`Register success!! Welcome ${username}`)
     }
     render(){
         const { values: { email, password, phone, username, gender,
@@ -106,7 +79,8 @@ export default class Confirm extends Component {
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
-                            onClick={this.prevStep}
+                            onClick={this.handleSubmit}
+                            
                         >
                             Sign Up
                         </Button>
