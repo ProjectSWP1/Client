@@ -3,16 +3,16 @@ import React, { Component } from 'react'
 import UserForm from './UserForm.js';
 import PersonalForm from './PersonalForm.js';
 import Confirm from './Confirm.js';
+import dayjs from 'dayjs';
 
 export default class SignUp extends Component {
     state = {
         step: 1,
-        username: '',
         email: '',
         password: '',
         phone: '',
-        gender: '',
-        yob: '',
+        gender: 'male',
+        dob: '',
         address: ''
     }
     
@@ -39,9 +39,9 @@ export default class SignUp extends Component {
 
     render() {
         const { step } = this.state
-        const { email, password, phone, username, gender,
-                dob, address } = this.state
-        const values = { email, password, phone, username, gender,
+        const { email, password, phone, gender,
+            dob, address } = this.state
+        const values = { email, password, phone, gender,
             dob, address }
         
         switch(step) {

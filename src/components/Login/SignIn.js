@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -29,12 +29,7 @@ export default function SignIn() {
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
-          sx={{
+        <Grid item xs={false} sm={4} md={7} sx={{
             backgroundImage: 'url(./../../assets/images/entrance.jpg)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
@@ -44,15 +39,7 @@ export default function SignIn() {
           }}
         />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
+          <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center',}}>
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
@@ -92,13 +79,13 @@ export default function SignIn() {
               >
                 Sign In
               </Button>
-              <Button 
-                variant="contained" 
+              <Button
+                variant="contained"
                 href="/"
                 fullWidth
                 sx={{ mt: 3, mb: 2 }}
-                startIcon={<GoogleIcon/>}>
-                  Login with Google
+                startIcon={<GoogleIcon />}>
+                Login with Google
               </Button>
               <Grid container>
                 <Grid item xs>

@@ -3,14 +3,18 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import { Copyright, defaultTheme } from '../Theme/Theme.js';
+import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 export default class PersonalForm extends Component {
     continue = e => {
@@ -21,7 +25,7 @@ export default class PersonalForm extends Component {
         e.preventDefault();
         this.props.prevStep()
     }
-    render(){
+    render() {
         const { values, handleChange } = this.props
         return (
             <ThemeProvider theme={defaultTheme}>
@@ -38,41 +42,39 @@ export default class PersonalForm extends Component {
                         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                             <LockOutlinedIcon />
                         </Avatar>
-                        <Typography component="h1" variant="h5">
-                            Enter Personal Details
-                        </Typography>
+                        <h1 style={{ color: 'darkgreen', textAlign: 'center' }}>Enter Personal Details</h1>
                         <Box component="form" noValidate sx={{ mt: 3 }}>
                             <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                required
-                                fullWidth
-                                id="gender"
-                                label="Gender"
-                                onChange={handleChange('gender')}
-                                defaultValue={values.gender}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                required
-                                fullWidth
-                                id="dob"
-                                label="Date of Birth"
-                                onChange={handleChange('dob')}
-                                defaultValue={values.dob}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                required
-                                fullWidth
-                                label="Address"
-                                id="address"
-                                onChange={handleChange('address')}
-                                defaultValue={values.address}
-                                />
-                            </Grid>
+                                <Grid item xs={12}>
+                                    <FormLabel id="gender">Gender</FormLabel>
+                                    <RadioGroup
+                                        row
+                                        aria-labelledby="gender"
+                                        name="Gender"
+                                        onChange={handleChange('gender')}
+                                        value={values.gender}
+                                    >
+                                        <FormControlLabel value="female" control={<Radio />} label="Female"/>
+                                        <FormControlLabel value="male" control={<Radio />} label="Male" />
+                                    </RadioGroup>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs} >
+                                        <DemoContainer components={['DatePicker']} >
+                                            <DatePicker label="Date of Birth" />
+                                        </DemoContainer>
+                                    </LocalizationProvider>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        label="Address"
+                                        id="address"
+                                        onChange={handleChange('address')}
+                                        defaultValue={values.address}
+                                    />
+                                </Grid>
                                 <Button
                                     fullWidth
                                     variant="contained"

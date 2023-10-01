@@ -1,5 +1,6 @@
 import React from 'react'
 import './Header.css'
+import { Link } from 'react-router-dom';
 
 window.onscroll = function() {scrollFunction()}
 
@@ -40,9 +41,7 @@ export default function Header() {
                             </a>
                         </li>
                         <li className="nav-menu__item">
-                            <a href="/register" className="nav-menu__link">
-                                Membership
-                            </a>
+                            <Link to={"/register"} className="nav-menu__link">Membership</Link>
                         </li>
                         <li className="nav-menu__item">
                             <a href="#" className="nav-menu__link">
@@ -50,9 +49,7 @@ export default function Header() {
                             </a>
                         </li>
                         <li className="nav-menu__item">
-                            <a href="/login" className="nav-menu__link">
-                                Login
-                            </a>
+                            <Link to={"/login"} className="nav-menu__link">Login</Link>
                         </li>
                     </ul>
                 </div>

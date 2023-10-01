@@ -4,14 +4,14 @@
   box-sizing: border-box;
 }
 
-html{
+/* html{
   font-size: 70%;
   font-family: sans-serif;
 }
 
 body{
   font-size: 1.6rem;
-}
+} */
 
 .container-main{
   max-width: 1580px;

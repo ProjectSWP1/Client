@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route }
 import Home from './pages/home.js'
 import Register from './pages/register.js'
 import Login from './pages/login.js'
+import Admin from './components/Admin/Dashboard.js'
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
             <Route exact path='/' element={<Home />} />
             <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login />} />
+            <Route path='/admin' element={<Admin/>}/>
          </Routes>
       </Router>
    );

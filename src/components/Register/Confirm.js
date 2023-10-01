@@ -21,9 +21,10 @@ export default class Confirm extends Component {
         this.props.prevStep()
     }
     handleSubmit = event => {
-        // event.preventDefault();
-        const { values: { username} } = this.props;
-        alert(`Register success!! Welcome ${username}`)
+        event.preventDefault();
+        const { values } = this.props;
+        alert(`Register success!! Welcome ${values.username}`)
+        window.location.href = '/'
     }
     render(){
         const { values: { email, password, phone, username, gender,
@@ -46,8 +47,8 @@ export default class Confirm extends Component {
                         <List>
                             <ListItem>
                                 <ListItemText
-                                    primary="Username"
-                                    secondary={username}
+                                    primary="Email"
+                                    secondary={email}
                                 />
                             </ListItem>
                             <ListItem>
