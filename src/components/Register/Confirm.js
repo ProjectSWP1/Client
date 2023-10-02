@@ -23,8 +23,8 @@ export default class Confirm extends Component {
     handleSubmit = event => {
         event.preventDefault();
         const { values } = this.props;
-        alert(`Register success!! Welcome ${values.username}`)
-        window.location.href = '/'
+        alert(`Register success!! Welcome ${values.email}`)
+        console.log(values);
     }
     render(){
         const { values: { email, password, phone, username, gender,
