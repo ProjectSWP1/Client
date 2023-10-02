@@ -6,6 +6,7 @@ import Home from './pages/home.js'
 import Register from './pages/register.js'
 import Login from './pages/login.js'
 import Admin from './components/Admin/Dashboard.js'
+import ManageAccount from './components/Admin/ManageAccount/ManageAccount';
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
             <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login />} />
             <Route path='/admin' element={<Admin/>}/>
+            <Route path='/admin/manageaccount' element={<ManageAccount/>}/>
          </Routes>
       </Router>
    );
