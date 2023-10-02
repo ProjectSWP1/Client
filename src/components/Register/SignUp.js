@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import UserForm from './UserForm.js';
 import PersonalForm from './PersonalForm.js';
 import Confirm from './Confirm.js';
-import dayjs from 'dayjs';
 
 export default class SignUp extends Component {
     state = {
