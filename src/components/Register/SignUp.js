@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
-// import UserDetails from './UserDetails.js';
 import UserForm from './UserForm.js';
 import PersonalForm from './PersonalForm.js';
 import Confirm from './Confirm.js';
-import dayjs from 'dayjs';
 
 export default class SignUp extends Component {
     state = {
@@ -43,7 +41,7 @@ export default class SignUp extends Component {
             dob, address } = this.state
         const values = { email, password, phone, gender,
             dob, address }
-        
+            
         switch(step) {
             case 1:
                 return (

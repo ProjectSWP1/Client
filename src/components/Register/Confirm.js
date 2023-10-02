@@ -23,8 +23,43 @@ export default class Confirm extends Component {
     handleSubmit = event => {
         event.preventDefault();
         const { values } = this.props;
-        alert(`Register success!! Welcome ${values.username}`)
-        window.location.href = '/'
+        console.log('Values in Confirm component:', values);
+        // Construct the payload with accountDto and memberDto
+    const payload = {
+        accountDto: {
+          email: values.email,
+          password: values.password,
+          phoneNumber: values.phone,
+        },
+        memberDto: {
+          phoneNumber: values.phone,
+          address: values.address,
+          age: 30, 
+          gender: values.gender,
+          name: values.username,
+        },
+      };
+  
+      // Make a POST request to the backend to submit the registration data
+      fetch('http://localhost:8080/user/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Handle the response from the backend, if needed
+          alert(`Register success!! Welcome ${values.email}`);
+          // You can also redirect to a success page or perform other actions here
+        })
+        .catch(error => {
+          // Handle errors, if any
+          console.error('Error submitting registration data:', error);
+          // You can display an error message to the user if needed
+        });
+        //window.location.href = '/'
     }
     render(){
         const { values: { email, password, phone, username, gender,
