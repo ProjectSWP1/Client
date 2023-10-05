@@ -53,13 +53,13 @@ export default class Confirm extends Component {
           // Handle the response from the backend, if needed
           alert(`Register success!! Welcome ${values.email}`);
           // You can also redirect to a success page or perform other actions here
+          window.location.href = '/'
         })
         .catch(error => {
           // Handle errors, if any
           console.error('Error submitting registration data:', error);
           // You can display an error message to the user if needed
         });
-        //window.location.href = '/'
     }
     render(){
         const { values: { email, password, phone, username, gender,
