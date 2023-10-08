@@ -3,6 +3,7 @@ import './Footer.css'
 
 export default function Footer() {
   return (
+    <div className='bottom-container'>
     <div className='bottom'>
         <div className='top-btn'>
             <a href='#' className='menu-btn'>HOME</a>
@@ -22,6 +23,7 @@ export default function Footer() {
             <br/>Thành phố Hồ Chí Minh 700000</p>
         <p className='phone-number'>028 7300 5588</p>
         <p className='copyright'>Copyright © 2023 The ZooKay Park - TP.HCM . All Rights Reserved.</p>
+    </div>
     </div>
   )
 }

@@ -6,15 +6,17 @@ import History from '../components/Home/History/History.js';
 import Slide from '../components/Home/Slide/Slide';
 
 const Home = () => {
-	return (
-		<div className='container-main'>
-            <Header />
-            <Slide />
-            <History />
-            <FollowUs />
+    return (
+        <div>
+            <div className='container-main'>
+                <Header />
+                <Slide />
+                <History />
+                <FollowUs />
+            </div>
             <Footer />
         </div>
-	);
+    );
 };
 
 export default Home;
