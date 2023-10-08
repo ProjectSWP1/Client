@@ -1,8 +1,13 @@
-
+.bottom-container{
+    background-color: black;
+    display: flex;
+    justify-content: center;
+}
 .bottom{
     background-color: black;
     text-align: center;
     color: white;
+    width: 1530px;
 }
 .top-btn{
     padding: 15px;

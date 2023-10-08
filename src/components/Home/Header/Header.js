@@ -1,6 +1,8 @@
 import React from 'react'
 import './Header.css'
 import { Link } from 'react-router-dom';
+import { Avatar } from '@mui/material';
+import { deepOrange } from '@mui/material/colors';
 
 window.onscroll = function() {scrollFunction()}
 
@@ -50,6 +52,9 @@ export default function Header() {
                         </li>
                         <li className="nav-menu__item">
                             <Link to={"/login"} className="nav-menu__link">Login</Link>
+                        </li>
+                        <li>
+                            <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
                         </li>
                     </ul>
                 </div>
