@@ -17,7 +17,8 @@ function App() {
             <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login />} />
             <Route path='/admin' element={<Admin/>}>
-               <Route path=':idClick' element={<Dash/>}/>   
+               <Route exact path='dashboard' element={<Dash/>}/>
+               <Route path='manageaccount' element={<ManageAccount/>}/>
             </Route>
          </Routes>
       </Router>

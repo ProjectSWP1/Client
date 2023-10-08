@@ -133,15 +133,12 @@ export default function Dashboard() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {/* {mainListItems} */}
-            <ListItems parentCallback={handleClick}/>
+            {mainListItems}
             {/* <Divider sx={{ my: 1 }} />
             {secondaryListItems} */}
           </List>
         </Drawer>
-        
         <Outlet/>
-        
       </Box>
     </ThemeProvider>
   );
