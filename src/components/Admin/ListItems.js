@@ -6,46 +6,66 @@ import ListSubheader from '@mui/material/ListSubheader';
 import LineAxisIcon from '@mui/icons-material/LineAxis';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+const MenuItem = React.createContext('Dashboard')
 
-export const mainListItems = (
-  <React.Fragment>
-    <ListItemButton>
-      <ListItemIcon>
-        <LineAxisIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard"/>
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <SupervisedUserCircleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Manage Account" />
-    </ListItemButton>
-  </React.Fragment>
-);
+export default function ListItems() {
+  return (
+    <React.Fragment>
+      <ListItemButton onClick={onTrigger("Dashboard")}>
+        <ListItemIcon>
+          <LineAxisIcon />
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" />
+      </ListItemButton>
+      <ListItemButton onClick={onTrigger("Manage Account")}>
+        <ListItemIcon>
+          <SupervisedUserCircleIcon />
+        </ListItemIcon>
+        <ListItemText primary="Manage Account" />
+      </ListItemButton>
+    </React.Fragment>
+  )
+}
 
-export const secondaryListItems = (
-  <React.Fragment>
-    <ListSubheader component="div" inset>
-      Saved reports
-    </ListSubheader>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Current month" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Last quarter" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Year-end sale" />
-    </ListItemButton>
-  </React.Fragment>
-);
+// export const mainListItems = (
+//   <React.Fragment>
+//     <ListItemButton>
+//       <ListItemIcon>
+//         <LineAxisIcon />
+//       </ListItemIcon>
+//       <ListItemText primary="Dashboard" />
+//     </ListItemButton>
+//     <ListItemButton>
+//       <ListItemIcon>
+//         <SupervisedUserCircleIcon />
+//       </ListItemIcon>
+//       <ListItemText primary="Manage Account" />
+//     </ListItemButton>
+//   </React.Fragment>
+// );
+
+// export const secondaryListItems = (
+//   <React.Fragment>
+//     <ListSubheader component="div" inset>
+//       Saved reports
+//     </ListSubheader>
+//     <ListItemButton>
+//       <ListItemIcon>
+//         <AssignmentIcon />
+//       </ListItemIcon>
+//       <ListItemText primary="Current month" />
+//     </ListItemButton>
+//     <ListItemButton>
+//       <ListItemIcon>
+//         <AssignmentIcon />
+//       </ListItemIcon>
+//       <ListItemText primary="Last quarter" />
+//     </ListItemButton>
+//     <ListItemButton>
+//       <ListItemIcon>
+//         <AssignmentIcon />
+//       </ListItemIcon>
+//       <ListItemText primary="Year-end sale" />
+//     </ListItemButton>
+//   </React.Fragment>
+// );
