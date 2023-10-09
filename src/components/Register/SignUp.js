@@ -10,8 +10,8 @@ export default class SignUp extends Component {
         password: '',
         phone: '',
         gender: 'male',
-        dob: new Date(),
-        address: ''
+        address: '',
+        dob: '',
     }
     
     //proceed to next part
@@ -31,9 +31,9 @@ export default class SignUp extends Component {
     }
 
     //handle fields change
-    handleChange = input => e => {
-        this.setState({[input]: e.target.value})
-    }
+    handleChange = (input) => e => {
+        this.setState({[input]: (input == 'dob') ? `${e.$M + 1}/${e.$D}/${e.$y}` : e.target.value})
+    } 
 
     render() {
         const { step } = this.state
@@ -69,8 +69,6 @@ export default class SignUp extends Component {
                         values = {values}
                     />     
                 )
-            case 4: 
-                return <h1>success</h1>
         }
      }
 }

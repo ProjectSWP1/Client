@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -10,7 +9,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import { ListItemText } from '@mui/material';
 import { Copyright, defaultTheme } from '../Theme/Theme.js';
-
+import { Link, useNavigate } from 'react-router-dom'
 export default class Confirm extends Component {
     continue = event => {
         event.preventDefault();
@@ -20,49 +19,63 @@ export default class Confirm extends Component {
         event.preventDefault();
         this.props.prevStep()
     }
+
     handleSubmit = event => {
         event.preventDefault();
         const { values } = this.props;
         console.log('Values in Confirm component:', values);
         // Construct the payload with accountDto and memberDto
-    const payload = {
-        accountDto: {
-          email: values.email,
-          password: values.password,
-          phoneNumber: values.phone,
-        },
-        memberDto: {
-          phoneNumber: values.phone,
-          address: values.address,
-          age: 30, 
-          gender: values.gender,
-          name: values.username,
-        },
-      };
-  
-      // Make a POST request to the backend to submit the registration data
-      fetch('http://localhost:8080/user/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      })
-        .then(response => response.json())
-        .then(data => {
-          // Handle the response from the backend, if needed
-          alert(`Register success!! Welcome ${values.email}`);
-            
-          // You can also redirect to a success page or perform other actions here
+        const payload = {
+            accountDto: {
+                email: values.email,
+                password: values.password,
+                phoneNumber: values.phone,
+            },
+            memberDto: {
+                phoneNumber: values.phone,
+                address: values.address,
+                age: 30,
+                gender: values.gender,
+                name: values.username,
+            },
+        };
+
+        // Make a POST request to the backend to submit the registration data
+        fetch('http://localhost:8080/user/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                //   'Authorizaion': `Bear ${}`
+            },
+            body: JSON.stringify(payload),
         })
-        .catch(error => {
-          // Handle errors, if any
-          console.error('Error submitting registration data:', error);
-          // You can display an error message to the user if needed
-        });
+            .then(data => {
+                // Handle the response from the backend, if needed
+                //   alert(`Register success!! Welcome ${values.email}`);
+                //   console.log(data);
+                fetch('http://localhost:8080/user/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        //   'Authorizaion': `Bear ${}`
+                    },
+                    body: JSON.stringify(values.email)
+                }).then(data => console.log(data))
+                    .catch(error => {
+                        // Handle errors, if any
+                        console.error('Cannot find your email:', error);
+                        // You can display an error message to the user if needed
+                    })
+                // You can also redirect to a success page or perform other actions here
+            })
+            .catch(error => {
+                // Handle errors, if any
+                console.error('Error submitting registration data:', error);
+                // You can display an error message to the user if needed
+            });
         //window.location.href = '/'
     }
-    render(){
+    render() {
         const { values: { email, password, phone, username, gender,
             dob, address } } = this.props
         return (
@@ -117,9 +130,8 @@ export default class Confirm extends Component {
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                             onClick={this.handleSubmit}
-                            
                         >
-                            Sign Up
+                            <Link to={'/verifyemail'}>Sign Up</Link>
                         </Button>
                         <Button
                             fullWidth

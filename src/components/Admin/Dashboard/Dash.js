@@ -3,7 +3,7 @@ import React from 'react'
 import Chart from './Chart'
 import Deposits from './Deposits'
 import Orders from './Orders'
-import { Copyright } from '../Theme/Theme'
+import { Copyright } from '../../Theme/Theme'
 import { Outlet } from 'react-router-dom'
 
 export default function Dash() {
