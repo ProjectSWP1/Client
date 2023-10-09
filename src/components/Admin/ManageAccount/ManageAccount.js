@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Container } from '@mui/material';
+import useAuth from '../../auth/auth';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -44,11 +45,15 @@ const rows = [
 export default function ManageAccount() {
   const [account, setAccount] = React.useState([])
 
+  const { token } = useAuth();
+
   React.useEffect(() => {
     fetch('http://localhost:8080/admin/getAccount', {
       method: 'GET',
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
+        'Authorization': "Bearer " + token,
       }}).then(response => response.json()).then(data => {setAccount(data)})
   }, [account])
 
