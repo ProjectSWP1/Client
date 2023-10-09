@@ -33,12 +33,8 @@ function createData(name, gender, address, age, phone) {
   return { name, gender, address, age, phone };
 }
 
-const data = fetch('http://localhost:8080/member/all',{
-  method: 'GET'
-})
-console.log(data)
+
 const rows = [
-  createData(data.name, data.gender, data.address, data.age, data.phone_number),
   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
   createData('Eclair', 262, 16.0, 24, 6.0),
   createData('Cupcake', 305, 3.7, 67, 4.3),
@@ -46,6 +42,16 @@ const rows = [
 ];
 
 export default function ManageAccount() {
+  const [account, setAccount] = React.useState([])
+
+  React.useEffect(() => {
+    fetch('http://localhost:8080/admin/getAccount', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }}).then(response => response.json()).then(data => {setAccount(data)})
+  }, [account])
+
   return (
     <Container sx={{
       backgroundColor: (theme) =>
@@ -56,32 +62,31 @@ export default function ManageAccount() {
       height: '100vh',
       overflow: 'auto',
     }}>
-      <TableContainer component={Paper} sx={{ mt: '100px'}}>
+      <TableContainer component={Paper} sx={{ mt: '100px' }}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell align="right">Gender</StyledTableCell>
-              <StyledTableCell align="right">Address</StyledTableCell>
-              <StyledTableCell align="right">Age</StyledTableCell>
-              <StyledTableCell align="right">Phone</StyledTableCell>
+              <StyledTableCell>Username</StyledTableCell>
+              <StyledTableCell align="right">Email</StyledTableCell>
+              <StyledTableCell align="right">Password</StyledTableCell>
+              <StyledTableCell align="right">Role</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <StyledTableRow key={row.name}>
+            {account.map((row) => (
+              <StyledTableRow key={row.username}>
                 <StyledTableCell component="th" scope="row">
-                  {row.name}
+                  {row.username}
                 </StyledTableCell>
-                <StyledTableCell align="right">{row.gender}</StyledTableCell>
-                <StyledTableCell align="right">{row.address}</StyledTableCell>
-                <StyledTableCell align="right">{row.age}</StyledTableCell>
-                <StyledTableCell align="right">{row.phone}</StyledTableCell>
+                <StyledTableCell align="right">{row.email}</StyledTableCell>
+                <StyledTableCell align="right">{row.password}</StyledTableCell>
+                <StyledTableCell align="right">{row.role.authority}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
     </Container>
   );
 }

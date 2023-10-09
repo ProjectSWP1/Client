@@ -14,15 +14,34 @@ import Typography from '@mui/material/Typography';
 import { ThemeProvider } from '@mui/material/styles';
 import { Copyright, defaultTheme } from './../Theme/Theme.js';
 import GoogleIcon from '@mui/icons-material/Google';
+import axios from 'axios'
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const [email, setEmail] = React.useState('')
+  const [password, setPassword] = React.useState('')
+  const [error, setError] = React.useState('');
+
+  const API = axios.create({
+    baseURL: "http://localhost:8080",
+    withCredentials: true
+  });
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const loginDto = {
-        email: data.email,
-        password: data.password,
-    };
+    
+    try {
+      const response = await API.post("http://localhost:8080/user/login", { email, password});
+
+      if(response.data.account != null) {
+        // Neu account co ton tai thi quay ve home
+      } else {
+        // Hien typo loi
+        
+      }
+
+    } catch (error) {
+      setError("Login failed");
+
+    }
   };
 
   return (
@@ -54,8 +73,8 @@ export default function SignIn() {
                 id="email"
                 label="Email Address"
                 name="email"
-                autoComplete="email"
-                autoFocus
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
               />
               <TextField
                 margin="normal"
@@ -66,6 +85,8 @@ export default function SignIn() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}

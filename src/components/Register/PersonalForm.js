@@ -15,7 +15,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import { DateField } from '@mui/x-date-pickers';
 
 export default class PersonalForm extends Component {
     continue = e => {
@@ -60,11 +59,13 @@ export default class PersonalForm extends Component {
                                     </RadioGroup>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs} >
-                                        <DemoContainer components={['DateField']} >
-                                            <DateField label="Date of Birth" 
-                                                        value={dayjs(values.dob)}
-                                                        onChange={handleChange('dob')}/>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DemoContainer components={['DatePicker']} >
+                                            <DatePicker label="Date of Birth" 
+                                                        value={dayjs(values.dob)}   
+                                                        onChange={handleChange('dob')}
+                                                        format='MM/DD/YYYY'
+                                                        />
                                         </DemoContainer>
                                     </LocalizationProvider>
                                 </Grid>
@@ -75,7 +76,7 @@ export default class PersonalForm extends Component {
                                         label="Address"
                                         id="address"
                                         onChange={handleChange('address')}
-                                        defaultValue={values.address}
+                                        value={values.address}
                                     />
                                 </Grid>
                                 <Button

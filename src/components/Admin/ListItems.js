@@ -7,12 +7,6 @@ import LineAxisIcon from '@mui/icons-material/LineAxis';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Link } from 'react-router-dom';
-const MenuItem = React.createContext('Dashboard')
-const handleClick = (e) => {
-  if(e == 'Dashboard'){
-    
-  }
-}
 
 // export default function ListItems() {
 //   return (
@@ -36,16 +30,28 @@ const handleClick = (e) => {
 export const mainListItems = (
   <React.Fragment>
     <ListItemButton>
-      <ListItemIcon>
-        <LineAxisIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
+      <Link to={'/admin/dashboard'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <LineAxisIcon />
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" style={{ display: 'inline-block' }} />
+      </Link>
     </ListItemButton>
     <ListItemButton>
-      <ListItemIcon>
-        <SupervisedUserCircleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Manage Account" />
+      <Link to={'/admin/manageaccount'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <SupervisedUserCircleIcon />
+        </ListItemIcon>
+        <ListItemText primary="Manage Account" style={{ display: 'inline-block' }} />
+      </Link>
     </ListItemButton>
   </React.Fragment>
 );
