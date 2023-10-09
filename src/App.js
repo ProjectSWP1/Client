@@ -9,6 +9,7 @@ import Admin from './components/Admin/Dashboard.js'
 import ManageAccount from './components/Admin/ManageAccount/ManageAccount';
 import VerifyEmail from './components/Register/VerifyEmail';
 import Dash from './components/Admin/Dash';
+import UserProfile from './components/User/UserProfile';
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                <Route exact path='dashboard' element={<Dash/>}/>
                <Route path='manageaccount' element={<ManageAccount/>}/>
             </Route>
+            <Route path='/profile' element={<UserProfile/>}/>
          </Routes>
       </Router>
    );

@@ -1,30 +1,75 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './Header.css'
 import { Link } from 'react-router-dom';
-import { Avatar } from '@mui/material';
+import { Avatar, Button, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper, Stack } from '@mui/material';
 import { deepOrange } from '@mui/material/colors';
 
-window.onscroll = function() {scrollFunction()}
+window.onscroll = function () { scrollFunction() }
 
 function scrollFunction() {
-    if(document.body.scroll> 20 || document.documentElement.scrollTop > 20) {
+    if (document.body.scroll > 20 || document.documentElement.scrollTop > 20) {
         document.getElementById("nav-bg_onscroll").style.opacity = "0.9";
         document.getElementById("nav-bg_onscroll").style.backgroundColor = "#5D9C59";
         document.getElementById("nav-bg_onscroll").style.transition = "0.3s";
-      } else {
+    } else {
         document.getElementById("nav-bg_onscroll").style.opacity = "1";
         document.getElementById("nav-bg_onscroll").style.backgroundColor = "";
-      }
+    }
 }
 
 export default function Header() {
+    const [isAuth, setAuth] = useState(false)
+    const accessToken = localStorage.getItem('token')
+    useEffect(() => {
+        if (accessToken) {
+            setAuth(true)
+        }
+    }, [accessToken])
+
+
+
+
+    const [open, setOpen] = React.useState(false);
+    const anchorRef = React.useRef(null);
+
+    const handleToggle = () => {
+        setOpen((prevOpen) => !prevOpen);
+    };
+
+    const handleClose = (event) => {
+        if (anchorRef.current && anchorRef.current.contains(event.target)) {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    function handleListKeyDown(event) {
+        if (event.key === 'Tab') {
+            event.preventDefault();
+            setOpen(false);
+        } else if (event.key === 'Escape') {
+            setOpen(false);
+        }
+    }
+
+    // return focus to the button when we transitioned from !open -> open
+    const prevOpen = React.useRef(open);
+    React.useEffect(() => {
+        if (prevOpen.current === true && open === false) {
+            anchorRef.current.focus();
+        }
+
+        prevOpen.current = open;
+    }, [open]);
+
     return (
         <section className="container-header">
             <section className="nav-bg" id="nav-bg_onscroll">
                 {/* logo */}
                 <div className="nav-logo">
                     <a href="#">
-                        <img src='assets/images/zookay.png'/>
+                        <img src='assets/images/zookay.png' />
                     </a>
                 </div>
 
@@ -50,12 +95,59 @@ export default function Header() {
                                 Contact Us
                             </a>
                         </li>
-                        <li className="nav-menu__item">
-                            <Link to={"/login"} className="nav-menu__link">Login</Link>
-                        </li>
-                        <li>
-                            <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
-                        </li>
+                        {isAuth ?
+                            <li>
+                                <Button
+                                    ref={anchorRef}
+                                    id="composition-button"
+                                    aria-controls={open ? 'composition-menu' : undefined}
+                                    aria-expanded={open ? 'true' : undefined}
+                                    aria-haspopup="true"
+                                    onClick={handleToggle}
+                                >
+                                    <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
+                                </Button>
+                                <Popper
+                                    open={open}
+                                    anchorEl={anchorRef.current}
+                                    role={undefined}
+                                    placement="bottom-start"
+                                    transition
+                                    disablePortal
+                                >
+                                    {({ TransitionProps, placement }) => (
+                                        <Grow
+                                            {...TransitionProps}
+                                            style={{
+                                                transformOrigin:
+                                                    placement === 'bottom-start' ? 'left top' : 'left bottom',
+                                            }}
+                                        >
+                                            <Paper>
+                                                <ClickAwayListener onClickAway={handleClose}>
+                                                    <MenuList
+                                                        autoFocusItem={open}
+                                                        id="composition-menu"
+                                                        aria-labelledby="composition-button"
+                                                        onKeyDown={handleListKeyDown}
+                                                    >
+                                                        <MenuItem onClick={handleClose}>
+                                                            <Link to={'/profile'}
+                                                                style={{color: 'black', textDecoration: 'none'}}
+                                                                >My Profile</Link>
+                                                        </MenuItem>
+                                                        <MenuItem onClick={handleClose}>Setting</MenuItem>
+                                                        <MenuItem onClick={handleClose}>Logout</MenuItem>
+                                                    </MenuList>
+                                                </ClickAwayListener>
+                                            </Paper>
+                                        </Grow>
+                                    )}
+                                </Popper>
+                            </li>
+                            : <li className="nav-menu__item">
+                                <Link to={"/login"} className="nav-menu__link">Login</Link>
+                            </li>}
                     </ul>
                 </div>
             </section>

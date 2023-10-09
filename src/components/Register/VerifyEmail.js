@@ -6,7 +6,7 @@ export default function VerifyEmail() {
       <div className='verify'>
         <p>Enter your OTP: </p>
         <form className='verify-form'>
-          <input type='text' className='enter-otp'></input>
+          <input type='text' className='enter-otp'/>
           <input type='Submit' className='submit-otp'/>
         </form>
       </div>
