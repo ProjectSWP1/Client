@@ -6,6 +6,32 @@ import ListSubheader from '@mui/material/ListSubheader';
 import LineAxisIcon from '@mui/icons-material/LineAxis';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { Link } from 'react-router-dom';
+const MenuItem = React.createContext('Dashboard')
+const handleClick = (e) => {
+  if(e == 'Dashboard'){
+    
+  }
+}
+
+// export default function ListItems() {
+//   return (
+//     <React.Fragment>
+//       <ListItemButton onClick={handleClick}>
+//         <ListItemIcon>
+//           <LineAxisIcon />
+//         </ListItemIcon>
+//         <ListItemText primary="Dashboard" />
+//       </ListItemButton>
+//       <ListItemButton onClick={handleClick}>
+//         <ListItemIcon>
+//           <SupervisedUserCircleIcon />
+//         </ListItemIcon>
+//         <ListItemText primary="Manage Account" />
+//       </ListItemButton>
+//     </React.Fragment>
+//   )
+// }
 
 export const mainListItems = (
   <React.Fragment>
@@ -13,7 +39,7 @@ export const mainListItems = (
       <ListItemIcon>
         <LineAxisIcon />
       </ListItemIcon>
-      <ListItemText primary="Dashboard"/>
+      <ListItemText primary="Dashboard" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>

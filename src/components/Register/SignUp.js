@@ -10,7 +10,7 @@ export default class SignUp extends Component {
         password: '',
         phone: '',
         gender: 'male',
-        dob: '',
+        dob: new Date(),
         address: ''
     }
     

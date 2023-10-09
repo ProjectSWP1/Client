@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './Header.css';
 import { Link } from 'react-router-dom';
+import { Avatar } from '@mui/material';
+import { deepOrange } from '@mui/material/colors';
 
 window.onscroll = function () {
   scrollFunction();

@@ -52,6 +52,7 @@ export default class Confirm extends Component {
         .then(data => {
           // Handle the response from the backend, if needed
           alert(`Register success!! Welcome ${values.email}`);
+            
           // You can also redirect to a success page or perform other actions here
           window.location.href = '/'
         })
