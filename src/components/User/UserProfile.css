@@ -1,0 +1,30 @@
+.profile-container{
+    display: flex;
+    justify-content: center;
+}
+.profile{
+    margin-top: 50px;
+    width: 50%;
+}
+.profile-title {
+    font-size: 0.85cm;
+    color: darkgreen;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: bold;
+    text-align: center;
+}
+.profile-form{
+    color: darkgreen;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-size: 0.5cm;
+}
+.profile-form input{
+    width: 100%;
+    border-radius: 20px;
+    padding: 15px;
+    font-size: 0.5cm;
+}
+.profile-gender{
+    padding: 20px 0 0 0;
+    width: 100%
+}

@@ -1,5 +1,6 @@
 import Avatar from "@mui/material/Avatar";
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // Removed unnecessary import
+import { useNavigate, useLocation } from 'react-router';
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -14,15 +15,29 @@ import Typography from "@mui/material/Typography";
 import { ThemeProvider } from "@mui/material/styles";
 import { Copyright, defaultTheme } from "./../Theme/Theme.js";
 import GoogleIcon from "@mui/icons-material/Google";
+import axios from 'axios';
+import useAuth from '../auth/auth.js';
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth(); // Access the login function directly
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+  const API = axios.create({
+    baseURL: "http://localhost:8000",
+    withCredentials: true,
+  });
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
   };
 
   const handleSubmit = async (event) => {
@@ -30,32 +45,22 @@ export default function SignIn() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8080/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      const data = await response.json();
+      const response = await API.post('http://localhost:8080/user/login', { email, password });
 
-      if (data.account != null) {
-        // Redirect or handle success
-
-        localStorage.setItem(`account`, JSON.stringify(data.account));
-        localStorage.setItem(`jwtToken`, data.jwt);
-
-        alert(`Login success!! ${data.account.username}`);
-        window.location.href = "/";
+      if (response.data.account != null) {
+        const user = response.data.account;
+        const token = response.data.jwt;
+        login(user, token);
+        navigate("/");
       } else {
-        const data = await response.json();
-        setError(data.message || "Login failed");
+        setError("Invalid email or password");
       }
     } catch (error) {
-      setError("An error occurred");
+      console.error('Login failed: ', error);
+      setError("Login failed. Please try again later.");
+    } finally {
+      setLoading(false); // Ensure loading state is reset
     }
-
-    setLoading(false);
   };
 
   return (
@@ -94,6 +99,14 @@ export default function SignIn() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
+
+            {/* Display error message */}
+            {error && (
+              <Typography variant="body2" color="error">
+                {error}
+              </Typography>
+            )}
+
             <Box
               component="form"
               noValidate
@@ -109,7 +122,7 @@ export default function SignIn() {
                 name="email"
                 autoComplete="email"
                 autoFocus
-                onChange={handleInputChange}
+                onChange={handleEmailChange}
               />
               <TextField
                 margin="normal"
@@ -120,7 +133,7 @@ export default function SignIn() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                onChange={handleInputChange}
+                onChange={handlePasswordChange}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}

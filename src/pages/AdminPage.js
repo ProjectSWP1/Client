@@ -9,19 +9,12 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import ListItems, { mainListItems, secondaryListItems } from './ListItems';
-import Chart from './Chart';
-import Deposits from './Deposits';
-import Orders from './Orders';
-import { Copyright, defaultTheme } from '../Theme/Theme.js'
+import ListItems, { mainListItems, secondaryListItems } from '../components/Admin/ListItems';
+import { Copyright, defaultTheme } from '../components/Theme/Theme.js'
 import { Outlet, Route, Routes } from 'react-router-dom';
-import Dash from './Dash';
 
 const drawerWidth = 240;
 
@@ -69,17 +62,13 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function Dashboard() {
+export default function AdminPage() {
   const [open, setOpen] = React.useState(true);
-  const [anchor, setAnchor] = React.useState('Dashboard');
+  const [anchor, setAnchor] = React.useState('Admin');
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
-  const handleClick = (childData) => {
-    this.setAnchor({ anchor: childData })
-  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
