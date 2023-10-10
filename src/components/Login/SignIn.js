@@ -1,71 +1,118 @@
-import React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import { ThemeProvider } from '@mui/material/styles';
-import { Copyright, defaultTheme } from './../Theme/Theme.js';
-import GoogleIcon from '@mui/icons-material/Google';
-import axios from 'axios'
+import Avatar from "@mui/material/Avatar";
+import React, { useState } from 'react'; // Removed unnecessary import
+import { useNavigate, useLocation } from 'react-router';
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import { ThemeProvider } from "@mui/material/styles";
+import { Copyright, defaultTheme } from "./../Theme/Theme.js";
+import GoogleIcon from "@mui/icons-material/Google";
+import axios from 'axios';
+import useAuth from '../auth/auth.js';
 
 export default function SignIn() {
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
-  const [error, setError] = React.useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth(); // Access the login function directly
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const API = axios.create({
-    baseURL: "http://localhost:8080",
-    withCredentials: true
+    baseURL: "http://localhost:8000",
+    withCredentials: true,
   });
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+    setLoading(true);
+
     try {
-      const response = await API.post("http://localhost:8080/user/login", { email, password});
+      const response = await API.post('http://localhost:8080/user/login', { email, password });
 
-      if(response.data.account != null) {
-        // Neu account co ton tai thi quay ve home
+      if (response.data.account != null) {
+        const user = response.data.account;
+        const token = response.data.jwt;
+        login(user, token);
+        navigate("/");
       } else {
-        // Hien typo loi
-        
+        setError("Invalid email or password");
       }
-
     } catch (error) {
-      setError("Login failed");
-
+      console.error('Login failed: ', error);
+      setError("Login failed. Please try again later.");
+    } finally {
+      setLoading(false); // Ensure loading state is reset
     }
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
-        <Grid item xs={false} sm={4} md={7} sx={{
-            backgroundImage: 'url(./../../assets/images/entrance.jpg)',
-            backgroundRepeat: 'no-repeat',
+        <Grid
+          item
+          xs={false}
+          sm={4}
+          md={7}
+          sx={{
+            backgroundImage: "url(./../../assets/images/entrance.jpg)",
+            backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+              t.palette.mode === "light"
+                ? t.palette.grey[50]
+                : t.palette.grey[900],
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
         />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center',}}>
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Box
+            sx={{
+              my: 8,
+              mx: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+
+            {/* Display error message */}
+            {error && (
+              <Typography variant="body2" color="error">
+                {error}
+              </Typography>
+            )}
+
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 1 }}
+            >
               <TextField
                 margin="normal"
                 required
@@ -73,8 +120,9 @@ export default function SignIn() {
                 id="email"
                 label="Email Address"
                 name="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                autoComplete="email"
+                autoFocus
+                onChange={handleEmailChange}
               />
               <TextField
                 margin="normal"
@@ -85,8 +133,7 @@ export default function SignIn() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                onChange={handlePasswordChange}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -97,16 +144,19 @@ export default function SignIn() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                disabled={loading}
               >
-                Sign In
+                {loading ? "Signing In..." : "Sign In"}
               </Button>
               <Button
                 variant="contained"
                 href="/"
                 fullWidth
                 sx={{ mt: 3, mb: 2 }}
-                startIcon={<GoogleIcon />}>
-                Login with Google
+                startIcon={<GoogleIcon />}
+                disabled={loading}
+              >
+                {loading ? "Signing In with Google..." : "Login with Google"}
               </Button>
               <Grid container>
                 <Grid item xs>
