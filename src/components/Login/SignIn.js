@@ -17,6 +17,7 @@ import { Copyright, defaultTheme } from "./../Theme/Theme.js";
 import GoogleIcon from "@mui/icons-material/Google";
 import axios from 'axios';
 import useAuth from '../auth/auth.js';
+import { NEW_TIMEOUT_IN_SECONDS, setItemWithTimeout, setWithExpiry } from "../auth/setTimeOut.js";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -46,11 +47,14 @@ export default function SignIn() {
 
     try {
       const response = await API.post('http://localhost:8080/user/login', { email, password });
-
+      
       if (response.data.account != null) {
-        const user = response.data.account;
-        const token = response.data.jwt;
-        login(user, token);
+        const token = response.data.jwt
+        // const token = JSON.stringify(response.data.jwt)
+        // login(user, token);
+      // setWithExpiry('token', token, 2000)
+      // localStorage.setItem('token', JSON.stringify({data: token, timestamp: Date.now()}))
+      setItemWithTimeout('token', token, NEW_TIMEOUT_IN_SECONDS)
         navigate("/");
       } else {
         setError("Invalid email or password");

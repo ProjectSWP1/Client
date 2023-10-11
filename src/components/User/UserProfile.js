@@ -12,8 +12,8 @@ export default function UserProfile() {
                     Email <input type='text'/>
                     <p className='profile-gender'>
                         <span style={{paddingRight: '50px'}}>Gender: </span> 
-                        Male <input type='radio' style={{width: '10%'}}/>
-                        Female <input type='radio' style={{width: '10%'}}/>
+                        Male <input name='gender' value={'Male'} type='radio' style={{width: '10%'}}/>
+                        Female <input name='gender' value={'Female'} type='radio' style={{width: '10%'}}/>
                     </p>
                     Birthdate <input type='date'/>
                     Address <input type='text'/>

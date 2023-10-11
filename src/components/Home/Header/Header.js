@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Avatar, Button, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper, Stack } from '@mui/material';
 import { deepOrange } from '@mui/material/colors';
 import useAuth from '../../auth/auth';
+import { checkAndRemoveExpiredData, getItemWithTimeout, getWithExpiry } from '../../auth/setTimeOut';
 
 window.onscroll = function () { scrollFunction() }
 
@@ -20,18 +21,22 @@ function scrollFunction() {
 
 export default function Header() {
     const [isAuth, setAuth] = useState(false)
-    const accessToken = localStorage.getItem('token')
+    const [user, setUser] = useState(null)
+    // const accessToken = getWithExpiry('token')
+    // const accessToken = localStorage.getItem('token')
+    const accessToken = getItemWithTimeout('token')
     useEffect(() => {
         if (accessToken) {
+            // login(user, token)
             setAuth(true)
+            setUser(JSON.parse(atob(accessToken.split('.')[1])))
         }
-    }, [accessToken])
-
+    }, [accessToken])   
     // Cái này lấy từ auth.js sau khi setAuth bên login
-    const { user, logout } = useAuth();
-    const { token } = useAuth();
-    console.log(user); // in ra để biết có user hay k
-    console.log(token);
+    // const { user, logout } = useAuth();
+    // const { token } = useAuth();
+    // console.log(user); // in ra để biết có user hay k
+    // console.log(token);
 
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
@@ -44,8 +49,8 @@ export default function Header() {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
             return;
         }
-
-        setOpen(false);
+        setAuth(false);
+        localStorage.removeItem('token')
     };
 
     function handleListKeyDown(event) {
@@ -93,7 +98,7 @@ export default function Header() {
                                 Contact Us
                             </a>
                         </li>
-                        {user ?
+                        {isAuth ?
                             <li>
                                 <Button
                                     ref={anchorRef}
@@ -103,7 +108,7 @@ export default function Header() {
                                     aria-haspopup="true"
                                     onClick={handleToggle}
                                 >
-                                    <Avatar sx={{ bgcolor: deepOrange[500] }}>{user.username.charAt(0)}{" "}</Avatar>
+                                    <Avatar sx={{ bgcolor: deepOrange[500] }}>{user.sub.charAt(0)}{" "}</Avatar>
                                 </Button>
                                 <Popper
                                     open={open}
@@ -135,19 +140,19 @@ export default function Header() {
                                                                 >My Profile</Link>
                                                         </MenuItem>
                                                         {
-                                                          user.role.authority === 'Admin' ? (
+                                                          user.roles.authority === 'Admin' ? (
                                                             <MenuItem onClick={handleClose}>
                                                             <Link to={'/admin'}
                                                                 style={{color: 'black', textDecoration: 'none'}}
                                                                 >My Management</Link>
                                                             </MenuItem>
-                                                          ) : user.role.authority == 'Staff' ? (
+                                                          ) : user.roles.authority == 'Staff' ? (
                                                             <MenuItem onClick={handleClose}>
                                                             <Link to={'/staff'}
                                                                 style={{color: 'black', textDecoration: 'none'}}
                                                                 >My Management</Link>
                                                             </MenuItem>
-                                                          ) : user.role.authority == 'Trainer' ? (
+                                                          ) : user.roles.authority == 'Trainer' ? (
                                                             <MenuItem onClick={handleClose}>
                                                             <Link to={'/trainer'}
                                                                 style={{color: 'black', textDecoration: 'none'}}

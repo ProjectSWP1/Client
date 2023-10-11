@@ -3,7 +3,8 @@ import FollowUs from '../components/Home/FollowUs/FollowUs.js';
 import Footer from '../components/Home/Footer/Footer.js';
 import Header from '../components/Home/Header/Header.js';
 import History from '../components/Home/History/History.js';
-import Slide from '../components/Home/Slide/Slide';
+import Slide from '../components/Home/Slide/Slide.js';
+
 
 const Home = () => {
     return (

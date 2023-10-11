@@ -9,7 +9,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import { ListItemText } from '@mui/material';
 import { Copyright, defaultTheme } from '../Theme/Theme.js';
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 export default class Confirm extends Component {
     continue = event => {
         event.preventDefault();
@@ -48,8 +48,7 @@ export default class Confirm extends Component {
                 //   'Authorizaion': `Bear ${}`
             },
             body: JSON.stringify(payload),
-        })
-            .then(data => {
+        }).then(data => {
                 // Handle the response from the backend, if needed
                 //   alert(`Register success!! Welcome ${values.email}`);
                 //   console.log(data);
@@ -60,7 +59,7 @@ export default class Confirm extends Component {
                         //   'Authorizaion': `Bear ${}`
                     },
                     body: JSON.stringify(values.email)
-                }).then(data => console.log(data))
+                }).then(response => response.json()).then(data => console.log(data))
                     .catch(error => {
                         // Handle errors, if any
                         console.error('Cannot find your email:', error);
@@ -131,7 +130,7 @@ export default class Confirm extends Component {
                             sx={{ mt: 3, mb: 2 }}
                             onClick={this.handleSubmit}
                         >
-                            <Link to={'/verifyemail'}>Sign Up</Link>
+                            <Link to={'/verifyemail'} style={{textDecoration: 'none', color: 'white'}}>Sign Up</Link>
                         </Button>
                         <Button
                             fullWidth
