@@ -10,6 +10,8 @@ import VerifyEmail from "./components/Register/VerifyEmail";
 import Dash from "./components/Admin/Dashboard/Dash";
 import UserProfile from "./components/User/UserProfile";
 import { AuthProvider } from "./components/auth/auth";
+import ForgotPassword from "./components/Login/ForgotPassword";
+import ResetPassword from "./components/Login/ResetPassword";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/verifyemail" element={<VerifyEmail />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgotpassword" element={<ForgotPassword/>}/>
+          <Route path="/resetpassword" element={<ResetPassword/>}/>
           <Route path="/admin" element={<Admin />}>
             <Route exact path="dashboard" element={<Dash />} />
             <Route path="manageaccount" element={<ManageAccount />} />
