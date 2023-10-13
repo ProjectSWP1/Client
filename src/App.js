@@ -6,6 +6,7 @@ import Register from "./components/Register/SignUp.js";
 import Login from "./components/Login/SignIn.js";
 import Admin from "./pages/AdminPage.js";
 import Staff from "./pages/StaffPage.js";
+import Trainer from "./pages/TrainerPage.js";
 import ManageAccount from "./components/Admin/ManageAccount/ManageAccount";
 import VerifyEmail from "./components/Register/VerifyEmail";
 import Dash from "./components/Admin/Dashboard/Dash";
@@ -14,6 +15,7 @@ import { AuthProvider } from "./components/auth/auth";
 import ForgotPassword from "./components/Login/ForgotPassword";
 import ResetPassword from "./components/Login/ResetPassword";
 import ZooArea from "./components/Staff/ZooArea/Zooarea";
+import AnimalCage from "./components/Trainer/AnimalCage/AnimalCage";
 
 function App() {
   return (
@@ -32,6 +34,9 @@ function App() {
           </Route>
           <Route path="/staff" element={<Staff />}>
             <Route exact path="zooarea" element={<ZooArea />} />
+          </Route>
+          <Route path="/trainer" element={<Trainer />}>
+            <Route exact path="cages" element={<AnimalCage />} />
           </Route>
           <Route path="/profile" element={<UserProfile />} />
         </Routes>

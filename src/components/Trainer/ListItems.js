@@ -30,7 +30,7 @@ import { Link } from 'react-router-dom';
 export const mainListItems = (
   <React.Fragment>
     <ListItemButton>
-      <Link to={'/trainer/animalcage'} style={{
+      <Link to={'/trainer/cages'} style={{
         textDecoration: 'none',
         color: 'grey',
         width: '100%'
