@@ -130,7 +130,7 @@ export default class Confirm extends Component {
                             sx={{ mt: 3, mb: 2 }}
                             onClick={this.handleSubmit}
                         >
-                            <Link to={'/verifyemail'} style={{textDecoration: 'none', color: 'white'}}>Sign Up</Link>
+                            <Link to={`/verifyemail?email=${email}`} style={{textDecoration: 'none', color: 'white'}}>Sign Up</Link>
                         </Button>
                         <Button
                             fullWidth
