@@ -1,31 +1,39 @@
+import React, { useState } from 'react'
 import './VerifyEmail.css'
-import { Button } from '@mui/material'
-import SignIn from '../Login/SignIn.js'
-import React, { Component } from 'react'
-
-export default class VerifyEmail extends Component {
-
-  render() {
-    const { data } = this.props.location.state
-    
-    console.log(data);
-    const handleSubmit = (event) => {
-      event.preventDefault()
-      if (data.otp == event.target) {
-        return <SignIn />
-      }
-    }
-    return (
-      <div className='verify-container'>
-        <div className='verify'>
-          <label id='enterOtp'>Enter your OTP: </label>
-          <form className='verify-form'>
-            <input id='enterOtp' type='text' className='enter-otp' />
-            <input type='Submit' className='submit-otp' />
-          </form>
-        </div>
-      </div>
-    )
+import { useNavigate , useLocation } from 'react-router-dom'
+export default function VerifyEmail() {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const email = queryParams.get('email');
+  const navigate = useNavigate()
+  const [otp, setOtp] = useState('');
+  const handleSubmit = () => {
+    console.log("Email : "+email);
+    const url = `http://localhost:8080/user/verify?email=${email}&otp=${otp}`;
+    fetch(url, {
+      method: 'PUT'
+    }).then(response => {
+      console.log(response);
+    }).then(data => {
+      console.log(data);
+      navigate("/login");
+    })
+      .catch(error => {
+        // Handle errors, if any
+        console.error('Cannot find your email:', error);
+        // You can display an error message to the user if needed
+      })
   }
-}
 
+  return (
+    <div className='verify-container'>
+      <div className='verify'>
+        <p>Enter your OTP: </p>
+        <form className='verify-form' onSubmit={(event) => event.preventDefault()}>
+          <input type='text' className='enter-otp' onChange={(event) => setOtp(event.target.value)} />
+          <input type='Submit' className='submit-otp' onClick={handleSubmit} />
+        </form>
+      </div>
+    </div>
+  )
+}
