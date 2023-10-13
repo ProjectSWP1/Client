@@ -83,7 +83,7 @@
 .verify{
     width: 50%;
 }
-.verify p{
+.verify label{
     font-size: 0.85cm;
     padding-top: 200px;
     width: 100%;
