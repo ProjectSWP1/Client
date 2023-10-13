@@ -45,7 +45,7 @@ const rows = [
 export default function ManageAccount() {
   const [account, setAccount] = React.useState([])
 
-  const { token } = useAuth();
+  const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
 
   React.useEffect(() => {
     fetch('http://localhost:8080/admin/getAccount', {
@@ -55,7 +55,7 @@ export default function ManageAccount() {
         'Content-Type': 'application/json',
         'Authorization': "Bearer " + token,
       }}).then(response => response.json()).then(data => {setAccount(data)})
-  }, [account])
+  }, [])
 
   return (
     <Container sx={{
