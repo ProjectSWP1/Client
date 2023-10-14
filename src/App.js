@@ -17,6 +17,8 @@ import ResetPassword from "./components/Login/ResetPassword";
 import ZooArea from "./components/Staff/ZooArea/Zooarea";
 import AnimalCage from "./components/Trainer/AnimalCage/AnimalCage";
 import ZooTrainer from "./components/Staff/ZooTrainer/Zootrainer";
+import Animal from "./components/Trainer/Animal/Animal";
+import AnimalSpecies from "./components/Trainer/AnimalSpecies/AnimalSpecies";
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
           </Route>
           <Route path="/trainer" element={<Trainer />}>
             <Route exact path="cages" element={<AnimalCage />} />
+            <Route exact path="animals" element={<Animal />} />
+            <Route exact path="animalspecies" element={<AnimalSpecies />} />
           </Route>
           <Route path="/profile" element={<UserProfile />} />
         </Routes>

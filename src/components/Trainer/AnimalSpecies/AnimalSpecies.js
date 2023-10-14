@@ -7,20 +7,18 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
-export default function AnimalCage() {
-    const [cages, setCages] = useState([]);
-    const [zooAreas, setZooAreas] = useState([]);
-    const [capacity, setCapacity] = useState(1);
-    const [description, setDescription] = useState("");
-    const [cageId, setCageId] = useState("");
-    const [selectedZooArea, setSelectedZooArea] = useState("");
+export default function AnimalSpecies() {
+    const [species, setSpecies] = useState([]);
+    const [groups, setGroups] = useState("");
+    const [name, setName] = useState("");
     const [open, setOpen] = useState(false);
-    const ADD_CAGE_TITLE = "Add animal cage";
-    const UPDATE_CAGE_TITLE = "Update animal cage";
-    const [popUpTitle, setPopupTitle] = useState(ADD_CAGE_TITLE);
+    const ADD_ANIMAL_SPECIES_TITLE = "Add animal specie";
+    const UPDATE_ANIMAL_SPECIES_TITLE = "Update animal specie";
+    const [specieId , setSpecieId] = useState(0);
+    const [popUpTitle, setPopupTitle] = useState(ADD_ANIMAL_SPECIES_TITLE);
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
     useEffect(() => {
-        fetch('http://localhost:8080/trainer/get-cage', {
+        fetch('http://localhost:8080/trainer/get-all-animalSpecies', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -29,17 +27,7 @@ export default function AnimalCage() {
             }
         }).then(response => response.json()).then(data => {
             console.log(data);
-            setCages(data);
-        })
-        fetch('http://localhost:8080/trainer/get-zoo-area', {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token,
-            }
-        }).then(response => response.json()).then(data => {
-            setZooAreas(data);
+            setSpecies(data);
         })
     }, []);
 
@@ -48,59 +36,48 @@ export default function AnimalCage() {
     };
 
     const handleOpenPopupUpdateAction = (id) => {
-        const cageById = cages.filter(cage => {
-            return cage.cageID === id;
+        const specieById = species.filter(specie => {
+            return specie.speciesId === id;
         })[0];
-        setCageId(id);
+        setSpecieId(id);
         setOpen(true);
-        setDescription(cageById.description);
-        setCapacity(cageById.capacity);
-        setPopupTitle(`${UPDATE_CAGE_TITLE} ${id}`);
+        setGroups(specieById.groups);
+        setName(specieById.name);
+        setPopupTitle(`${UPDATE_ANIMAL_SPECIES_TITLE} ${specieById.name}`);
     }
 
     const handleOpenPopupAddAction = () => {
         setOpen(true);
-        setDescription("");
-        setCapacity(1);
-        setCageId("");
-        setSelectedZooArea("");
-        setPopupTitle(ADD_CAGE_TITLE);
+        setGroups("");
+        setName("");
+        setSpecieId(0);
+        setPopupTitle(ADD_ANIMAL_SPECIES_TITLE);
     }
 
-    const handleCapacityChange = (e) => {
-        const inputValue = e.target.value;
-
-        // Use a regular expression to allow only positive integer numbers
-        if (/^[1-9]\d*$/.test(inputValue) || inputValue === '') {
-            setCapacity(inputValue);
-        }
-    };
-
     const handleAddSave = () => {
-        const cageDto = {
-            cageID: cageId,
-            description: description,
-            capacity: capacity,
-            zoo_AreaID: selectedZooArea
+        const animalSpeciesDto = {
+            groups: groups,
+            name: name
         }
-        fetch('http://localhost:8080/trainer/create-cage', {
+        fetch('http://localhost:8080/trainer/create-animal-species', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token,
             },
-            body: JSON.stringify(cageDto)
+            body: JSON.stringify(animalSpeciesDto)
         }).then(response => {
+            console.log(response.status);
             if (!response.ok) {
                 throw new Error("Error");
             }
-            return response.json();
+            return response.text();
         })
         .then(data => {
-            console.log(data);
+            console.log("Add sucess" + data);
             setOpen(false);
-            setCages([...cages, cageDto]);
+            setSpecies([...species, animalSpeciesDto]);
             Swal.fire({
                 title: 'Success!',
                 text: `Add Successfully`,
@@ -117,20 +94,19 @@ export default function AnimalCage() {
     }
 
     const handleUpdateSave = () => {
-        const cageDto = {
-            cageID: cageId,
-            description: description,
-            capacity: capacity,
-            zoo_AreaID: selectedZooArea
+        const animalSpeciesDto = {
+            speciesId : specieId,
+            groups: groups,
+            name: name
         }
-        fetch('http://localhost:8080/trainer/update-cage', {
+        fetch('http://localhost:8080/trainer/update-animal-species', {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token,
             },
-            body: JSON.stringify(cageDto)
+            body: JSON.stringify(animalSpeciesDto)
         }).then(response => { 
             if (!response.ok) {
                 throw new Error("Error");
@@ -139,9 +115,9 @@ export default function AnimalCage() {
          }).then(data => {
             console.log(data);
             setOpen(false);
-            setCages(cages.map(cage => {
-                if (cage.cageID === cageDto.cageID) return cageDto;
-                return cage;
+            setSpecies(species.map(specie => {
+                if (specie.speciesId === specieId) return animalSpeciesDto;
+                return specie;
             }));
             Swal.fire({
                 title: 'Success!',
@@ -169,7 +145,7 @@ export default function AnimalCage() {
             confirmButtonText: 'Yes!',
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:8080/trainer/remove-cage/${id}`, {
+                fetch(`http://localhost:8080/trainer/remove-animal-species/${id}`, {
                     method: 'DELETE',
                     headers: {
                         Accept: 'application/json',
@@ -185,8 +161,8 @@ export default function AnimalCage() {
                         text: `Delete Successfully`,
                         icon: 'success',
                     });
-                    setCages(cages.filter(cage => {
-                        return cage.cageID != id;
+                    setSpecies(species.filter(specie => {
+                        return specie.speciesId != id;
                     }));
                 })
                     .catch(error => {
@@ -204,7 +180,7 @@ export default function AnimalCage() {
         {
             id: 1,
             name: '#',
-            selector: (cage, index) => {
+            selector: (specie, index) => {
                 return (
                     <p>{index + 1}</p>
                 )
@@ -212,30 +188,30 @@ export default function AnimalCage() {
         },
         {
             id: 2,
-            name: 'Description',
-            selector: cage => {
+            name: 'Groups',
+            selector: specie => {
                 return (
-                    <p>{cage.description}</p>
+                    <p>{specie.groups}</p>
                 )
             }
         },
         {
             id: 3,
-            name: 'Capacity',
-            selector: cage => {
+            name: 'Name',
+            selector: specie => {
                 return (
-                    <p>{cage.capacity}</p>
+                    <p>{specie.name}</p>
                 )
             }
         },
         {
             id: 4,
             name: 'Actions',
-            selector: cage => {
+            selector: specie => {
                 return (
                     <div>
-                        <Button variant="contained" onClick={() => handleDeleteAction(cage.cageID)}>Delete</Button>
-                        <Button variant="contained" onClick={() => handleOpenPopupUpdateAction(cage.cageID)}>Update</Button>
+                        <Button variant="contained" onClick={() => handleDeleteAction(specie.speciesId)}>Delete</Button>
+                        <Button variant="contained" onClick={() => handleOpenPopupUpdateAction(specie.speciesId)}>Update</Button>
                     </div>
                 )
             }
@@ -256,51 +232,25 @@ export default function AnimalCage() {
                 <DialogContent>
                     <Box component="form" noValidate sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                            {popUpTitle === ADD_CAGE_TITLE ? <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="cageId"
-                                    label="cageId"
-                                    value={cageId}
-                                    onChange={(e) => setCageId(e.target.value)}
-                                />
-                            </Grid> : ""}
                             <Grid item xs={12}>
                                 <TextField
                                     required
                                     fullWidth
-                                    id="description"
-                                    label="Description"
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
+                                    id="groups"
+                                    label="groups"
+                                    value={groups}
+                                    onChange={(e) => setGroups(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     required
                                     fullWidth
-                                    label="Capacity"
-                                    type="number"
-                                    id="capacity"
-                                    value={capacity}
-                                    onChange={handleCapacityChange}
+                                    label="name"
+                                    id="name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
                                 />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <InputLabel id="select-label">Select an zoo area</InputLabel>
-                                <Select
-                                    labelId="select-label"
-                                    id="select"
-                                    value={selectedZooArea}
-                                    onChange={(e) => setSelectedZooArea(e.target.value)}
-                                >
-                                    {zooAreas.map(area => {
-                                        return (
-                                            <MenuItem key={area.zooAreaId} value={area.zooAreaId}>{area.zooAreaId}</MenuItem>
-                                        )
-                                    })}
-                                </Select>
                             </Grid>
                         </Grid>
                     </Box>
@@ -309,7 +259,7 @@ export default function AnimalCage() {
                     <Button onClick={handleClose} color="primary">
                         Close
                     </Button>
-                    <Button onClick={popUpTitle === ADD_CAGE_TITLE ? handleAddSave : handleUpdateSave} color="primary">
+                    <Button onClick={popUpTitle === ADD_ANIMAL_SPECIES_TITLE ? handleAddSave : handleUpdateSave} color="primary">
                         Save
                     </Button>
                 </DialogActions>
@@ -317,12 +267,12 @@ export default function AnimalCage() {
             <TableContainer component={Paper} sx={{ mt: '100px' }}>
                 <DataTable
                     columns={columns}
-                    data={cages.map(item => ({
+                    data={species.map(item => ({
                         ...item,
                     }))}
-                    title="Zoo Cage"
+                    title="Animal Species"
                     pagination
-                    keyField='cageID'
+                    keyField='speciesId'
                     paginationPerPage={5} // Number of rows per page
                     paginationRowsPerPageOptions={[5, 10, 20, 50]} // Rows per page options
                 />

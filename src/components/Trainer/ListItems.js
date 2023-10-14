@@ -38,7 +38,31 @@ export const mainListItems = (
         <ListItemIcon>
           <LineAxisIcon />
         </ListItemIcon>
-        <ListItemText primary="Zoo Area Page" style={{ display: 'inline-block' }} />
+        <ListItemText primary="Zoo Cage Page" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
+    <ListItemButton>
+      <Link to={'/trainer/animals'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <LineAxisIcon />
+        </ListItemIcon>
+        <ListItemText primary="Animal Page" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
+    <ListItemButton>
+      <Link to={'/trainer/animalspecies'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <LineAxisIcon />
+        </ListItemIcon>
+        <ListItemText primary="Animal Species Page" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
   </React.Fragment>
