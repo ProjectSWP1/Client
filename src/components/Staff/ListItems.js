@@ -40,6 +40,18 @@ export const mainListItems = (
         </ListItemIcon>
         <ListItemText primary="Zoo Area Page" style={{ display: 'inline-block' }} />
       </Link>
+      </ListItemButton>
+      <ListItemButton>
+      <Link to={'/staff/trainers'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <LineAxisIcon />
+        </ListItemIcon>
+        <ListItemText primary="Zoo Trainer Page" style={{ display: 'inline-block' }} />
+      </Link>
     </ListItemButton>
   </React.Fragment>
 );

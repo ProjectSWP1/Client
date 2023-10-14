@@ -16,6 +16,7 @@ import ForgotPassword from "./components/Login/ForgotPassword";
 import ResetPassword from "./components/Login/ResetPassword";
 import ZooArea from "./components/Staff/ZooArea/Zooarea";
 import AnimalCage from "./components/Trainer/AnimalCage/AnimalCage";
+import ZooTrainer from "./components/Staff/ZooTrainer/Zootrainer";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           </Route>
           <Route path="/staff" element={<Staff />}>
             <Route exact path="zooarea" element={<ZooArea />} />
+            <Route exact path="trainers" element={<ZooTrainer />} />
           </Route>
           <Route path="/trainer" element={<Trainer />}>
             <Route exact path="cages" element={<AnimalCage />} />
