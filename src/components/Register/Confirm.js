@@ -39,6 +39,8 @@ export default class Confirm extends Component {
                 age: 30,
                 gender: values.gender,
                 name: values.username,
+                email : values.email,
+                dob : values.dob
             },
         };
         // Make a POST request to the backend to submit the registration data
