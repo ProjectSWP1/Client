@@ -40,8 +40,8 @@ export const mainListItems = (
         </ListItemIcon>
         <ListItemText primary="Zoo Area Page" style={{ display: 'inline-block' }} />
       </Link>
-      </ListItemButton>
-      <ListItemButton>
+    </ListItemButton>
+    <ListItemButton>
       <Link to={'/staff/trainers'} style={{
         textDecoration: 'none',
         color: 'grey',
@@ -51,6 +51,42 @@ export const mainListItems = (
           <LineAxisIcon />
         </ListItemIcon>
         <ListItemText primary="Zoo Trainer Page" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
+    <ListItemButton>
+      <Link to={'/staff/cages'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <LineAxisIcon />
+        </ListItemIcon>
+        <ListItemText primary="Zoo Cage Page" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
+    <ListItemButton>
+      <Link to={'/staff/animals'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <LineAxisIcon />
+        </ListItemIcon>
+        <ListItemText primary="Animal Page" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
+    <ListItemButton>
+      <Link to={'/staff/animalspecies'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <LineAxisIcon />
+        </ListItemIcon>
+        <ListItemText primary="Animal Species Page" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
   </React.Fragment>

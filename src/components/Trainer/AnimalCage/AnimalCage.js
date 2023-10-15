@@ -28,7 +28,6 @@ export default function AnimalCage() {
                 'Authorization': "Bearer " + token,
             }
         }).then(response => response.json()).then(data => {
-            console.log(data);
             setCages(data);
         })
         fetch('http://localhost:8080/trainer/get-zoo-area', {
@@ -52,6 +51,7 @@ export default function AnimalCage() {
             return cage.cageID === id;
         })[0];
         setCageId(id);
+        setSelectedZooArea(cageById.zooArea.zooAreaId ? cageById.zooArea.zooAreaId : cageById.zooArea);
         setOpen(true);
         setDescription(cageById.description);
         setCapacity(cageById.capacity);
@@ -93,12 +93,13 @@ export default function AnimalCage() {
             body: JSON.stringify(cageDto)
         }).then(response => {
             if (!response.ok) {
-                throw new Error("Error");
+                return response.text().then((message) => {
+                    throw new Error(message);
+                  });
             }
             return response.json();
         })
         .then(data => {
-            console.log(data);
             setOpen(false);
             setCages([...cages, cageDto]);
             Swal.fire({
@@ -110,7 +111,7 @@ export default function AnimalCage() {
             setOpen(false);
             Swal.fire({
                 title: 'Fail!',
-                text: `Add Fail`,
+                text: `${error.message}`,
                 icon: 'error',
             });
         });
@@ -133,14 +134,19 @@ export default function AnimalCage() {
             body: JSON.stringify(cageDto)
         }).then(response => { 
             if (!response.ok) {
-                throw new Error("Error");
+                return response.text().then((message) => {
+                    throw new Error(message);
+                  });
             }
             return response.text();
          }).then(data => {
-            console.log(data);
             setOpen(false);
             setCages(cages.map(cage => {
-                if (cage.cageID === cageDto.cageID) return cageDto;
+                if (cage.cageID === cageDto.cageID) return {
+                    ...cage,
+                    description : cageDto.description,
+                    capacity : cageDto.capacity 
+                };
                 return cage;
             }));
             Swal.fire({
@@ -152,7 +158,7 @@ export default function AnimalCage() {
             setOpen(false);
             Swal.fire({
                 title: 'Fail!',
-                text: `Update Fail`,
+                text: `${error.message}`,
                 icon: 'error',
             });
         });
@@ -178,7 +184,9 @@ export default function AnimalCage() {
                     }
                 }).then(response => {
                     if (!response.ok) {
-                        throw new Error("Error");
+                        return response.text().then((message) => {
+                            throw new Error(message);
+                          });
                     }
                     Swal.fire({
                         title: 'Success!',
@@ -192,7 +200,7 @@ export default function AnimalCage() {
                     .catch(error => {
                         Swal.fire({
                             title: 'Fail!',
-                            text: `Delete Fail`,
+                            text: `${error.message}`,
                             icon: 'error',
                         });
                     });
@@ -202,16 +210,16 @@ export default function AnimalCage() {
 
     const columns = [
         {
-            id: 1,
-            name: '#',
+            id: 2,
+            name: 'ID',
             selector: (cage, index) => {
                 return (
-                    <p>{index + 1}</p>
+                    <p>{cage.cageID}</p>
                 )
             }
         },
         {
-            id: 2,
+            id: 3,
             name: 'Description',
             selector: cage => {
                 return (
@@ -220,7 +228,7 @@ export default function AnimalCage() {
             }
         },
         {
-            id: 3,
+            id: 4,
             name: 'Capacity',
             selector: cage => {
                 return (
@@ -229,7 +237,16 @@ export default function AnimalCage() {
             }
         },
         {
-            id: 4,
+            id: 5,
+            name: 'Zoo Area',
+            selector: cage => {
+                return (
+                    <p>{cage.zooArea?.zooAreaId ? cage.zooArea.zooAreaId : cage.zooArea}</p>
+                )
+            }
+        },
+        {
+            id: 6,
             name: 'Actions',
             selector: cage => {
                 return (
@@ -292,7 +309,7 @@ export default function AnimalCage() {
                                 <Select
                                     labelId="select-label"
                                     id="select"
-                                    value={selectedZooArea}
+                                    defaultValue={selectedZooArea}
                                     onChange={(e) => setSelectedZooArea(e.target.value)}
                                 >
                                     {zooAreas.map(area => {
