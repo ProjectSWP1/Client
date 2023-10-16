@@ -32,6 +32,7 @@ export default function Header() {
             setUser(JSON.parse(atob(accessToken.split('.')[1])))
         }
     }, [accessToken])   
+    console.log(user);
     // Cái này lấy từ auth.js sau khi setAuth bên login
     // const { user, logout } = useAuth();
     // const { token } = useAuth();
@@ -127,39 +128,39 @@ export default function Header() {
                                             }}
                                         >
                                             <Paper>
-                                                <ClickAwayListener onClickAway={handleClose}>
+                                                {/* <ClickAwayListener onClickAway={handleClose}> */}
                                                     <MenuList
                                                         autoFocusItem={open}
                                                         id="composition-menu"
                                                         aria-labelledby="composition-button"
                                                         onKeyDown={handleListKeyDown}
                                                     >
-                                                        <MenuItem onClick={handleClose}>
+                                                        <MenuItem>
                                                             <Link to={'/profile'}
                                                                 style={{color: 'black', textDecoration: 'none'}}
                                                                 >My Profile</Link>
                                                         </MenuItem>
                                                         {
-                                                          user.roles.authority === 'Admin' ? (
-                                                            <MenuItem onClick={handleClose}>
+                                                          user.roles === 'Admin' ? (
+                                                            <MenuItem>
                                                             <Link to={'/admin'}
                                                                 style={{color: 'black', textDecoration: 'none'}}
                                                                 >My Management</Link>
                                                             </MenuItem>
-                                                          ) : user.roles.authority == 'Staff' ? (
-                                                            <MenuItem onClick={handleClose}>
+                                                          ) : user.roles == 'Staff' ? (
+                                                            <MenuItem>
                                                             <Link to={'/staff'}
                                                                 style={{color: 'black', textDecoration: 'none'}}
                                                                 >My Management</Link>
                                                             </MenuItem>
-                                                          ) : user.roles.authority == 'Trainer' ? (
-                                                            <MenuItem onClick={handleClose}>
+                                                          ) : user.roles == 'Trainer' ? (
+                                                            <MenuItem>
                                                             <Link to={'/trainer'}
                                                                 style={{color: 'black', textDecoration: 'none'}}
                                                                 >My Management</Link>
                                                             </MenuItem>
                                                           ) : (
-                                                            <MenuItem onClick={handleClose}>
+                                                            <MenuItem>
                                                             <Link to={'/trainer'}
                                                                 style={{color: 'black', textDecoration: 'none'}}
                                                                 >My Order</Link>
@@ -169,7 +170,7 @@ export default function Header() {
                                                         <MenuItem onClick={handleClose}>Setting</MenuItem>
                                                         <MenuItem onClick={handleClose}>Logout</MenuItem>
                                                     </MenuList>
-                                                </ClickAwayListener>
+                                                {/* </ClickAwayListener> */}
                                             </Paper>
                                         </Grow>
                                     )}
