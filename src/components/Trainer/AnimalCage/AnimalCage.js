@@ -91,8 +91,14 @@ export default function AnimalCage() {
                 'Authorization': "Bearer " + token,
             },
             body: JSON.stringify(cageDto)
-        }).then(response => response.text())
-        .then(data => {
+        }).then(response => {
+            if (!response.ok) {
+                return response.text().then((message) => {
+                    throw new Error(message);
+                });
+            }
+            return response.text();
+        }).then(data => {
             setOpen(false);
             setCages([...cages, {
                 cageID: cageDto.cageID,

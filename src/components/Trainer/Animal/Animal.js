@@ -89,8 +89,8 @@ export default function Animal() {
         setWeight(animalById.weight);
         setAge(animalById.age);
         setGender(animalById.gender);
-        setSelectedCageId(animalById.cage.cageID);
-        setSelectedSpeciesId(animalById.species.speciesId);
+        setSelectedCageId(animalById.cage?.cageID ? animalById.cage.cageID : animalById.cage);
+        setSelectedSpeciesId(animalById.species?.speciesId ? animalById.species.speciesId : animalById.species);
         setName(animalById.name);
         setPopupTitle(`${UPDATE_ANIMAL_TITLE} ${animalById.name}`);
     }
@@ -392,7 +392,7 @@ export default function Animal() {
                                 <Select
                                     labelId="select-label-cage"
                                     id="select-cage"
-                                    defaultValue={animal ? animal?.cage.cageID : ""}
+                                    defaultValue={!animal ? '' : animal.cage?.cageID ? animal.cage.cageID : animal.cage}
                                     onChange={(e) => setSelectedCageId(e.target.value)}
                                 >
                                     {cages.map(cage => {
@@ -407,7 +407,7 @@ export default function Animal() {
                                 <Select
                                     labelId="select-label-specie"
                                     id="select-specie"
-                                    defaultValue={animal ? animal?.species.speciesId : ""}
+                                    defaultValue={!animal ? '' : animal.species?.speciesId ? animal.species.speciesId : animal.species}
                                     onChange={(e) => setSelectedSpeciesId(e.target.value)}
                                 >
                                     {species.map(specie => {
