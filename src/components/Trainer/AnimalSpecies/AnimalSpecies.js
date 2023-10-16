@@ -55,6 +55,7 @@ export default function AnimalSpecies() {
 
     const handleAddSave = () => {
         const animalSpeciesDto = {
+            speciesId: species,
             groups: groups,
             name: name
         }
@@ -234,6 +235,16 @@ export default function AnimalSpecies() {
                 <DialogContent>
                     <Box component="form" noValidate sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="specie"
+                                    label="specie"
+                                    value={specieId}
+                                    onChange={(e) => setGroups(e.target.value)}
+                                />
+                            </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     required

@@ -23,7 +23,6 @@ export function getItemWithTimeout(key) {
 	if (item.timeout && Date.now() >= item.timeout) {
 		// If the item has expired, set a new timeout and update the item
 		localStorage.removeItem(key);
-		alert('Time out, please login again')
 		return null
 	}
 

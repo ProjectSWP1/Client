@@ -83,6 +83,7 @@ export default function AnimalCage() {
             capacity: capacity,
             zoo_AreaID: selectedZooArea
         }
+        console.log(cageDto);
         fetch('http://localhost:8080/trainer/create-cage', {
             method: 'POST',
             headers: {
@@ -91,27 +92,21 @@ export default function AnimalCage() {
                 'Authorization': "Bearer " + token,
             },
             body: JSON.stringify(cageDto)
-        }).then(response => {
-            if (!response.ok) {
-                return response.text().then((message) => {
-                    throw new Error(message);
-                  });
-            }
-            return response.json();
-        })
+        }).then(response => response.text())
         .then(data => {
             setOpen(false);
             setCages([...cages, cageDto]);
             Swal.fire({
                 title: 'Success!',
-                text: `Add Successfully`,
+                text: `${data}`,
                 icon: 'success',
             });
         }).catch(error => {
             setOpen(false);
+            console.log(error);
             Swal.fire({
                 title: 'Fail!',
-                text: `${error.message}`,
+                text: `Add failed`,
                 icon: 'error',
             });
         });
@@ -183,6 +178,7 @@ export default function AnimalCage() {
                         'Authorization': "Bearer " + token,
                     }
                 }).then(response => {
+                    console.log(response);
                     if (!response.ok) {
                         return response.text().then((message) => {
                             throw new Error(message);
@@ -210,7 +206,7 @@ export default function AnimalCage() {
 
     const columns = [
         {
-            id: 2,
+            id: 1,
             name: 'ID',
             selector: (cage, index) => {
                 return (

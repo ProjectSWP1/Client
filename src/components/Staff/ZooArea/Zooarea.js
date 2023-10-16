@@ -20,10 +20,10 @@ export default function ZooArea() {
   const columns = [
     {
       id: 1,
-      name: '#',
+      name: 'ID',
       selector: (zooArea, index) => {
         return (
-          <p>{index + 1}</p>
+          <p>{zooArea.zooAreaId}</p>
         )
       }
     },

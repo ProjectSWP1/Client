@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -10,7 +10,9 @@ import ListItem from '@mui/material/ListItem';
 import { ListItemText } from '@mui/material';
 import { Copyright, defaultTheme } from '../Theme/Theme.js';
 import { Link } from 'react-router-dom'
+import VerifyEmail from './VerifyEmail.js';
 export default class Confirm extends Component {
+    state = { fetchdata: null }
     continue = event => {
         event.preventDefault();
         this.props.nextStep()
@@ -41,7 +43,6 @@ export default class Confirm extends Component {
                 dob : values.dob
             },
         };
-
         // Make a POST request to the backend to submit the registration data
         fetch('http://localhost:8080/user/register', {
             method: 'POST',
@@ -51,30 +52,30 @@ export default class Confirm extends Component {
             },
             body: JSON.stringify(payload),
         }).then(data => {
-                // Handle the response from the backend, if needed
-                //   alert(`Register success!! Welcome ${values.email}`);
-                //   console.log(data);
-                fetch('http://localhost:8080/user/send-email', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        //   'Authorizaion': `Bear ${}`
-                    },
-                    body: JSON.stringify(values.email)
-                }).then(response => response.json()).then(data => console.log(data))
-                    .catch(error => {
-                        // Handle errors, if any
-                        console.error('Cannot find your email:', error);
-                        // You can display an error message to the user if needed
-                    })
-                // You can also redirect to a success page or perform other actions here
+            // Handle the response from the backend, if needed
+            //   alert(`Register success!! Welcome ${values.email}`);
+            //   console.log(data);
+            return fetch('http://localhost:8080/user/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    //   'Authorizaion': `Bear ${}`
+                },
+                body: JSON.stringify(values.email)
             })
+        }).then(response => response.json()).then(data => this.setState({data}))
+            .catch(error => {
+                // Handle errors, if any
+                console.error('Cannot find your email:', error);
+                // You can display an error message to the user if needed
+            })
+            // You can also redirect to a success page or perform other actions here
+
             .catch(error => {
                 // Handle errors, if any
                 console.error('Error submitting registration data:', error);
                 // You can display an error message to the user if needed
             });
-        //window.location.href = '/'
     }
     render() {
         const { values: { email, password, phone, username, gender,
