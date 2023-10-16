@@ -71,12 +71,13 @@ export default function AnimalSpecies() {
         }).then(response => {
             console.log(response.status);
             if (!response.ok) {
-                throw new Error("Error");
+                return response.text().then((message) => {
+                    throw new Error(message);
+                  });
             }
             return response.text();
         })
         .then(data => {
-            console.log("Add sucess" + data);
             setOpen(false);
             setSpecies([...species, animalSpeciesDto]);
             Swal.fire({
@@ -88,7 +89,7 @@ export default function AnimalSpecies() {
             setOpen(false);
             Swal.fire({
                 title: 'Fail!',
-                text: `Add Fail`,
+                text: `${error.message}`,
                 icon: 'error',
             });
         });
@@ -110,7 +111,9 @@ export default function AnimalSpecies() {
             body: JSON.stringify(animalSpeciesDto)
         }).then(response => { 
             if (!response.ok) {
-                throw new Error("Error");
+                return response.text().then((message) => {
+                    throw new Error(message);
+                  });
             }
             return response.text();
          }).then(data => {
@@ -129,7 +132,7 @@ export default function AnimalSpecies() {
             setOpen(false);
             Swal.fire({
                 title: 'Fail!',
-                text: `Update Fail`,
+                text: `${error.message}`,
                 icon: 'error',
             });
         });
@@ -155,7 +158,9 @@ export default function AnimalSpecies() {
                     }
                 }).then(response => {
                     if (!response.ok) {
-                        throw new Error("Error");
+                        return response.text().then((message) => {
+                            throw new Error(message);
+                          });
                     }
                     Swal.fire({
                         title: 'Success!',
@@ -169,7 +174,7 @@ export default function AnimalSpecies() {
                     .catch(error => {
                         Swal.fire({
                             title: 'Fail!',
-                            text: `Delete Fail`,
+                            text: `${error.message}`,
                             icon: 'error',
                         });
                     });

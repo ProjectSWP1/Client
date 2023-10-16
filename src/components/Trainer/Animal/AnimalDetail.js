@@ -54,7 +54,7 @@ const AnimalDetail = ({ animalDetail }) => {
             <div className={{
                 marginBottom: "10px",
             }}>
-                <Typography variant="subtitle1">Species : {animalDetail?.species.name}</Typography>
+                <Typography variant="subtitle1">Species : {animalDetail?.species?.name}</Typography>
             </div>
         </Paper>
     );

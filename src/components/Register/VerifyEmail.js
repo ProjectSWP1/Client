@@ -8,7 +8,6 @@ export default function VerifyEmail() {
   const navigate = useNavigate()
   const [otp, setOtp] = useState('');
   const handleSubmit = () => {
-    console.log("Email : "+email);
     const url = `http://localhost:8080/user/verify?email=${email}&otp=${otp}`;
     fetch(url, {
       method: 'PUT'
