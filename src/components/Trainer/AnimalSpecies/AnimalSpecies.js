@@ -26,7 +26,6 @@ export default function AnimalSpecies() {
                 'Authorization': "Bearer " + token,
             }
         }).then(response => response.json()).then(data => {
-            console.log(data);
             setSpecies(data);
         })
     }, []);
@@ -68,7 +67,6 @@ export default function AnimalSpecies() {
             },
             body: JSON.stringify(animalSpeciesDto)
         }).then(response => {
-            console.log(response.status);
             if (!response.ok) {
                 return response.text().then((message) => {
                     throw new Error(message);
@@ -116,7 +114,6 @@ export default function AnimalSpecies() {
             }
             return response.text();
          }).then(data => {
-            console.log(data);
             setOpen(false);
             setSpecies(species.map(specie => {
                 if (specie.speciesId === specieId) return animalSpeciesDto;

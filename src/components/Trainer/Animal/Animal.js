@@ -191,7 +191,6 @@ export default function Animal() {
             }
             return response.text();
         }).then(data => {
-            console.log(data);
             setOpen(false);
             fetch(`http://localhost:8080/trainer/get-animal/${animalDto.animalId}`, {
                 method: 'GET',

@@ -309,7 +309,7 @@ export default function AnimalCage() {
                                 <Select
                                     labelId="select-label"
                                     id="select"
-                                    defaultValue={selectedZooArea}
+                                    value={selectedZooArea}
                                     onChange={(e) => setSelectedZooArea(e.target.value)}
                                 >
                                     {zooAreas.map(area => {
