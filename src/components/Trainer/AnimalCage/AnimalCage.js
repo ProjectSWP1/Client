@@ -83,7 +83,6 @@ export default function AnimalCage() {
             capacity: capacity,
             zoo_AreaID: selectedZooArea
         }
-        console.log(cageDto);
         fetch('http://localhost:8080/trainer/create-cage', {
             method: 'POST',
             headers: {
@@ -95,7 +94,14 @@ export default function AnimalCage() {
         }).then(response => response.text())
         .then(data => {
             setOpen(false);
-            setCages([...cages, cageDto]);
+            setCages([...cages, {
+                cageID: cageDto.cageID,
+                description: cageDto.description,
+                capacity: cageDto.capacity,
+                zooArea : {
+                    zooAreaId : selectedZooArea
+                }
+            }]);
             Swal.fire({
                 title: 'Success!',
                 text: `${data}`,
