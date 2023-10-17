@@ -28,6 +28,7 @@ export default function AnimalCage() {
                 'Authorization': "Bearer " + token,
             }
         }).then(response => response.json()).then(data => {
+            console.log(data);
             setCages(data);
         })
         fetch('http://localhost:8080/trainer/get-zoo-area', {
@@ -92,7 +93,14 @@ export default function AnimalCage() {
                 'Authorization': "Bearer " + token,
             },
             body: JSON.stringify(cageDto)
-        }).then(response => response.text())
+        }).then(response => {
+            if (!response.ok) {
+                return response.text().then((message) => {
+                    throw new Error(message);
+                  });
+            }
+            return response.text();
+        })
         .then(data => {
             setOpen(false);
             setCages([...cages, cageDto]);
@@ -103,10 +111,9 @@ export default function AnimalCage() {
             });
         }).catch(error => {
             setOpen(false);
-            console.log(error);
             Swal.fire({
                 title: 'Fail!',
-                text: `Add failed`,
+                text: `${error}`,
                 icon: 'error',
             });
         });
@@ -305,7 +312,7 @@ export default function AnimalCage() {
                                 <Select
                                     labelId="select-label"
                                     id="select"
-                                    defaultValue={selectedZooArea}
+                                    value={selectedZooArea}
                                     onChange={(e) => setSelectedZooArea(e.target.value)}
                                 >
                                     {zooAreas.map(area => {
