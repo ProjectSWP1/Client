@@ -28,7 +28,6 @@ export default function AnimalCage() {
                 'Authorization': "Bearer " + token,
             }
         }).then(response => response.json()).then(data => {
-            console.log(data);
             setCages(data);
         })
         fetch('http://localhost:8080/trainer/get-zoo-area', {
@@ -38,7 +37,10 @@ export default function AnimalCage() {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token,
             }
-        }).then(response => response.json()).then(data => {
+        }).then(response => {
+            if (!response.ok) return [];
+            return response.json();
+        }).then(data => {
             setZooAreas(data);
         })
     }, []);
@@ -84,7 +86,6 @@ export default function AnimalCage() {
             capacity: capacity,
             zoo_AreaID: selectedZooArea
         }
-        console.log(cageDto);
         fetch('http://localhost:8080/trainer/create-cage', {
             method: 'POST',
             headers: {
@@ -97,13 +98,19 @@ export default function AnimalCage() {
             if (!response.ok) {
                 return response.text().then((message) => {
                     throw new Error(message);
-                  });
+                });
             }
             return response.text();
-        })
-        .then(data => {
+        }).then(data => {
             setOpen(false);
-            setCages([...cages, cageDto]);
+            setCages([...cages, {
+                cageID: cageDto.cageID,
+                description: cageDto.description,
+                capacity: cageDto.capacity,
+                zooArea: {
+                    zooAreaId: selectedZooArea
+                }
+            }]);
             Swal.fire({
                 title: 'Success!',
                 text: `${data}`,
@@ -134,20 +141,20 @@ export default function AnimalCage() {
                 'Authorization': "Bearer " + token,
             },
             body: JSON.stringify(cageDto)
-        }).then(response => { 
+        }).then(response => {
             if (!response.ok) {
                 return response.text().then((message) => {
                     throw new Error(message);
-                  });
+                });
             }
             return response.text();
-         }).then(data => {
+        }).then(data => {
             setOpen(false);
             setCages(cages.map(cage => {
                 if (cage.cageID === cageDto.cageID) return {
                     ...cage,
-                    description : cageDto.description,
-                    capacity : cageDto.capacity 
+                    description: cageDto.description,
+                    capacity: cageDto.capacity
                 };
                 return cage;
             }));
@@ -189,7 +196,7 @@ export default function AnimalCage() {
                     if (!response.ok) {
                         return response.text().then((message) => {
                             throw new Error(message);
-                          });
+                        });
                     }
                     Swal.fire({
                         title: 'Success!',
