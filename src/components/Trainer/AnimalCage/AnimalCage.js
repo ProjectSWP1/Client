@@ -54,7 +54,7 @@ export default function AnimalCage() {
             return cage.cageID === id;
         })[0];
         setCageId(id);
-        setSelectedZooArea(cageById.zooArea.zooAreaId ? cageById.zooArea.zooAreaId : cageById.zooArea);
+        setSelectedZooArea(cageById.zooArea?.zooAreaId? cageById.zooArea.zooAreaId : cageById.zooArea);
         setOpen(true);
         setDescription(cageById.description);
         setCapacity(cageById.capacity);
@@ -154,13 +154,16 @@ export default function AnimalCage() {
                 if (cage.cageID === cageDto.cageID) return {
                     ...cage,
                     description: cageDto.description,
-                    capacity: cageDto.capacity
+                    capacity: cageDto.capacity,
+                    zooArea: {
+                        zooAreaId: selectedZooArea
+                    }
                 };
                 return cage;
             }));
             Swal.fire({
                 title: 'Success!',
-                text: `Update Successfully`,
+                text: `${data}`,
                 icon: 'success',
             });
         }).catch(error => {
@@ -192,15 +195,16 @@ export default function AnimalCage() {
                         'Authorization': "Bearer " + token,
                     }
                 }).then(response => {
-                    console.log(response);
                     if (!response.ok) {
                         return response.text().then((message) => {
                             throw new Error(message);
                         });
                     }
+                    return response.text()
+                }).then(data => {
                     Swal.fire({
                         title: 'Success!',
-                        text: `Delete Successfully`,
+                        text: `${data}`,
                         icon: 'success',
                     });
                     setCages(cages.filter(cage => {

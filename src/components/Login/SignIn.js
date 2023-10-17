@@ -153,16 +153,6 @@ export default function SignIn() {
               >
                 {loading ? "Signing In..." : "Sign In"}
               </Button>
-              <Button
-                variant="contained"
-                href="/"
-                fullWidth
-                sx={{ mt: 3, mb: 2 }}
-                startIcon={<GoogleIcon />}
-                disabled={loading}
-              >
-                {loading ? "Signing In with Google..." : "Login with Google"}
-              </Button>
               <Grid container>
                 <Grid item xs>
                   <Link href="/forgotpassword" variant="body2">
