@@ -70,7 +70,10 @@ export default function ZooTrainer() {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token,
             }
-        }).then(response => response.json()).then(data => {
+        }).then(response => {
+            if(!response.ok) return [];
+            return response.json();
+          }).then(data => {
             setZooTrainers(data);
         })
     }, []);

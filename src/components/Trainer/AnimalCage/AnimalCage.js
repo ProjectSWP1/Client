@@ -27,7 +27,10 @@ export default function AnimalCage() {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token,
             }
-        }).then(response => response.json()).then(data => {
+        }).then(response => {
+            if (!response.ok) return [];
+            return response.json();
+        }).then(data => {
             setCages(data);
         })
         fetch('http://localhost:8080/trainer/get-zoo-area', {
@@ -37,7 +40,10 @@ export default function AnimalCage() {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token,
             }
-        }).then(response => response.json()).then(data => {
+        }).then(response => {
+            if (!response.ok) return [];
+            return response.json();
+        }).then(data => {
             setZooAreas(data);
         })
     }, []);
@@ -104,8 +110,8 @@ export default function AnimalCage() {
                 cageID: cageDto.cageID,
                 description: cageDto.description,
                 capacity: cageDto.capacity,
-                zooArea : {
-                    zooAreaId : selectedZooArea
+                zooArea: {
+                    zooAreaId: selectedZooArea
                 }
             }]);
             Swal.fire({
@@ -139,20 +145,20 @@ export default function AnimalCage() {
                 'Authorization': "Bearer " + token,
             },
             body: JSON.stringify(cageDto)
-        }).then(response => { 
+        }).then(response => {
             if (!response.ok) {
                 return response.text().then((message) => {
                     throw new Error(message);
-                  });
+                });
             }
             return response.text();
-         }).then(data => {
+        }).then(data => {
             setOpen(false);
             setCages(cages.map(cage => {
                 if (cage.cageID === cageDto.cageID) return {
                     ...cage,
-                    description : cageDto.description,
-                    capacity : cageDto.capacity 
+                    description: cageDto.description,
+                    capacity: cageDto.capacity
                 };
                 return cage;
             }));
@@ -194,7 +200,7 @@ export default function AnimalCage() {
                     if (!response.ok) {
                         return response.text().then((message) => {
                             throw new Error(message);
-                          });
+                        });
                     }
                     Swal.fire({
                         title: 'Success!',

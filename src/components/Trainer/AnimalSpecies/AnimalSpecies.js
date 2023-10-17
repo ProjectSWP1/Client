@@ -14,7 +14,7 @@ export default function AnimalSpecies() {
     const [open, setOpen] = useState(false);
     const ADD_ANIMAL_SPECIES_TITLE = "Add animal specie";
     const UPDATE_ANIMAL_SPECIES_TITLE = "Update animal specie";
-    const [specieId , setSpecieId] = useState(0);
+    const [specieId, setSpecieId] = useState(0);
     const [popUpTitle, setPopupTitle] = useState(ADD_ANIMAL_SPECIES_TITLE);
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
     useEffect(() => {
@@ -25,7 +25,10 @@ export default function AnimalSpecies() {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token,
             }
-        }).then(response => response.json()).then(data => {
+        }).then(response => {
+            if (!response.ok) return [];
+            return response.json();
+        }).then(data => {
             setSpecies(data);
         })
     }, []);
@@ -71,31 +74,31 @@ export default function AnimalSpecies() {
             if (!response.ok) {
                 return response.text().then((message) => {
                     throw new Error(message);
-                  });
+                });
             }
             return response.text();
         })
-        .then(data => {
-            setOpen(false);
-            setSpecies([...species, animalSpeciesDto]);
-            Swal.fire({
-                title: 'Success!',
-                text: `Add Successfully`,
-                icon: 'success',
+            .then(data => {
+                setOpen(false);
+                setSpecies([...species, animalSpeciesDto]);
+                Swal.fire({
+                    title: 'Success!',
+                    text: `Add Successfully`,
+                    icon: 'success',
+                });
+            }).catch(error => {
+                setOpen(false);
+                Swal.fire({
+                    title: 'Fail!',
+                    text: `${error.message}`,
+                    icon: 'error',
+                });
             });
-        }).catch(error => {
-            setOpen(false);
-            Swal.fire({
-                title: 'Fail!',
-                text: `${error.message}`,
-                icon: 'error',
-            });
-        });
     }
 
     const handleUpdateSave = () => {
         const animalSpeciesDto = {
-            speciesId : specieId,
+            speciesId: specieId,
             groups: groups,
             name: name
         }
@@ -107,14 +110,14 @@ export default function AnimalSpecies() {
                 'Authorization': "Bearer " + token,
             },
             body: JSON.stringify(animalSpeciesDto)
-        }).then(response => { 
+        }).then(response => {
             if (!response.ok) {
                 return response.text().then((message) => {
                     throw new Error(message);
-                  });
+                });
             }
             return response.text();
-         }).then(data => {
+        }).then(data => {
             setOpen(false);
             setSpecies(species.map(specie => {
                 if (specie.speciesId === specieId) return animalSpeciesDto;
@@ -157,7 +160,7 @@ export default function AnimalSpecies() {
                     if (!response.ok) {
                         return response.text().then((message) => {
                             throw new Error(message);
-                          });
+                        });
                     }
                     Swal.fire({
                         title: 'Success!',
@@ -235,7 +238,7 @@ export default function AnimalSpecies() {
                 <DialogContent>
                     <Box component="form" noValidate sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                        <Grid item xs={12}>
+                            <Grid item xs={12}>
                                 <TextField
                                     required
                                     fullWidth

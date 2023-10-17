@@ -36,7 +36,10 @@ export default function Animal() {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token,
             }
-        }).then(response => response.json()).then(data => {
+        }).then(response => {
+            if (!response.ok) return {animal : []};
+            return response.json();
+        }).then(data => {
             setAnimals(data.animal);
         });
         fetch('http://localhost:8080/trainer/get-cage/ascending', {
@@ -46,7 +49,10 @@ export default function Animal() {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token,
             }
-        }).then(response => response.json()).then(data => {
+        }).then(response => {
+            if (!response.ok) return [];
+            return response.json();
+        }).then(data => {
             setCages(data);
         });
         fetch('http://localhost:8080/trainer/get-all-animalSpecies', {
@@ -56,7 +62,10 @@ export default function Animal() {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token,
             }
-        }).then(response => response.json()).then(data => {
+        }).then(response => {
+            if (!response.ok) return [];
+            return response.json();
+        }).then(data => {
             setSpecies(data);
         });
     }, [])
