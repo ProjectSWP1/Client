@@ -18,6 +18,9 @@ export function getItemWithTimeout(key) {
 		setItemWithTimeout(key, item.value, NEW_TIMEOUT_IN_SECONDS);
 		return item.value;
 	}
+	// documen.addEventListener('click', () => {
+
+	// })
 
 	const item = JSON.parse(itemString);
 	if (item.timeout && Date.now() >= item.timeout) {
