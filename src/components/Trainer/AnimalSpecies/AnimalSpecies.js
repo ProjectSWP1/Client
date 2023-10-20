@@ -77,13 +77,12 @@ export default function AnimalSpecies() {
                 });
             }
             return response.text();
-        })
-            .then(data => {
+        }).then(data => {
                 setOpen(false);
                 setSpecies([...species, animalSpeciesDto]);
                 Swal.fire({
                     title: 'Success!',
-                    text: `Add Successfully`,
+                    text: `${data}`,
                     icon: 'success',
                 });
             }).catch(error => {
@@ -185,10 +184,10 @@ export default function AnimalSpecies() {
     const columns = [
         {
             id: 1,
-            name: '#',
+            name: 'SpeciesID',
             selector: (specie, index) => {
                 return (
-                    <p>{index + 1}</p>
+                    <p>{specie.speciesId}</p>
                 )
             }
         },
@@ -243,7 +242,7 @@ export default function AnimalSpecies() {
                                     required
                                     fullWidth
                                     id="specie"
-                                    label="specie"
+                                    label="Species"
                                     value={specieId}
                                     onChange={(e) => setGroups(e.target.value)}
                                 />
@@ -253,7 +252,7 @@ export default function AnimalSpecies() {
                                     required
                                     fullWidth
                                     id="groups"
-                                    label="groups"
+                                    label="Groups"
                                     value={groups}
                                     onChange={(e) => setGroups(e.target.value)}
                                 />
@@ -262,7 +261,7 @@ export default function AnimalSpecies() {
                                 <TextField
                                     required
                                     fullWidth
-                                    label="name"
+                                    label="Name"
                                     id="name"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}

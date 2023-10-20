@@ -22,7 +22,11 @@ export default function VerifyEmail() {
       }
       return response.text()
     }).then(data => {
-      console.log(data);
+      // console.log(data);
+      if(data == 'Invalid OTP '){
+        throw new Error(data)
+      }
+      navigate('/login')
     })
       .catch(error => {
         Swal.fire({
