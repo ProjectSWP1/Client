@@ -27,7 +27,10 @@ export default function AnimalCage() {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token,
             }
-        }).then(response => response.json()).then(data => {
+        }).then(response => {
+            if (!response.ok) return [];
+            return response.json();
+        }).then(data => {
             setCages(data);
         })
         fetch('http://localhost:8080/trainer/get-zoo-area', {
