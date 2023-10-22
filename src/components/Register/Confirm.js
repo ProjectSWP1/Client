@@ -34,7 +34,6 @@ export default class Confirm extends Component {
             memberDto: {
                 phoneNumber: values.phone,
                 address: values.address,
-                age: 30,
                 gender: values.gender,
                 name: values.username,
                 email : values.email,
