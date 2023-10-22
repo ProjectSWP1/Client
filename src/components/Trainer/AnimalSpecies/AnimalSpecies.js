@@ -5,15 +5,14 @@ import Swal from 'sweetalert2';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 export default function AnimalSpecies() {
     const [species, setSpecies] = useState([]);
     const [groups, setGroups] = useState("");
     const [name, setName] = useState("");
     const [open, setOpen] = useState(false);
-    const ADD_ANIMAL_SPECIES_TITLE = "Add animal specie";
-    const UPDATE_ANIMAL_SPECIES_TITLE = "Update animal specie";
+    const ADD_ANIMAL_SPECIES_TITLE = "Add animal species";
+    const UPDATE_ANIMAL_SPECIES_TITLE = "Update animal species";
     const [specieId, setSpecieId] = useState(0);
     const [popUpTitle, setPopupTitle] = useState(ADD_ANIMAL_SPECIES_TITLE);
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
@@ -31,7 +30,7 @@ export default function AnimalSpecies() {
         }).then(data => {
             setSpecies(data);
         })
-    }, []);
+    }, [species]);
 
     const handleClose = () => {
         setOpen(false);
@@ -39,7 +38,7 @@ export default function AnimalSpecies() {
 
     const handleOpenPopupUpdateAction = (id) => {
         const specieById = species.filter(specie => {
-            return specie.speciesId === id;
+            return specie.speciesId == id;
         })[0];
         setSpecieId(id);
         setOpen(true);
@@ -58,7 +57,6 @@ export default function AnimalSpecies() {
 
     const handleAddSave = () => {
         const animalSpeciesDto = {
-            speciesId: species,
             groups: groups,
             name: name
         }
@@ -79,7 +77,7 @@ export default function AnimalSpecies() {
             return response.text();
         }).then(data => {
                 setOpen(false);
-                setSpecies([...species, animalSpeciesDto]);
+                // setSpecies([...species, animalSpeciesDto]);
                 Swal.fire({
                     title: 'Success!',
                     text: `${data}`,
@@ -118,13 +116,13 @@ export default function AnimalSpecies() {
             return response.text();
         }).then(data => {
             setOpen(false);
-            setSpecies(species.map(specie => {
-                if (specie.speciesId === specieId) return animalSpeciesDto;
-                return specie;
-            }));
+            // setSpecies(species.map(specie => {
+            //     if (specie.speciesId === specieId) return animalSpeciesDto;
+            //     return specie;
+            // }));
             Swal.fire({
                 title: 'Success!',
-                text: `Update Successfully`,
+                text: `${data}`,
                 icon: 'success',
             });
         }).catch(error => {
@@ -161,14 +159,17 @@ export default function AnimalSpecies() {
                             throw new Error(message);
                         });
                     }
+                    return response.text()
+                    
+                    // setSpecies(species.filter(specie => {
+                    //     return specie.speciesId != id;
+                    // }));
+                }).then(data => {
                     Swal.fire({
                         title: 'Success!',
-                        text: `Delete Successfully`,
+                        text: `${data}`,
                         icon: 'success',
                     });
-                    setSpecies(species.filter(specie => {
-                        return specie.speciesId != id;
-                    }));
                 })
                     .catch(error => {
                         Swal.fire({
@@ -237,16 +238,6 @@ export default function AnimalSpecies() {
                 <DialogContent>
                     <Box component="form" noValidate sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="specie"
-                                    label="Species"
-                                    value={specieId}
-                                    onChange={(e) => setGroups(e.target.value)}
-                                />
-                            </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     required

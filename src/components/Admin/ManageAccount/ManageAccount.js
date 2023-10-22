@@ -1,61 +1,252 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import React, { useState, useEffect } from 'react';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Container } from '@mui/material';
-import useAuth from '../../auth/auth';
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
-
-function createData(name, gender, address, age, phone) {
-  return { name, gender, address, age, phone };
-}
-
-
-const rows = [
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+import { Box, Button, Container, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, FormLabel, Grid, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField } from '@mui/material';
+import DataTable from 'react-data-table-component';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import Swal from 'sweetalert2';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import dayjs from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 export default function ManageAccount() {
-  const [account, setAccount] = React.useState([])
+  const [accounts, setAccounts] = useState([])
+  const [zooAreas, setZooAreas] = useState([])
+  const [open, setOpen] = useState(false);
+  const ADD_ACCOUNT_TITLE = "Add new account";
+  // const UPDATE_CAGE_TITLE = "Update animal cage";
 
+  //for account
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [phone, setPhone] = useState('')
+  const [role, setRole] = useState('')
+
+  //for employee/member
+  const [empId, setEmpId] = useState('')
+  const [address, setAddress] = useState('')
+  const [dob, setDob] = useState('')
+  const [name, setName] = useState('')
+  const [selectedZooArea, setSelectedZooArea] = useState('')
+  const [gender, setGender] = useState('')
+
+  const [popUpTitle, setPopupTitle] = useState(ADD_ACCOUNT_TITLE);
   const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
-
-  React.useEffect(() => {
+  // const currentAcc = JSON.parse(atob(token.split('.')[1]))
+  useEffect(() => {
     fetch('http://localhost:8080/admin/getAccount', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         'Authorization': "Bearer " + token,
-      }}).then(response => response.json()).then(data => {setAccount(data)})
+      }
+    }).then(response => response.json()).then(data => {
+      // const newData = data.filter((item) => {
+      //   return item.username !== currentAcc.sub
+      // })
+      // if (newData) {
+      //   setAccounts(newData)
+      // }
+      console.log(data);
+      setAccounts(data)
+    })
+
+    fetch('http://localhost:8080/trainer/get-zoo-area', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer " + token,
+      }
+    }).then(response => {
+      if (!response.ok) return [];
+      return response.json();
+    }).then(data => {
+      setZooAreas(data);
+    })
   }, [])
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpenPopupAddAction = () => {
+    //account
+    setOpen(true);
+    setEmail("");
+    setPassword("");
+    setRole("")
+    setPhone("")
+
+    //employee/member
+    setEmpId("")
+    setAddress("")
+    setGender("")
+    setDob("")
+    setName("")
+    setSelectedZooArea("");
+    setPopupTitle(ADD_ACCOUNT_TITLE);
+  }
+
+  const handleAddSave = () => {
+    // const payload = {
+    const accountDto = {
+      email: email,
+      password: password,
+      phoneNumber: phone
+    }
+    const memberDto = {
+      phoneNumber: phone,
+      address: address,
+      gender: gender,
+      name: name,
+      email: email,
+      // dob: dob
+    }
+    // const roleID = role
+    // }
+    fetch(`http://localhost:8080/admin/create-account?roleId=${role}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer " + token,
+      },
+      body: JSON.stringify({
+        accountDto: accountDto,
+        memberDto: memberDto
+      })
+    }).then(response => {
+      if (!response.ok) {
+        return response.text().then((message) => {
+          throw new Error(message);
+        });
+      }
+      return response.text();
+    }).then(data => {
+      setOpen(false);
+      setAccounts([...accounts, {
+        email: accountDto.email,
+        password: accountDto.password,
+        phoneNumber: accountDto.phone,
+        role: {
+          authority: role
+        }
+      }]);
+      Swal.fire({
+        title: 'Success!',
+        text: `${data}`,
+        icon: 'success',
+      });
+    }).catch(error => {
+      setOpen(false);
+      Swal.fire({
+        title: 'Fail!',
+        text: `${error}`,
+        icon: 'error',
+      });
+    });
+  }
+
+  const handleUpdateRoleSave = (id) => {
+
+  }
+
+  const handleDisactiveAction = (email) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Are you sure?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:8080/admin/deactivate-account/${email}`, {
+          method: 'PUT',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + token,
+          },
+        }).then(response => {
+          if (!response.ok) {
+            return response.text().then((message) => {
+              throw new Error(message);
+            });
+          }
+          return response.text()
+        }).then(data => {
+          Swal.fire({
+            title: 'Success!',
+            text: `${data}`,
+            icon: 'success',
+          });
+        })
+          .catch(error => {
+            Swal.fire({
+              title: 'Fail!',
+              text: `${error.message}`,
+              icon: 'error',
+            });
+          });
+      }
+    });
+  }
+
+  const columns = [
+    {
+      id: 1,
+      name: 'Email',
+      selector: (account, index) => {
+        return (
+          <p>{account.email}</p>
+        )
+      }
+    },
+    {
+      id: 2,
+      name: 'Username',
+      selector: account => {
+        return (
+          <p>{account.username}</p>
+        )
+      }
+    },
+    {
+      id: 3,
+      name: 'Active',
+      selector: account => {
+        return (
+          <p>{account.active ? <CheckIcon color="success" /> : <CloseIcon color="warning" />}</p>
+        )
+      }
+    },
+    {
+      id: 4,
+      name: 'Role',
+      selector: account => {
+        return (
+          <p>{account.role.authority}</p>
+        )
+      }
+    },
+    {
+      id: 5,
+      name: 'Delete',
+      selector: account => {
+        return (
+          <div>
+            <Button variant="contained" onClick={() => handleDisactiveAction(account.email)}>Disactive</Button>
+          </div>
+        )
+      }
+    }
+  ]
 
   return (
     <Container sx={{
@@ -67,31 +258,152 @@ export default function ManageAccount() {
       height: '100vh',
       overflow: 'auto',
     }}>
+      <Dialog open={open} onClose={handleClose} >
+        <DialogTitle>{popUpTitle}</DialogTitle>
+        <DialogContent>
+          <Box component="form" noValidate sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              {popUpTitle === ADD_ACCOUNT_TITLE ? <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Grid> : ""}
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="password"
+                  label="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="Phone Number"
+                  type="number"
+                  id="phoneNumber"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <InputLabel id="select-label">Select an zoo area</InputLabel>
+                <Select
+                  labelId="select-label"
+                  id="select"
+                  value={selectedZooArea}
+                  onChange={(e) => setSelectedZooArea(e.target.value)}
+                >
+                  {zooAreas.map(area => {
+                    return (
+                      <MenuItem key={area.zooAreaId} value={area.zooAreaId}>{area.description}</MenuItem>
+                    )
+                  })}
+                </Select>
+              </Grid>
+              <Grid item xs={6}>
+                <InputLabel id="select-label">Select role</InputLabel>
+                <Select
+                  labelId="select-label"
+                  id="select"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                >
+                  <MenuItem value='ST'>Staff</MenuItem>
+                  <MenuItem value='ZT'>Zoo Trainer</MenuItem>
+                </Select>
+              </Grid>
+              {/* member */}
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="EmpID"
+                  id="empId"
+                  onChange={(e) => setEmpId(e.target.value)}
+                  value={empId}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="Name"
+                  id="name"
+                  onChange={(e) => setName(e.target.value)}
+                  value={name}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormLabel id="gender">Gender</FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="gender"
+                  name="Gender"
+                  onChange={(e) => setGender(e.target.value)}
+                  value={gender}
+                >
+                  <FormControlLabel value="female" control={<Radio />} label="Female" />
+                  <FormControlLabel value="male" control={<Radio />} label="Male" />
+                </RadioGroup>
+              </Grid>
+              <Grid item xs={12}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DatePicker']} >
+                    <DatePicker label="Date of Birth"
+                      value={dayjs(dob)}
+                      onChange={(e) => setDob(e.target.value)}
+                      format='MM/DD/YYYY'
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="Address"
+                  id="address"
+                  onChange={(e) => setAddress(e.target.value)}
+                  value={address}
+                />
+              </Grid>
+            </Grid>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Close
+          </Button>
+          <Button onClick={popUpTitle === ADD_ACCOUNT_TITLE ? handleAddSave : handleUpdateRoleSave} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
       <TableContainer component={Paper} sx={{ mt: '100px' }}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Username</StyledTableCell>
-              <StyledTableCell align="right">Email</StyledTableCell>
-              <StyledTableCell align="right">Password</StyledTableCell>
-              <StyledTableCell align="right">Role</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {account.map((row) => (
-              <StyledTableRow key={row.username}>
-                <StyledTableCell component="th" scope="row">
-                  {row.username}
-                </StyledTableCell>
-                <StyledTableCell align="right">{row.email}</StyledTableCell>
-                <StyledTableCell align="right">{row.password}</StyledTableCell>
-                <StyledTableCell align="right">{row.role.authority}</StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <DataTable
+          columns={columns}
+          data={accounts.map(item => ({
+            ...item,
+          }))}
+          title="Accounts"
+          pagination
+          keyField='email'
+          paginationPerPage={5} // Number of rows per page
+          paginationRowsPerPageOptions={[5, 10, 20, 50]} // Rows per page options
+        />
+        <Button color="primary" fullWidth onClick={handleOpenPopupAddAction}>
+          Add
+        </Button>
       </TableContainer>
-
     </Container>
   );
 }
