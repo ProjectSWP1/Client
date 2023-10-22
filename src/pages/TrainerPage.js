@@ -12,7 +12,7 @@ import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import ListItems, { mainListItems } from '../components/Trainer/ListItems';
+import { mainListItems, secondListItem } from '../components/Trainer/ListItems';
 import { Copyright, defaultTheme } from '../components/Theme/Theme.js'
 import { Outlet, Route, Routes } from 'react-router-dom';
 
@@ -123,8 +123,8 @@ export default function TrainerPage() {
           <Divider />
           <List component="nav">
             {mainListItems}
-            {/* <Divider sx={{ my: 1 }} />
-            {secondaryListItems} */}
+            <Divider sx={{ my: 1 }} />
+            {secondListItem}
           </List>
         </Drawer>
         <Outlet/>
