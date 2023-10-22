@@ -4,30 +4,44 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import LineAxisIcon from '@mui/icons-material/LineAxis';
+import HomeIcon from '@mui/icons-material/Home';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import HouseSidingIcon from '@mui/icons-material/HouseSiding';
+import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
+import PetsIcon from '@mui/icons-material/Pets';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+
 import { Link } from 'react-router-dom';
 
-// export default function ListItems() {
-//   return (
-//     <React.Fragment>
-//       <ListItemButton onClick={handleClick}>
-//         <ListItemIcon>
-//           <LineAxisIcon />
-//         </ListItemIcon>
-//         <ListItemText primary="Dashboard" />
-//       </ListItemButton>
-//       <ListItemButton onClick={handleClick}>
-//         <ListItemIcon>
-//           <SupervisedUserCircleIcon />
-//         </ListItemIcon>
-//         <ListItemText primary="Manage Account" />
-//       </ListItemButton>
-//     </React.Fragment>
-//   )
-// }
-
 export const mainListItems = (
+  <React.Fragment>
+    <ListItemButton>
+      <Link to={'/'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <HomeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Home" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
+    <ListItemButton>
+      <Link to={'/'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <AccountBoxIcon />
+        </ListItemIcon>
+        <ListItemText primary="Profile" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
+  </React.Fragment>
+)
+export const adminListItems = (
   <React.Fragment>
     <ListItemButton>
       <Link to={'/admin/dashboard'} style={{
@@ -53,127 +67,81 @@ export const mainListItems = (
         <ListItemText primary="Manage Account" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
+  </React.Fragment>
+);
+
+export const staffListItems = (
+  <React.Fragment>
+    <ListSubheader component="div" inset>
+      Staff's function
+    </ListSubheader>
     <ListItemButton>
-      <Link to={'/admin/cages'} style={{
+      <Link to={'/staff/zooarea'} style={{
         textDecoration: 'none',
         color: 'grey',
         width: '100%'
       }}>
         <ListItemIcon>
-          <LineAxisIcon />
-        </ListItemIcon>
-        <ListItemText primary="Zoo Cage Page" style={{ display: 'inline-block' }} />
-      </Link>
-    </ListItemButton>
-    <ListItemButton>
-      <Link to={'/admin/animals'} style={{
-        textDecoration: 'none',
-        color: 'grey',
-        width: '100%'
-      }}>
-        <ListItemIcon>
-          <LineAxisIcon />
-        </ListItemIcon>
-        <ListItemText primary="Animal Page" style={{ display: 'inline-block' }} />
-      </Link>
-    </ListItemButton>
-    <ListItemButton>
-      <Link to={'/admin/animalspecies'} style={{
-        textDecoration: 'none',
-        color: 'grey',
-        width: '100%'
-      }}>
-        <ListItemIcon>
-          <LineAxisIcon />
-        </ListItemIcon>
-        <ListItemText primary="Animal Species Page" style={{ display: 'inline-block' }} />
-      </Link>
-    </ListItemButton>
-    <ListItemButton>
-      <Link to={'/admin/zooarea'} style={{
-        textDecoration: 'none',
-        color: 'grey',
-        width: '100%'
-      }}>
-        <ListItemIcon>
-          <LineAxisIcon />
+          <LocationSearchingIcon />
         </ListItemIcon>
         <ListItemText primary="Zoo Area Page" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
     <ListItemButton>
-      <Link to={'/admin/trainers'} style={{
+      <Link to={'/staff/trainers'} style={{
         textDecoration: 'none',
         color: 'grey',
         width: '100%'
       }}>
         <ListItemIcon>
-          <LineAxisIcon />
+          <SupervisedUserCircleIcon />
         </ListItemIcon>
         <ListItemText primary="Zoo Trainer Page" style={{ display: 'inline-block' }} />
-      </Link>
-    </ListItemButton>
-    <ListItemButton>
-      <Link to={'/admin/cages'} style={{
-        textDecoration: 'none',
-        color: 'grey',
-        width: '100%'
-      }}>
-        <ListItemIcon>
-          <LineAxisIcon />
-        </ListItemIcon>
-        <ListItemText primary="Zoo Cage Page" style={{ display: 'inline-block' }} />
-      </Link>
-    </ListItemButton>
-    <ListItemButton>
-      <Link to={'/admin/animals'} style={{
-        textDecoration: 'none',
-        color: 'grey',
-        width: '100%'
-      }}>
-        <ListItemIcon>
-          <LineAxisIcon />
-        </ListItemIcon>
-        <ListItemText primary="Animal Page" style={{ display: 'inline-block' }} />
-      </Link>
-    </ListItemButton>
-    <ListItemButton>
-      <Link to={'/admin/animalspecies'} style={{
-        textDecoration: 'none',
-        color: 'grey',
-        width: '100%'
-      }}>
-        <ListItemIcon>
-          <LineAxisIcon />
-        </ListItemIcon>
-        <ListItemText primary="Animal Species Page" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
   </React.Fragment>
 );
 
-export const secondaryListItems = (
+export const trainerListItems = (
   <React.Fragment>
     <ListSubheader component="div" inset>
-      Saved reports
+      Trainer's function
     </ListSubheader>
     <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Current month" />
+      <Link to={'/trainer/cages'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <HouseSidingIcon />
+        </ListItemIcon>
+        <ListItemText primary="Zoo Cage Page" style={{ display: 'inline-block' }} />
+      </Link>
     </ListItemButton>
     <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Last quarter" />
+      <Link to={'/trainer/animals'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <PetsIcon />
+        </ListItemIcon>
+        <ListItemText primary="Animal Page" style={{ display: 'inline-block' }} />
+      </Link>
     </ListItemButton>
     <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Year-end sale" />
+      <Link to={'/trainer/animalspecies'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <PetsIcon />
+        </ListItemIcon>
+        <ListItemText primary="Animal Species Page" style={{ display: 'inline-block' }} />
+      </Link>
     </ListItemButton>
   </React.Fragment>
 );
