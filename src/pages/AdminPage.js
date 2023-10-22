@@ -12,7 +12,7 @@ import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems } from '../components/Admin/ListItems';
+import { firstListItems, mainListItems, secondaryListItems, thirdListItems } from '../components/Admin/ListItems';
 import { Copyright, defaultTheme } from '../components/Theme/Theme.js'
 import { Outlet } from 'react-router-dom';
 
@@ -123,8 +123,12 @@ export default function AdminPage() {
           <Divider />
           <List component="nav">
             {mainListItems}
-            {/* <Divider sx={{ my: 1 }} />
-            {secondaryListItems} */}
+            <Divider sx={{ my: 1 }} />
+            {firstListItems}
+            <Divider sx={{ my: 1 }} />
+            {secondaryListItems}
+            <Divider sx={{ my: 1 }} />
+            {thirdListItems}
           </List>
         </Drawer>
         <Outlet/>

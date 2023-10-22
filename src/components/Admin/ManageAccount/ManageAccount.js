@@ -104,7 +104,7 @@ export default function ManageAccount() {
       gender: gender,
       name: name,
       email: email,
-      // dob: dob
+      dob: dob
     }
     // const roleID = role
     // }
@@ -360,7 +360,7 @@ export default function ManageAccount() {
                   <DemoContainer components={['DatePicker']} >
                     <DatePicker label="Date of Birth"
                       value={dayjs(dob)}
-                      onChange={(e) => setDob(e.target.value)}
+                      onChange={(e) => setDob(`${e.$M + 1}/${e.$D}/${e.$y}`)}
                       format='MM/DD/YYYY'
                     />
                   </DemoContainer>
