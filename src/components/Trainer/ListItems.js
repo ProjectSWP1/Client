@@ -55,5 +55,17 @@ export const mainListItems = (
         <ListItemText primary="Animal Species Page" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
+    <ListItemButton>
+      <Link to={'/trainer/profile'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <LineAxisIcon />
+        </ListItemIcon>
+        <ListItemText primary="Trainer Profile" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
   </React.Fragment>
 );
