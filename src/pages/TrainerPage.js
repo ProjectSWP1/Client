@@ -12,9 +12,9 @@ import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondListItem } from '../components/Trainer/ListItems';
-import { Copyright, defaultTheme } from '../components/Theme/Theme.js'
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { mainListItems, trainerListItems } from '../components/ListItems.js';
+import { defaultTheme } from '../components/Theme/Theme.js'
+import { Outlet } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -124,7 +124,7 @@ export default function TrainerPage() {
           <List component="nav">
             {mainListItems}
             <Divider sx={{ my: 1 }} />
-            {secondListItem}
+            {trainerListItems}
           </List>
         </Drawer>
         <Outlet/>

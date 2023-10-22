@@ -67,7 +67,7 @@ export default function ManageAccount() {
     }).then(data => {
       setZooAreas(data);
     })
-  }, [])
+  }, [accounts])
 
   const handleClose = () => {
     setOpen(false);
@@ -108,7 +108,7 @@ export default function ManageAccount() {
     }
     // const roleID = role
     // }
-    fetch(`http://localhost:8080/admin/create-account?roleId=${role}`, {
+    fetch(`http://localhost:8080/admin/create-account?roleId=${role}&zooArea_Id=${selectedZooArea}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -295,6 +295,18 @@ export default function ManageAccount() {
                 />
               </Grid>
               <Grid item xs={6}>
+                <InputLabel id="select-label">Select role</InputLabel>
+                <Select
+                  labelId="select-label"
+                  id="select"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                >
+                  <MenuItem value='ST'>Staff</MenuItem>
+                  <MenuItem value='ZT'>Zoo Trainer</MenuItem>
+                </Select>
+              </Grid>
+              {role == 'ZT'? <Grid item xs={6}>
                 <InputLabel id="select-label">Select an zoo area</InputLabel>
                 <Select
                   labelId="select-label"
@@ -308,19 +320,7 @@ export default function ManageAccount() {
                     )
                   })}
                 </Select>
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel id="select-label">Select role</InputLabel>
-                <Select
-                  labelId="select-label"
-                  id="select"
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                >
-                  <MenuItem value='ST'>Staff</MenuItem>
-                  <MenuItem value='ZT'>Zoo Trainer</MenuItem>
-                </Select>
-              </Grid>
+              </Grid> : ""}
               {/* member */}
               <Grid item xs={12}>
                 <TextField
