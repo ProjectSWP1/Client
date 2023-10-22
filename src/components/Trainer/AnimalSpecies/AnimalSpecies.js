@@ -5,16 +5,15 @@ import Swal from 'sweetalert2';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 export default function AnimalSpecies() {
     const [species, setSpecies] = useState([]);
     const [groups, setGroups] = useState("");
     const [name, setName] = useState("");
     const [open, setOpen] = useState(false);
-    const ADD_ANIMAL_SPECIES_TITLE = "Add animal specie";
-    const UPDATE_ANIMAL_SPECIES_TITLE = "Update animal specie";
-    const [specieId , setSpecieId] = useState(0);
+    const ADD_ANIMAL_SPECIES_TITLE = "Add animal species";
+    const UPDATE_ANIMAL_SPECIES_TITLE = "Update animal species";
+    const [specieId, setSpecieId] = useState(0);
     const [popUpTitle, setPopupTitle] = useState(ADD_ANIMAL_SPECIES_TITLE);
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
     useEffect(() => {
@@ -25,11 +24,13 @@ export default function AnimalSpecies() {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token,
             }
-        }).then(response => response.json()).then(data => {
-            console.log(data);
+        }).then(response => {
+            if (!response.ok) return [];
+            return response.json();
+        }).then(data => {
             setSpecies(data);
         })
-    }, []);
+    }, [species]);
 
     const handleClose = () => {
         setOpen(false);
@@ -37,7 +38,7 @@ export default function AnimalSpecies() {
 
     const handleOpenPopupUpdateAction = (id) => {
         const specieById = species.filter(specie => {
-            return specie.speciesId === id;
+            return specie.speciesId == id;
         })[0];
         setSpecieId(id);
         setOpen(true);
@@ -68,34 +69,33 @@ export default function AnimalSpecies() {
             },
             body: JSON.stringify(animalSpeciesDto)
         }).then(response => {
-            console.log(response.status);
             if (!response.ok) {
-                throw new Error("Error");
+                return response.text().then((message) => {
+                    throw new Error(message);
+                });
             }
             return response.text();
-        })
-        .then(data => {
-            console.log("Add sucess" + data);
-            setOpen(false);
-            setSpecies([...species, animalSpeciesDto]);
-            Swal.fire({
-                title: 'Success!',
-                text: `Add Successfully`,
-                icon: 'success',
+        }).then(data => {
+                setOpen(false);
+                // setSpecies([...species, animalSpeciesDto]);
+                Swal.fire({
+                    title: 'Success!',
+                    text: `${data}`,
+                    icon: 'success',
+                });
+            }).catch(error => {
+                setOpen(false);
+                Swal.fire({
+                    title: 'Fail!',
+                    text: `${error.message}`,
+                    icon: 'error',
+                });
             });
-        }).catch(error => {
-            setOpen(false);
-            Swal.fire({
-                title: 'Fail!',
-                text: `Add Fail`,
-                icon: 'error',
-            });
-        });
     }
 
     const handleUpdateSave = () => {
         const animalSpeciesDto = {
-            speciesId : specieId,
+            speciesId: specieId,
             groups: groups,
             name: name
         }
@@ -107,28 +107,29 @@ export default function AnimalSpecies() {
                 'Authorization': "Bearer " + token,
             },
             body: JSON.stringify(animalSpeciesDto)
-        }).then(response => { 
+        }).then(response => {
             if (!response.ok) {
-                throw new Error("Error");
+                return response.text().then((message) => {
+                    throw new Error(message);
+                });
             }
             return response.text();
-         }).then(data => {
-            console.log(data);
+        }).then(data => {
             setOpen(false);
-            setSpecies(species.map(specie => {
-                if (specie.speciesId === specieId) return animalSpeciesDto;
-                return specie;
-            }));
+            // setSpecies(species.map(specie => {
+            //     if (specie.speciesId === specieId) return animalSpeciesDto;
+            //     return specie;
+            // }));
             Swal.fire({
                 title: 'Success!',
-                text: `Update Successfully`,
+                text: `${data}`,
                 icon: 'success',
             });
         }).catch(error => {
             setOpen(false);
             Swal.fire({
                 title: 'Fail!',
-                text: `Update Fail`,
+                text: `${error.message}`,
                 icon: 'error',
             });
         });
@@ -154,21 +155,26 @@ export default function AnimalSpecies() {
                     }
                 }).then(response => {
                     if (!response.ok) {
-                        throw new Error("Error");
+                        return response.text().then((message) => {
+                            throw new Error(message);
+                        });
                     }
+                    return response.text()
+                    
+                    // setSpecies(species.filter(specie => {
+                    //     return specie.speciesId != id;
+                    // }));
+                }).then(data => {
                     Swal.fire({
                         title: 'Success!',
-                        text: `Delete Successfully`,
+                        text: `${data}`,
                         icon: 'success',
                     });
-                    setSpecies(species.filter(specie => {
-                        return specie.speciesId != id;
-                    }));
                 })
                     .catch(error => {
                         Swal.fire({
                             title: 'Fail!',
-                            text: `Delete Fail`,
+                            text: `${error.message}`,
                             icon: 'error',
                         });
                     });
@@ -179,10 +185,10 @@ export default function AnimalSpecies() {
     const columns = [
         {
             id: 1,
-            name: '#',
+            name: 'SpeciesID',
             selector: (specie, index) => {
                 return (
-                    <p>{index + 1}</p>
+                    <p>{specie.speciesId}</p>
                 )
             }
         },
@@ -237,7 +243,7 @@ export default function AnimalSpecies() {
                                     required
                                     fullWidth
                                     id="groups"
-                                    label="groups"
+                                    label="Groups"
                                     value={groups}
                                     onChange={(e) => setGroups(e.target.value)}
                                 />
@@ -246,7 +252,7 @@ export default function AnimalSpecies() {
                                 <TextField
                                     required
                                     fullWidth
-                                    label="name"
+                                    label="Name"
                                     id="name"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}

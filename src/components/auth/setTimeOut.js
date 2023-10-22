@@ -18,12 +18,14 @@ export function getItemWithTimeout(key) {
 		setItemWithTimeout(key, item.value, NEW_TIMEOUT_IN_SECONDS);
 		return item.value;
 	}
+	// documen.addEventListener('click', () => {
+
+	// })
 
 	const item = JSON.parse(itemString);
 	if (item.timeout && Date.now() >= item.timeout) {
 		// If the item has expired, set a new timeout and update the item
 		localStorage.removeItem(key);
-		alert('Time out, please login again')
 		return null
 	}
 

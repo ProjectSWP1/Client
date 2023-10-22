@@ -25,21 +25,10 @@ export default function Animal() {
     const [animalDetail, setAnimalDetail] = useState(null);
     const ADD_ANIMAL_TITLE = "Add animal";
     const UPDATE_ANIMAL_TITLE = "Update animal";
-    const [animalId, setAnimalId] = useState(0);
+    const [animal, setAnimal] = useState(null);
     const [popUpTitle, setPopupTitle] = useState(ADD_ANIMAL_TITLE);
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
     useEffect(() => {
-        fetch('http://localhost:8080/trainer/get-all-animalSpecies', {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token,
-            }
-        }).then(response => response.json()).then(data => {
-            console.log(data);
-            setSpecies(data);
-        });
         fetch('http://localhost:8080/trainer/get-animal', {
             method: 'GET',
             headers: {
@@ -47,8 +36,10 @@ export default function Animal() {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token,
             }
-        }).then(response => response.json()).then(data => {
-            console.log(data.animal);
+        }).then(response => {
+            if (!response.ok) return {animal : []};
+            return response.json();
+        }).then(data => {
             setAnimals(data.animal);
         });
         fetch('http://localhost:8080/trainer/get-cage/ascending', {
@@ -58,43 +49,63 @@ export default function Animal() {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token,
             }
-        }).then(response => response.json()).then(data => {
-            console.log(data);
+        }).then(response => {
+            if (!response.ok) return [];
+            return response.json();
+        }).then(data => {
             setCages(data);
         });
-    }, []);
+        fetch('http://localhost:8080/trainer/get-all-animalSpecies', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token,
+            }
+        }).then(response => {
+            if (!response.ok) return [];
+            return response.json();
+        }).then(data => {
+            setSpecies(data);
+        });
+    }, [])
 
     const handleClose = () => {
         setOpen(false);
     };
 
     const handleOpenPopupDetail = (id) => {
-        const animalDetail = animals.filter(animal => {
-            return animal.animalId == id;
-        })[0];
-        setAnimalDetail(animalDetail);
+        fetch(`http://localhost:8080/trainer/get-animal/${id}`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token,
+            }
+        }).then(response => response.json()).then(data => {
+            setAnimalDetail(data);
+        });
     }
 
     const handleOpenPopupUpdateAction = (id) => {
-        console.log(id);
         const animalById = animals.filter(animal => {
             return animal.animalId === id;
         })[0];
-        setAnimalId(id);
+        setAnimal(animalById);
         setOpen(true);
         setDescription(animalById.description);
         setHeight(animalById.height);
         setWeight(animalById.weight);
         setAge(animalById.age);
         setGender(animalById.gender);
-        setSelectedCageId("");
-        setSelectedSpeciesId(0);
+        setSelectedCageId(animalById.cage?.cageID ? animalById.cage.cageID : animalById.cage);
+        setSelectedSpeciesId(animalById.species?.speciesId ? animalById.species.speciesId : animalById.species);
         setName(animalById.name);
         setPopupTitle(`${UPDATE_ANIMAL_TITLE} ${animalById.name}`);
     }
 
     const handleOpenPopupAddAction = () => {
-        setAnimalId(0);
+        setAnimal(null);
         setOpen(true);
         setDescription("");
         setHeight(1);
@@ -128,24 +139,34 @@ export default function Animal() {
             body: JSON.stringify(animalDto)
         }).then(response => {
             if (!response.ok) {
-                throw new Error("Error");
+                return response.text().then((message) => {
+                    throw new Error(message);
+                });
             }
             return response.text();
         })
             .then(data => {
-                console.log(data);
                 setOpen(false);
-                setAnimals([...animals, animalDto]);
-                Swal.fire({
-                    title: 'Success!',
-                    text: `Add Successfully`,
-                    icon: 'success',
+                fetch('http://localhost:8080/trainer/get-animal', {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': "Bearer " + token,
+                    }
+                }).then(response => response.json()).then(data => {
+                    setAnimals(data.animal);
+                    Swal.fire({
+                        title: 'Success!',
+                        text: `Add Successfully`,
+                        icon: 'success',
+                    });
                 });
             }).catch(error => {
                 setOpen(false);
                 Swal.fire({
                     title: 'Fail!',
-                    text: `Add Fail`,
+                    text: `${error.message}`,
                     icon: 'error',
                 });
             });
@@ -153,7 +174,7 @@ export default function Animal() {
 
     const handleUpdateSave = () => {
         const animalDto = {
-            animalId: animalId,
+            animalId: animal.animalId,
             age: age,
             weight: weight,
             gender: gender,
@@ -163,7 +184,6 @@ export default function Animal() {
             description: description,
             name: name
         }
-        console.log("Update : ",animalDto);
         fetch('http://localhost:8080/trainer/update-animal', {
             method: 'PUT',
             headers: {
@@ -174,26 +194,37 @@ export default function Animal() {
             body: JSON.stringify(animalDto)
         }).then(response => {
             if (!response.ok) {
-                throw new Error("Error");
+                return response.text().then((message) => {
+                    throw new Error(message);
+                });
             }
             return response.text();
         }).then(data => {
-            console.log(data);
             setOpen(false);
-            setAnimals(animals.map(animal => {
-                if (animal.animalId === animalId) return animalDto;
-                return animal;
-            }));
-            Swal.fire({
-                title: 'Success!',
-                text: `Update Successfully`,
-                icon: 'success',
+            fetch(`http://localhost:8080/trainer/get-animal/${animalDto.animalId}`, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token,
+                }
+            }).then(response => response.json()).then(data => {
+                const updatedAnimal = data;
+                setAnimals(animals.map(animal => {
+                    if (animal.animalId === animalDto.animalId) return updatedAnimal;
+                    return animal;
+                }));
+                Swal.fire({
+                    title: 'Success!',
+                    text: `Update Successfully`,
+                    icon: 'success',
+                });
             });
         }).catch(error => {
             setOpen(false);
             Swal.fire({
                 title: 'Fail!',
-                text: `Update Fail`,
+                text: `${error.message}`,
                 icon: 'error',
             });
         });
@@ -219,7 +250,9 @@ export default function Animal() {
                     }
                 }).then(response => {
                     if (!response.ok) {
-                        throw new Error("Error");
+                        return response.text().then((message) => {
+                            throw new Error(message);
+                        });
                     }
                     Swal.fire({
                         title: 'Success!',
@@ -233,7 +266,7 @@ export default function Animal() {
                     .catch(error => {
                         Swal.fire({
                             title: 'Fail!',
-                            text: `Delete Fail`,
+                            text: `${error.message}`,
                             icon: 'error',
                         });
                     });
@@ -287,7 +320,7 @@ export default function Animal() {
             <Dialog open={animalDetail !== null} onClose={() => setAnimalDetail(null)} >
                 <DialogTitle>Detail</DialogTitle>
                 <DialogContent>
-                     <AnimalDetail animalDetail={animalDetail}  />
+                    <AnimalDetail animalDetail={animalDetail} />
                 </DialogContent>
             </Dialog>
             <Dialog open={open} onClose={handleClose} >
@@ -368,7 +401,7 @@ export default function Animal() {
                                 <Select
                                     labelId="select-label-cage"
                                     id="select-cage"
-                                    value={selectedCageId}
+                                    defaultValue={!animal ? '' : animal.cage?.cageID ? animal.cage.cageID : animal.cage}
                                     onChange={(e) => setSelectedCageId(e.target.value)}
                                 >
                                     {cages.map(cage => {
@@ -383,7 +416,7 @@ export default function Animal() {
                                 <Select
                                     labelId="select-label-specie"
                                     id="select-specie"
-                                    value={selectedSpeciesId}
+                                    defaultValue={!animal ? '' : animal.species?.speciesId ? animal.species.speciesId : animal.species}
                                     onChange={(e) => setSelectedSpeciesId(e.target.value)}
                                 >
                                     {species.map(specie => {

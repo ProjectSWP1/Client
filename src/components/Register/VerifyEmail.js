@@ -1,27 +1,39 @@
 import React, { useState } from 'react'
 import './VerifyEmail.css'
-import { useNavigate , useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
+import Swal from 'sweetalert2';
+
 export default function VerifyEmail() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const email = queryParams.get('email');
   const navigate = useNavigate()
   const [otp, setOtp] = useState('');
+
   const handleSubmit = () => {
-    console.log("Email : "+email);
     const url = `http://localhost:8080/user/verify?email=${email}&otp=${otp}`;
     fetch(url, {
       method: 'PUT'
     }).then(response => {
-      console.log(response);
+      if (!response.ok) {
+        return response.text().then((message) => {
+          throw new Error(message);
+        });
+      }
+      return response.text()
     }).then(data => {
       console.log(data);
-      navigate("/login");
+      if(data == 'Invalid OTP'){
+        throw new Error(data)
+      }
+      navigate('/login')
     })
       .catch(error => {
-        // Handle errors, if any
-        console.error('Cannot find your email:', error);
-        // You can display an error message to the user if needed
+        Swal.fire({
+          title: 'Fail!',
+          text: `${error}`,
+          icon: 'error',
+        });
       })
   }
 

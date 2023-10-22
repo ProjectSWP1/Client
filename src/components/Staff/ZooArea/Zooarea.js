@@ -12,7 +12,10 @@ export default function ZooArea() {
         'Content-Type': 'application/json',
         'Authorization': "Bearer " + token,
       }
-    }).then(response => response.json()).then(data => {
+    }).then(response => {
+      if(!response.ok) return [];
+      return response.json();
+    }).then(data => {
       setZooAreas(data);
     })
   }, []);
@@ -20,7 +23,7 @@ export default function ZooArea() {
   const columns = [
     {
       id: 1,
-      name: '#',
+      name: 'ID',
       selector: (zooArea, index) => {
         return (
           <p>{zooArea.zooAreaId}</p>
