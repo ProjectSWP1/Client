@@ -26,7 +26,7 @@ export default class Confirm extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        alert('Please wait a minute! We will send you the OTP to verify your email')
+        // alert('Please wait a minute! We will send you the OTP to verify your email')
         const { values } = this.props;
         // Construct the payload with accountDto and memberDto
         const payload = {

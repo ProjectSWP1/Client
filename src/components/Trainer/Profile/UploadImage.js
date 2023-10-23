@@ -3,12 +3,11 @@ import { grey } from '@mui/material/colors';
 import React, { useEffect, useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 const IMAGE_FILE_MAXIMUM_SIZE = 10 * 1024 * 1024;
-const UploadImage = () => {
+const UploadImage = ({employeeId}) => {
     const [isLoadingThumbnail, setLoadingThumbnail] = useState(false);
     const [thumbnailBase64Url, setthumbnailBase64Url] = useState(undefined);
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
     const inputThumbnailRef = useRef(null);
-    const employeeId = 1;
 
     const handleDragOver = (event) => {
         // Prevent default behaviour of drop event : Open new window for displaying image
@@ -24,7 +23,6 @@ const UploadImage = () => {
             const formData = new FormData();
 
             formData.append('qualificationFile', file);
-
             fetch(`http://localhost:8080/trainer/${employeeId}/upload-qualification`, {
                 method: 'POST',
                 headers: {
@@ -53,7 +51,7 @@ const UploadImage = () => {
     const isValidFile = (files) => {
         let isValid = true;
         const error = "FILE SIZE IS TOO LARGE";
-        if (files[0].size > IMAGE_FILE_MAXIMUM_SIZE) {
+        if (files[0] && files[0].size > IMAGE_FILE_MAXIMUM_SIZE) {
             Swal.fire({
                 title: 'Fail!',
                 typTypography: `${error}`,
@@ -132,12 +130,11 @@ const UploadImage = () => {
         }).finally(() => {
             setLoadingThumbnail(false);
         });
-    }, []);
+    }, [employeeId]);
 
     return (
         <Box
             pt={1}
-            pb={4}
             mb={5}
             bgcolor={grey}
             borderRadius={4}
@@ -149,7 +146,6 @@ const UploadImage = () => {
             <Box
                 px={4}
                 mt={2}
-                pb={2}
                 display={'flex'}
                 justifyContent={'space-between'}
                 alignItems={'center'}
@@ -160,7 +156,7 @@ const UploadImage = () => {
                     fontWeight={600}
                     color={grey}
                 >
-                    Thumbnail
+                    Qualification
                 </Typography>
             </Box>
             <Box px={4} mt={2} pb={2}>
@@ -185,7 +181,7 @@ const UploadImage = () => {
                                         backgroundColor: 'rgba(134, 140, 150 , 0.5)'
                                     }}
                                 >
-                                    <CircularProgress />
+                                    <CircularProgress sx={{margin : 'auto'}} />
                                 </Box>
                             ) : (
                                 ''

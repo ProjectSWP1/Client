@@ -19,7 +19,7 @@ import AnimalCage from "./components/Trainer/AnimalCage/AnimalCage";
 import ZooTrainer from "./components/Staff/ZooTrainer/Zootrainer";
 import Animal from "./components/Trainer/Animal/Animal";
 import AnimalSpecies from "./components/Trainer/AnimalSpecies/AnimalSpecies";
-import UploadImage from "./components/Trainer/Profile/UploadImage";
+import TrainerProfile from "./components/Trainer/Profile/TrainerProfile";
 
 function App() {
   return (
@@ -35,28 +35,16 @@ function App() {
           <Route path="/admin" element={<Admin />}>
             <Route exact path="dashboard" element={<Dash />} />
             <Route path="manageaccount" element={<ManageAccount />} />
-            <Route exact path="zooarea" element={<ZooArea />} />
-            <Route exact path="trainers" element={<ZooTrainer />} />
-            <Route exact path="cages" element={<AnimalCage />} />
-            <Route exact path="animals" element={<Animal />} />
-            <Route exact path="animalspecies" element={<AnimalSpecies />} />
-            <Route exact path="cages" element={<AnimalCage />} />
-            <Route exact path="animals" element={<Animal />} />
-            <Route exact path="animalspecies" element={<AnimalSpecies />} />
-            <Route exact path="profile" element={<UploadImage />} />
           </Route>
           <Route path="/staff" element={<Staff />}>
             <Route exact path="zooarea" element={<ZooArea />} />
             <Route exact path="trainers" element={<ZooTrainer />} />
-            <Route exact path="cages" element={<AnimalCage />} />
-            <Route exact path="animals" element={<Animal />} />
-            <Route exact path="animalspecies" element={<AnimalSpecies />} />
           </Route>
           <Route path="/trainer" element={<Trainer />}>
             <Route exact path="cages" element={<AnimalCage />} />
             <Route exact path="animals" element={<Animal />} />
             <Route exact path="animalspecies" element={<AnimalSpecies />} />
-            <Route exact path="profile" element={<UploadImage />} />
+            <Route exact path="profile" element={<TrainerProfile />} />
           </Route>
           <Route path="/profile" element={<UserProfile />} />
         </Routes>

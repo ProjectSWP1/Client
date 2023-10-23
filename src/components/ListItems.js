@@ -9,6 +9,7 @@ import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import HouseSidingIcon from '@mui/icons-material/HouseSiding';
 import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import PetsIcon from '@mui/icons-material/Pets';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 import { Link } from 'react-router-dom';
 
@@ -26,9 +27,21 @@ export const mainListItems = (
         <ListItemText primary="Home" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
+    <ListItemButton>
+      <Link to={'/'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <AccountBoxIcon />
+        </ListItemIcon>
+        <ListItemText primary="Profile" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
   </React.Fragment>
 )
-export const firstListItems = (
+export const adminListItems = (
   <React.Fragment>
     <ListItemButton>
       <Link to={'/admin/dashboard'} style={{
@@ -57,13 +70,13 @@ export const firstListItems = (
   </React.Fragment>
 );
 
-export const secondaryListItems = (
+export const staffListItems = (
   <React.Fragment>
     <ListSubheader component="div" inset>
       Staff's function
     </ListSubheader>
     <ListItemButton>
-      <Link to={'/admin/zooarea'} style={{
+      <Link to={'/staff/zooarea'} style={{
         textDecoration: 'none',
         color: 'grey',
         width: '100%'
@@ -75,7 +88,7 @@ export const secondaryListItems = (
       </Link>
     </ListItemButton>
     <ListItemButton>
-      <Link to={'/admin/trainers'} style={{
+      <Link to={'/staff/trainers'} style={{
         textDecoration: 'none',
         color: 'grey',
         width: '100%'
@@ -89,13 +102,13 @@ export const secondaryListItems = (
   </React.Fragment>
 );
 
-export const thirdListItems = (
+export const trainerListItems = (
   <React.Fragment>
     <ListSubheader component="div" inset>
       Trainer's function
     </ListSubheader>
     <ListItemButton>
-      <Link to={'/admin/cages'} style={{
+      <Link to={'/trainer/cages'} style={{
         textDecoration: 'none',
         color: 'grey',
         width: '100%'
@@ -107,7 +120,7 @@ export const thirdListItems = (
       </Link>
     </ListItemButton>
     <ListItemButton>
-      <Link to={'/admin/animals'} style={{
+      <Link to={'/trainer/animals'} style={{
         textDecoration: 'none',
         color: 'grey',
         width: '100%'
@@ -119,7 +132,7 @@ export const thirdListItems = (
       </Link>
     </ListItemButton>
     <ListItemButton>
-      <Link to={'/admin/animalspecies'} style={{
+      <Link to={'/trainer/animalspecies'} style={{
         textDecoration: 'none',
         color: 'grey',
         width: '100%'

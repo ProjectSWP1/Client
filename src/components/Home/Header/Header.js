@@ -1,29 +1,37 @@
 import React, { useEffect, useState } from 'react'
 import './Header.css'
 import { Link } from 'react-router-dom';
-import { Avatar, Button, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper, Stack } from '@mui/material';
+import { Avatar, Button, Grow, MenuItem, MenuList, Paper, Popper } from '@mui/material';
 import { deepOrange } from '@mui/material/colors';
-import useAuth from '../../auth/auth';
-import { checkAndRemoveExpiredData, getItemWithTimeout, getWithExpiry } from '../../auth/setTimeOut';
-
-window.onscroll = function () { scrollFunction() }
-
-function scrollFunction() {
-    if (document.body.scroll > 20 || document.documentElement.scrollTop > 20) {
-        document.getElementById("nav-bg_onscroll").style.opacity = "0.9";
-        document.getElementById("nav-bg_onscroll").style.backgroundColor = "#5D9C59";
-        document.getElementById("nav-bg_onscroll").style.transition = "0.3s";
-    } else {
-        document.getElementById("nav-bg_onscroll").style.opacity = "1";
-        document.getElementById("nav-bg_onscroll").style.backgroundColor = "";
-    }
-}
+import { getItemWithTimeout } from '../../auth/setTimeOut';
 
 export default function Header() {
     const [isAuth, setAuth] = useState(false)
     const [user, setUser] = useState(null)
     // const accessToken = getWithExpiry('token')
     // const accessToken = localStorage.getItem('token')
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        // Thêm một sự kiện lắng nghe cho việc cuộn trang
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            // Loại bỏ sự kiện lắng nghe khi component bị hủy
+            window.removeEventListener('scroll', handleScroll);
+        }
+    }, []);
+
+    const handleScroll = () => {
+        // Kiểm tra xem người dùng đã cuộn xuống đủ xa hay chưa, chẳng hạn 100px.
+        if (window.scrollY > 100) {
+            setIsScrolled(true);
+        } else {
+            setIsScrolled(false);
+        }
+    }
+
+
     const accessToken = getItemWithTimeout('token')
     useEffect(() => {
         if (accessToken) {
@@ -31,7 +39,7 @@ export default function Header() {
             setAuth(true)
             setUser(JSON.parse(atob(accessToken.split('.')[1])))
         }
-    }, [accessToken])   
+    }, [accessToken])
     console.log(user);
     // Cái này lấy từ auth.js sau khi setAuth bên login
     // const { user, logout } = useAuth();
@@ -74,8 +82,8 @@ export default function Header() {
     }, [open]);
 
     return (
-        <section className="container-header">
-            <section className="nav-bg" id="nav-bg_onscroll">
+        <section className={`slide-down-bar ${isScrolled ? 'visible' : ''}`}>
+            <section className="nav-bg">
                 {/* logo */}
                 <div className="nav-logo">
                     <a href="#">
@@ -129,47 +137,47 @@ export default function Header() {
                                         >
                                             <Paper>
                                                 {/* <ClickAwayListener onClickAway={handleClose}> */}
-                                                    <MenuList
-                                                        autoFocusItem={open}
-                                                        id="composition-menu"
-                                                        aria-labelledby="composition-button"
-                                                        onKeyDown={handleListKeyDown}
-                                                    >
-                                                        <MenuItem>
-                                                            <Link to={'/profile'}
-                                                                style={{color: 'black', textDecoration: 'none'}}
-                                                                >My Profile</Link>
-                                                        </MenuItem>
-                                                        {
-                                                          user.roles === 'Admin' ? (
+                                                <MenuList
+                                                    autoFocusItem={open}
+                                                    id="composition-menu"
+                                                    aria-labelledby="composition-button"
+                                                    onKeyDown={handleListKeyDown}
+                                                >
+                                                    <MenuItem>
+                                                        <Link to={'/profile'}
+                                                            style={{ color: 'black', textDecoration: 'none' }}
+                                                        >My Profile</Link>
+                                                    </MenuItem>
+                                                    {
+                                                        user.roles === 'Admin' ? (
                                                             <MenuItem>
-                                                            <Link to={'/admin'}
-                                                                style={{color: 'black', textDecoration: 'none'}}
+                                                                <Link to={'/admin'}
+                                                                    style={{ color: 'black', textDecoration: 'none' }}
                                                                 >My Management</Link>
                                                             </MenuItem>
-                                                          ) : user.roles == 'Staff' ? (
+                                                        ) : user.roles == 'Staff' ? (
                                                             <MenuItem>
-                                                            <Link to={'/staff'}
-                                                                style={{color: 'black', textDecoration: 'none'}}
+                                                                <Link to={'/staff'}
+                                                                    style={{ color: 'black', textDecoration: 'none' }}
                                                                 >My Management</Link>
                                                             </MenuItem>
-                                                          ) : user.roles == 'Trainer' ? (
+                                                        ) : user.roles == 'Trainer' ? (
                                                             <MenuItem>
-                                                            <Link to={'/trainer'}
-                                                                style={{color: 'black', textDecoration: 'none'}}
+                                                                <Link to={'/trainer'}
+                                                                    style={{ color: 'black', textDecoration: 'none' }}
                                                                 >My Management</Link>
                                                             </MenuItem>
-                                                          ) : (
+                                                        ) : (
                                                             <MenuItem>
-                                                            <Link to={'/trainer'}
-                                                                style={{color: 'black', textDecoration: 'none'}}
+                                                                <Link to={'/trainer'}
+                                                                    style={{ color: 'black', textDecoration: 'none' }}
                                                                 >My Order</Link>
                                                             </MenuItem>
-                                                          )
-                                                        }
-                                                        <MenuItem onClick={handleClose}>Setting</MenuItem>
-                                                        <MenuItem onClick={handleClose}>Logout</MenuItem>
-                                                    </MenuList>
+                                                        )
+                                                    }
+                                                    <MenuItem onClick={handleClose}>Setting</MenuItem>
+                                                    <MenuItem onClick={handleClose}>Logout</MenuItem>
+                                                </MenuList>
                                                 {/* </ClickAwayListener> */}
                                             </Paper>
                                         </Grow>
@@ -181,7 +189,7 @@ export default function Header() {
                             </li>}
                     </ul>
                 </div>
-      </section>
-    </section>
-  );
+            </section>
+        </section>
+    );
 }
