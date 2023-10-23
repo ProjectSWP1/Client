@@ -2,17 +2,33 @@
     display: flex;
     flex-wrap: wrap;
 } */
+.slide-down-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background-color: none;
+    transition: 0.3s;
+    z-index: 999;
+  }
+  
+  .slide-down-bar.visible {
+    background-color: #5D9C59;
+    opacity: 0.9;
+    transition: 0.3s;
+  }
+  
+
 .nav-bg{
     /* border: 3px solid green; */
     display: flex;
     justify-content: space-around;
     align-items: center;
-    height: 7rem;
+    height: 80px;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 999;
 }
 
 .nav-logo{
@@ -48,7 +64,7 @@
 .nav-menu__link{
     text-decoration: none;
     color: #ddd6d6;
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: bold;
     transition: 0.3s;
 }
