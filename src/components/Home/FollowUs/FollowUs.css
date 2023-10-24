@@ -11,14 +11,14 @@
     color: rgb(83, 105, 49)
 }
 .sign-up{
-    background-color: rgb(217, 242, 181);
+    /* background-color: rgb(217, 242, 181); */
     width: 100%;
     padding: 20px;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
 }
 .enter-email{
-    width: 90%;
+    width: 60%;
     padding: 20px;
     border-radius: 20px;
     font-size: 0.6cm;
