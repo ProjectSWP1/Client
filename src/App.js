@@ -36,21 +36,10 @@ function App() {
           <Route path="/admin" element={<Admin />}>
             <Route exact path="dashboard" element={<Dash />} />
             <Route path="manageaccount" element={<ManageAccount />} />
-            <Route exact path="zooarea" element={<ZooArea />} />
-            <Route exact path="trainers" element={<ZooTrainer />} />
-            <Route exact path="cages" element={<AnimalCage />} />
-            <Route exact path="animals" element={<Animal />} />
-            <Route exact path="animalspecies" element={<AnimalSpecies />} />
-            <Route exact path="cages" element={<AnimalCage />} />
-            <Route exact path="animals" element={<Animal />} />
-            <Route exact path="animalspecies" element={<AnimalSpecies />} />
           </Route>
           <Route path="/staff" element={<Staff />}>
             <Route exact path="zooarea" element={<ZooArea />} />
             <Route exact path="trainers" element={<ZooTrainer />} />
-            <Route exact path="cages" element={<AnimalCage />} />
-            <Route exact path="animals" element={<Animal />} />
-            <Route exact path="animalspecies" element={<AnimalSpecies />} />
           </Route>
           <Route path="/trainer" element={<Trainer />}>
             <Route exact path="cages" element={<AnimalCage />} />

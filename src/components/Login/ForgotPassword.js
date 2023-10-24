@@ -7,8 +7,8 @@ export default function ForgotPassword() {
       <div className='forgotpw'>
         <p>Enter your email: </p>
         <form className='forgotpw-form'>
-          <input type='text' className='enter-email'/>
-          <input type='Submit' className='submit-email'/>
+          <input type='text' className='forgotpw-enter-email'/>
+          <input type='Submit' className='forgotpw-submit-email'/>
         </form>
       </div>
     </div>
