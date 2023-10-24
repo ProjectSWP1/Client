@@ -151,19 +151,19 @@ export default function Header() {
                                                     {
                                                         user.roles === 'Admin' ? (
                                                             <MenuItem>
-                                                                <Link to={'/admin'}
+                                                                <Link to={'/admin/dashboard'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
                                                                 >My Management</Link>
                                                             </MenuItem>
                                                         ) : user.roles == 'Staff' ? (
                                                             <MenuItem>
-                                                                <Link to={'/staff'}
+                                                                <Link to={'/staff/zooarea'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
                                                                 >My Management</Link>
                                                             </MenuItem>
                                                         ) : user.roles == 'Trainer' ? (
                                                             <MenuItem>
-                                                                <Link to={'/trainer'}
+                                                                <Link to={'/trainer/cages'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
                                                                 >My Management</Link>
                                                             </MenuItem>

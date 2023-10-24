@@ -3,6 +3,7 @@ import { grey } from '@mui/material/colors';
 import React, { useEffect, useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 const IMAGE_FILE_MAXIMUM_SIZE = 10 * 1024 * 1024;
+
 const UploadImage = ({employeeId}) => {
     const [isLoadingThumbnail, setLoadingThumbnail] = useState(false);
     const [thumbnailBase64Url, setthumbnailBase64Url] = useState(undefined);

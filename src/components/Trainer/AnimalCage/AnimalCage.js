@@ -31,6 +31,7 @@ export default function AnimalCage() {
             if (!response.ok) return [];
             return response.json();
         }).then(data => {
+            console.log(data);
             setCages(data);
         })
         fetch('http://localhost:8080/trainer/get-zoo-area', {
