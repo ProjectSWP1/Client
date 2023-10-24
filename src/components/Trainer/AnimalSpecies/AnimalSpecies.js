@@ -30,7 +30,7 @@ export default function AnimalSpecies() {
         }).then(data => {
             setSpecies(data);
         })
-    }, [species]);
+    }, []);
 
     const handleClose = () => {
         setOpen(false);
