@@ -10,6 +10,7 @@ import HouseSidingIcon from '@mui/icons-material/HouseSiding';
 import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import PetsIcon from '@mui/icons-material/Pets';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 import { Link } from 'react-router-dom';
 
@@ -28,7 +29,7 @@ export const mainListItems = (
       </Link>
     </ListItemButton>
     <ListItemButton>
-      <Link to={'/'} style={{
+      <Link to={'/trainer/profile'} style={{
         textDecoration: 'none',
         color: 'grey',
         width: '100%'
@@ -141,6 +142,18 @@ export const trainerListItems = (
           <PetsIcon />
         </ListItemIcon>
         <ListItemText primary="Animal Species Page" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
+    <ListItemButton>
+      <Link to={'/trainer/schedule'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <CalendarMonthIcon />
+        </ListItemIcon>
+        <ListItemText primary="Schedule" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
   </React.Fragment>

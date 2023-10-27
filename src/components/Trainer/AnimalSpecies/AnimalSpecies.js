@@ -76,21 +76,21 @@ export default function AnimalSpecies() {
             }
             return response.text();
         }).then(data => {
-                setOpen(false);
-                // setSpecies([...species, animalSpeciesDto]);
-                Swal.fire({
-                    title: 'Success!',
-                    text: `${data}`,
-                    icon: 'success',
-                });
-            }).catch(error => {
-                setOpen(false);
-                Swal.fire({
-                    title: 'Fail!',
-                    text: `${error.message}`,
-                    icon: 'error',
-                });
+            setOpen(false);
+            // setSpecies([...species, animalSpeciesDto]);
+            Swal.fire({
+                title: 'Success!',
+                text: `${data}`,
+                icon: 'success',
             });
+        }).catch(error => {
+            setOpen(false);
+            Swal.fire({
+                title: 'Fail!',
+                text: `${error.message}`,
+                icon: 'error',
+            });
+        });
     }
 
     const handleUpdateSave = () => {
@@ -141,8 +141,8 @@ export default function AnimalSpecies() {
             text: 'Are you sure?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#2e7d32',
+            cancelButtonColor: '#DDDDDD',
             confirmButtonText: 'Yes!',
         }).then((result) => {
             if (result.isConfirmed) {
@@ -160,7 +160,7 @@ export default function AnimalSpecies() {
                         });
                     }
                     return response.text()
-                    
+
                     // setSpecies(species.filter(specie => {
                     //     return specie.speciesId != id;
                     // }));

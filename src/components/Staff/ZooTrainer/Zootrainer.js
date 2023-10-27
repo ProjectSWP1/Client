@@ -8,7 +8,7 @@ export default function ZooTrainer() {
     const [selectedRole, setSelectedRole] = useState("");
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
     const handleSaveRole = () => {
-        if(selectedRole.length === 0){
+        if (selectedRole.length === 0) {
             Swal.fire({
                 title: 'Fail!',
                 text: `Must select an role before hit save button`,
@@ -21,8 +21,8 @@ export default function ZooTrainer() {
             text: 'Change role of trainer , the trainer will no longer appear to this page , do you still want to continue?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#2e7d32',
+            cancelButtonColor: '#DDDDDD',
             confirmButtonText: 'Yes!',
         }).then((result) => {
             if (result.isConfirmed) {
@@ -71,9 +71,9 @@ export default function ZooTrainer() {
                 'Authorization': "Bearer " + token,
             }
         }).then(response => {
-            if(!response.ok) return [];
+            if (!response.ok) return [];
             return response.json();
-          }).then(data => {
+        }).then(data => {
             setZooTrainers(data);
         })
     }, []);

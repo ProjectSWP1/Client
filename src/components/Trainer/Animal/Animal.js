@@ -5,7 +5,6 @@ import Swal from 'sweetalert2';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import AnimalDetail from './AnimalDetail';
 export default function Animal() {
@@ -37,7 +36,7 @@ export default function Animal() {
                 'Authorization': "Bearer " + token,
             }
         }).then(response => {
-            if (!response.ok) return {animal : []};
+            if (!response.ok) return { animal: [] };
             return response.json();
         }).then(data => {
             setAnimals(data.animal);
@@ -236,8 +235,8 @@ export default function Animal() {
             text: 'Are you sure?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#2e7d32',
+            cancelButtonColor: '#DDDDDD',
             confirmButtonText: 'Yes!',
         }).then((result) => {
             if (result.isConfirmed) {

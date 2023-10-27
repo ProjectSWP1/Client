@@ -58,7 +58,7 @@ export default function AnimalCage() {
             return cage.cageID === id;
         })[0];
         setCageId(id);
-        setSelectedZooArea(cageById.zooArea?.zooAreaId? cageById.zooArea.zooAreaId : cageById.zooArea);
+        setSelectedZooArea(cageById.zooArea?.zooAreaId ? cageById.zooArea.zooAreaId : cageById.zooArea);
         setOpen(true);
         setDescription(cageById.description);
         setCapacity(cageById.capacity);
@@ -186,8 +186,8 @@ export default function AnimalCage() {
             text: 'Are you sure?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#2e7d32',
+            cancelButtonColor: '#DDDDDD',
             confirmButtonText: 'Yes!',
         }).then((result) => {
             if (result.isConfirmed) {

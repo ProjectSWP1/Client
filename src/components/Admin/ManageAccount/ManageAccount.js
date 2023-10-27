@@ -9,19 +9,24 @@ import Swal from 'sweetalert2';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import dayjs from 'dayjs';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 export default function ManageAccount() {
   const [accounts, setAccounts] = useState([])
   const [zooAreas, setZooAreas] = useState([])
   const [open, setOpen] = useState(false);
+  const [changed, setChanged] = useState(false)
+  // const [currentAcc, setCurrentAcc] = useState(null)
+
   const ADD_ACCOUNT_TITLE = "Add new account";
+  const UPDATE_ROLE_TITLE = "Update role account"
   // const UPDATE_CAGE_TITLE = "Update animal cage";
 
   //for account
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [phone, setPhone] = useState('')
+  const [username, setUsername] = useState('')
   const [role, setRole] = useState('')
 
   //for employee/member
@@ -31,10 +36,15 @@ export default function ManageAccount() {
   const [name, setName] = useState('')
   const [selectedZooArea, setSelectedZooArea] = useState('')
   const [gender, setGender] = useState('')
+  const availableRoles = [
+    ['Staff', 'ST'],
+    ['Trainer', 'ZT'],
+    ['Member', 'MB']
+  ]
 
   const [popUpTitle, setPopupTitle] = useState(ADD_ACCOUNT_TITLE);
   const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
-  // const currentAcc = JSON.parse(atob(token.split('.')[1]))
+  const currentAcc = JSON.parse(atob(token.split('.')[1]))
   useEffect(() => {
     fetch('http://localhost:8080/admin/getAccount', {
       method: 'GET',
@@ -44,14 +54,14 @@ export default function ManageAccount() {
         'Authorization': "Bearer " + token,
       }
     }).then(response => response.json()).then(data => {
-      // const newData = data.filter((item) => {
-      //   return item.username !== currentAcc.sub
-      // })
-      // if (newData) {
-      //   setAccounts(newData)
-      // }
-      console.log(data);
-      setAccounts(data)
+      const newData = data.filter((item) => {
+        return item.username !== currentAcc.sub
+      })
+      if (newData) {
+        setAccounts(newData)
+      }
+      // console.log(data);
+      // setAccounts(data)
     })
 
     fetch('http://localhost:8080/trainer/get-zoo-area', {
@@ -67,7 +77,7 @@ export default function ManageAccount() {
     }).then(data => {
       setZooAreas(data);
     })
-  }, [accounts])
+  }, [changed])
 
   const handleClose = () => {
     setOpen(false);
@@ -151,18 +161,28 @@ export default function ManageAccount() {
     });
   }
 
+  const handleOpenPopupUpdateAction = (account) => {
+    //account
+    setOpen(true);
+    setEmail(account.email);
+    setUsername(account.username)
+    setRole(account.role.authority)
+    setPopupTitle(UPDATE_ROLE_TITLE);
+  }
+
   const handleUpdateRoleSave = (id) => {
 
   }
 
   const handleDisactiveAction = (email) => {
+    setChanged(false)
     Swal.fire({
       title: 'Are you sure?',
       text: 'Are you sure?',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#2e7d32',
+      cancelButtonColor: '#DDDDDD',
       confirmButtonText: 'Yes!',
     }).then((result) => {
       if (result.isConfirmed) {
@@ -186,6 +206,7 @@ export default function ManageAccount() {
             text: `${data}`,
             icon: 'success',
           });
+          setChanged(true)
         })
           .catch(error => {
             Swal.fire({
@@ -220,6 +241,7 @@ export default function ManageAccount() {
     {
       id: 3,
       name: 'Active',
+      width: '100px',
       selector: account => {
         return (
           <p>{account.active ? <CheckIcon color="success" /> : <CloseIcon color="warning" />}</p>
@@ -229,6 +251,7 @@ export default function ManageAccount() {
     {
       id: 4,
       name: 'Role',
+      width: '150px',
       selector: account => {
         return (
           <p>{account.role.authority}</p>
@@ -240,9 +263,10 @@ export default function ManageAccount() {
       name: 'Delete',
       selector: account => {
         return (
-          <div>
-            <Button variant="contained" onClick={() => handleDisactiveAction(account.email)}>Disactive</Button>
-          </div>
+          <Box sx={{ '& button': { m: 1 } }}>
+            <Button variant="contained" size='small' onClick={() => handleDisactiveAction(account.email)}>Disactive</Button>
+            <Button variant="contained" size='small' onClick={() => handleOpenPopupUpdateAction(account)}>Change Role</Button>
+          </Box>
         )
       }
     }
@@ -263,119 +287,173 @@ export default function ManageAccount() {
         <DialogContent>
           <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              {popUpTitle === ADD_ACCOUNT_TITLE ? <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </Grid> : ""}
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="password"
-                  label="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  label="Phone Number"
-                  type="number"
-                  id="phoneNumber"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel id="select-label">Select role</InputLabel>
-                <Select
-                  labelId="select-label"
-                  id="select"
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                >
-                  <MenuItem value='ST'>Staff</MenuItem>
-                  <MenuItem value='ZT'>Zoo Trainer</MenuItem>
-                </Select>
-              </Grid>
-              {role == 'ZT'? <Grid item xs={6}>
-                <InputLabel id="select-label">Select an zoo area</InputLabel>
-                <Select
-                  labelId="select-label"
-                  id="select"
-                  value={selectedZooArea}
-                  onChange={(e) => setSelectedZooArea(e.target.value)}
-                >
-                  {zooAreas.map(area => {
-                    return (
-                      <MenuItem key={area.zooAreaId} value={area.zooAreaId}>{area.description}</MenuItem>
-                    )
-                  })}
-                </Select>
-              </Grid> : ""}
-              {/* member */}
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  label="EmpID"
-                  id="empId"
-                  onChange={(e) => setEmpId(e.target.value)}
-                  value={empId}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  label="Name"
-                  id="name"
-                  onChange={(e) => setName(e.target.value)}
-                  value={name}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormLabel id="gender">Gender</FormLabel>
-                <RadioGroup
-                  row
-                  aria-labelledby="gender"
-                  name="Gender"
-                  onChange={(e) => setGender(e.target.value)}
-                  value={gender}
-                >
-                  <FormControlLabel value="female" control={<Radio />} label="Female" />
-                  <FormControlLabel value="male" control={<Radio />} label="Male" />
-                </RadioGroup>
-              </Grid>
-              <Grid item xs={12}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={['DatePicker']} >
-                    <DatePicker label="Date of Birth"
-                      value={dayjs(dob)}
-                      onChange={(e) => setDob(`${e.$M + 1}/${e.$D}/${e.$y}`)}
-                      format='MM/DD/YYYY'
+              {popUpTitle === ADD_ACCOUNT_TITLE ?
+                <>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      type='email'
+                      id="email"
+                      label="Email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
-                  </DemoContainer>
-                </LocalizationProvider>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  label="Address"
-                  id="address"
-                  onChange={(e) => setAddress(e.target.value)}
-                  value={address}
-                />
-              </Grid>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      type='password'
+                      id="password"
+                      label="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      label="Phone Number"
+                      type="tel"
+                      id="phoneNumber"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <InputLabel id="select-label">Select role</InputLabel>
+                    <Select
+                      labelId="select-label"
+                      id="select"
+                      value={role}
+                      onChange={(e) => setRole(e.target.value)}
+                    >
+                      <MenuItem value='ST'>Staff</MenuItem>
+                      <MenuItem value='ZT'>Zoo Trainer</MenuItem>
+                    </Select>
+                  </Grid>
+                  {role == 'ZT' ? <Grid item xs={6}>
+                    <InputLabel id="select-label">Select an zoo area</InputLabel>
+                    <Select
+                      labelId="select-label"
+                      id="select"
+                      value={selectedZooArea}
+                      onChange={(e) => setSelectedZooArea(e.target.value)}
+                    >
+                      {zooAreas.map(area => {
+                        return (
+                          <MenuItem key={area.zooAreaId} value={area.zooAreaId}>{area.description}</MenuItem>
+                        )
+                      })}
+                    </Select>
+                  </Grid> : ""}
+                  {/* member */}
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      label="EmpID"
+                      id="empId"
+                      onChange={(e) => setEmpId(e.target.value)}
+                      value={empId}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      label="Name"
+                      id="name"
+                      onChange={(e) => setName(e.target.value)}
+                      value={name}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormLabel id="gender">Gender</FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="gender"
+                      name="Gender"
+                      onChange={(e) => setGender(e.target.value)}
+                      value={gender}
+                    >
+                      <FormControlLabel value="female" control={<Radio />} label="Female" />
+                      <FormControlLabel value="male" control={<Radio />} label="Male" />
+                    </RadioGroup>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={['DatePicker']} >
+                        <DatePicker label="Date of Birth"
+                          value={dayjs(dob)}
+                          onChange={(e) => setDob(`${e.$M + 1}/${e.$D}/${e.$y}`)}
+                          format='MM/DD/YYYY'
+                        />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      label="Address"
+                      id="address"
+                      onChange={(e) => setAddress(e.target.value)}
+                      value={address}
+                    />
+                  </Grid></> :
+                <>
+                  {/* pop up for update role */}
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Email"
+                      value={email}
+                      disabled
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Username"
+                      value={username}
+                      disabled
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <InputLabel id="select-label">Select role</InputLabel>
+                    <Select
+                      labelId="select-label"
+                      id="select"
+                      value={role}
+                      onChange={(e) => setRole(e.target.value)}
+                    >
+                      {availableRoles
+                      .filter(item => item.key != role)
+                      .map(validRole => (
+                        <MenuItem key={validRole} value={validRole}>{validRole}</MenuItem>
+                      ))
+                      }
+                    </Select>
+                  </Grid>
+                  {role == 'ZT' ? <Grid item xs={6}>
+                    <InputLabel id="select-label">Select an zoo area</InputLabel>
+                    <Select
+                      labelId="select-label"
+                      id="select"
+                      value={selectedZooArea}
+                      onChange={(e) => setSelectedZooArea(e.target.value)}
+                    >
+                      {zooAreas.map(area => {
+                        return (
+                          <MenuItem key={area.zooAreaId} value={area.zooAreaId}>{area.description}</MenuItem>
+                        )
+                      })}
+                    </Select>
+                  </Grid> : ""}
+                </>}
             </Grid>
           </Box>
         </DialogContent>
