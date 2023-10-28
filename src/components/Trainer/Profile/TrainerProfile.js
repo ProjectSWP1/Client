@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { DatePicker, LocalizationProvider  } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
+
 const TrainerProfile = () => {
     const [employee, setEmployee] = useState(null);
     const [name, setName] = useState("");
@@ -92,7 +93,7 @@ const TrainerProfile = () => {
     }
 
     return (
-        <Box sx={{ display: 'flex', marginTop: 10 }}>
+        <Box sx={{ display: 'flex', marginTop: 10, mr: 10 }}>
             <UploadImage employeeId={employee?.empId} />
             <Box component="form" noValidate sx={{ mt: 3 }}>
                 <Grid container spacing={2}>

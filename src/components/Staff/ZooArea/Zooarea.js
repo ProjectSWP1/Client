@@ -58,6 +58,7 @@ export default function ZooArea() {
         }))}
         title="Zoo Area"
         pagination
+        
         keyField='zooAreaId'
         paginationPerPage={5} // Number of rows per page
         paginationRowsPerPageOptions={[5, 10, 20, 50]} // Rows per page options

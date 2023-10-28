@@ -4,7 +4,7 @@ import './FollowUs.css'
 export default function FollowUs() {
   return (
     <div className='follow-us'>
-        <p className='title-subscribe'>Subscribe</p>
+        <p className='title-subscribe'>SUBSCRIBE</p>
         <form className='sign-up'>
             <input type='text' placeholder='Enter your email' className='enter-email'/>
             <input type='submit' className='submit-email' value={"Sign Up"}/>
