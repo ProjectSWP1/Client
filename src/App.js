@@ -20,6 +20,7 @@ import ZooTrainer from "./components/Staff/ZooTrainer/Zootrainer";
 import Animal from "./components/Trainer/Animal/Animal";
 import AnimalSpecies from "./components/Trainer/AnimalSpecies/AnimalSpecies";
 import TrainerProfile from "./components/Trainer/Profile/TrainerProfile";
+import TrainerSchedule from "./components/Trainer/TrainerSchedule/TrainerSchedule";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/forgotpassword" element={<ForgotPassword/>}/>
           <Route path="/resetpassword" element={<ResetPassword/>}/>
+
           <Route path="/admin" element={<Admin />}>
             <Route exact path="dashboard" element={<Dash />} />
             <Route path="manageaccount" element={<ManageAccount />} />
@@ -45,6 +47,7 @@ function App() {
             <Route exact path="animals" element={<Animal />} />
             <Route exact path="animalspecies" element={<AnimalSpecies />} />
             <Route exact path="profile" element={<TrainerProfile />} />
+            <Route exact path="schedule" element={<TrainerSchedule />} />
           </Route>
           <Route path="/profile" element={<UserProfile />} />
         </Routes>

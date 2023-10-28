@@ -35,6 +35,8 @@ const TrainerProfile = () => {
             if(data.doB)
             setDob(dayjs(new Date(data.doB)));
             console.log(data);
+        }).catch(error => {
+            console.log(error);
         })
     }, [])
 
