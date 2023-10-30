@@ -37,9 +37,9 @@ export default function ManageAccount() {
   const [selectedZooArea, setSelectedZooArea] = useState('')
   const [gender, setGender] = useState('')
   const availableRoles = [
-    ['Staff', 'ST'],
-    ['Trainer', 'ZT'],
-    ['Member', 'MB']
+    { key: 'Staff', value: 'ST' },
+    { key: 'Trainer', value: 'ZT' },
+    { key: 'Member', value: 'MB' }
   ]
 
   const [popUpTitle, setPopupTitle] = useState(ADD_ACCOUNT_TITLE);
@@ -162,16 +162,49 @@ export default function ManageAccount() {
   }
 
   const handleOpenPopupUpdateAction = (account) => {
-    //account
+    setChanged(false);
     setOpen(true);
     setEmail(account.email);
     setUsername(account.username)
-    setRole(account.role.authority)
+    setRole(account.role.roleID)
     setPopupTitle(UPDATE_ROLE_TITLE);
   }
 
-  const handleUpdateRoleSave = (id) => {
-
+  const handleUpdateRoleSave = () => {
+    const accountDto = {
+      email: email
+    }
+    fetch(`http://localhost:8080/admin/assignRole?roleId=${role}`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer " + token,
+      },
+      body: JSON.stringify(accountDto)
+    }).then(response => {
+      if (!response.ok) {
+        return response.text().then((message) => {
+          throw new Error(message);
+        });
+      }
+      return response.text();
+    }).then(data => {
+      setOpen(false);
+      setChanged(true);
+      Swal.fire({
+        title: 'Success!',
+        text: `${data}`,
+        icon: 'success',
+      });
+    }).catch(error => {
+      setOpen(false);
+      Swal.fire({
+        title: 'Fail!',
+        text: `${error}`,
+        icon: 'error',
+      });
+    });
   }
 
   const handleDisactiveAction = (email) => {
@@ -430,12 +463,11 @@ export default function ManageAccount() {
                       value={role}
                       onChange={(e) => setRole(e.target.value)}
                     >
-                      {availableRoles
-                      .filter(item => item.key != role)
-                      .map(validRole => (
-                        <MenuItem key={validRole} value={validRole}>{validRole}</MenuItem>
-                      ))
-                      }
+                      {availableRoles.map(validRole => {
+                        return (
+                          <MenuItem key={validRole.key} value={validRole.value}>{validRole.key}</MenuItem>
+                        )
+                      })}
                     </Select>
                   </Grid>
                   {role == 'ZT' ? <Grid item xs={6}>

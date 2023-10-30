@@ -4,6 +4,11 @@ import { Link } from 'react-router-dom';
 import { Avatar, Button, Grow, MenuItem, MenuList, Paper, Popper } from '@mui/material';
 import { deepOrange } from '@mui/material/colors';
 import { getItemWithTimeout } from '../../auth/setTimeOut';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 export default function Header() {
     const [isAuth, setAuth] = useState(false)
@@ -146,37 +151,37 @@ export default function Header() {
                                                     <MenuItem>
                                                         <Link to={'/profile'}
                                                             style={{ color: 'black', textDecoration: 'none' }}
-                                                        >My Profile</Link>
+                                                        ><AccountBoxIcon/> My Profile</Link>
                                                     </MenuItem>
                                                     {
                                                         user.roles === 'Admin' ? (
                                                             <MenuItem>
                                                                 <Link to={'/admin/dashboard'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
-                                                                >My Management</Link>
+                                                                ><BusinessCenterIcon/> My Management</Link>
                                                             </MenuItem>
                                                         ) : user.roles == 'Staff' ? (
                                                             <MenuItem>
                                                                 <Link to={'/staff/zooarea'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
-                                                                >My Management</Link>
+                                                                ><BusinessCenterIcon/> My Management</Link>
                                                             </MenuItem>
                                                         ) : user.roles == 'Trainer' ? (
                                                             <MenuItem>
                                                                 <Link to={'/trainer/cages'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
-                                                                >My Management</Link>
+                                                                ><BusinessCenterIcon/> My Management</Link>
                                                             </MenuItem>
                                                         ) : (
                                                             <MenuItem>
                                                                 <Link to={'/trainer'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
-                                                                >My Order</Link>
+                                                                ><ShoppingCartIcon/> My Order</Link>
                                                             </MenuItem>
                                                         )
                                                     }
-                                                    <MenuItem onClick={handleClose}>Setting</MenuItem>
-                                                    <MenuItem onClick={handleClose}>Logout</MenuItem>
+                                                    <MenuItem onClick={handleClose}><SettingsIcon/> Setting</MenuItem>
+                                                    <MenuItem onClick={handleClose}><LogoutIcon/> Logout</MenuItem>
                                                 </MenuList>
                                                 {/* </ClickAwayListener> */}
                                             </Paper>

@@ -21,6 +21,7 @@ import Animal from "./components/Trainer/Animal/Animal";
 import AnimalSpecies from "./components/Trainer/AnimalSpecies/AnimalSpecies";
 import TrainerProfile from "./components/Trainer/Profile/TrainerProfile";
 import TrainerSchedule from "./components/Trainer/TrainerSchedule/TrainerSchedule";
+import ManageEmployee from "./components/Admin/ManageEmployee/ManageEmployee";
 
 function App() {
   return (
@@ -36,7 +37,8 @@ function App() {
 
           <Route path="/admin" element={<Admin />}>
             <Route exact path="dashboard" element={<Dash />} />
-            <Route path="manageaccount" element={<ManageAccount />} />
+            <Route path="manage-account" element={<ManageAccount />} />
+            <Route path="manage-employee" element={<ManageEmployee />}/>
           </Route>
           <Route path="/staff" element={<Staff />}>
             <Route exact path="zooarea" element={<ZooArea />} />

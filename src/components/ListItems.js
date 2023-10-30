@@ -57,7 +57,7 @@ export const adminListItems = (
       </Link>
     </ListItemButton>
     <ListItemButton>
-      <Link to={'/admin/manageaccount'} style={{
+      <Link to={'/admin/manage-account'} style={{
         textDecoration: 'none',
         color: 'grey',
         width: '100%'
@@ -66,6 +66,18 @@ export const adminListItems = (
           <SupervisedUserCircleIcon />
         </ListItemIcon>
         <ListItemText primary="Manage Account" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
+    <ListItemButton>
+      <Link to={'/admin/manage-employee'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <SupervisedUserCircleIcon />
+        </ListItemIcon>
+        <ListItemText primary="Manage Employee" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
   </React.Fragment>
