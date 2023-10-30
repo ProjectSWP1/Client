@@ -8,14 +8,14 @@
     right: 0;
     height: 80px;
     background-color: none;
-    transition: 0.3s;
+    transition: 1s;
     z-index: 999;
   }
   
   .slide-down-bar.visible {
-    background-color: #5D9C59;
-    opacity: 0.9;
-    transition: 0.3s;
+    background-color: #1ba340;
+    opacity: 0.95;
+    transition: 0.65s;
   }
   
 
@@ -63,9 +63,11 @@
 
 .nav-menu__link{
     text-decoration: none;
-    color: #ddd6d6;
-    font-size: 1.5rem;
+    color: #f5f5f5;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1.6rem;
     font-weight: bold;
+    text-shadow: 2px 2px #095b05;
     transition: 0.3s;
 }
 
@@ -75,7 +77,12 @@
 }
 
 .nav-menu__link:hover{
-    color: rgb(255, 255, 255);
+    font-size: 1.745rem;
+    text-decoration: underline #1f674c;
+    text-underline-position: under;
+    text-underline-offset: 6px;
+    text-decoration-thickness: 1.5px;
+    color: rgb(99, 237, 181);
 }
 
 .actived{

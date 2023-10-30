@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import { Avatar, Button, Grow, MenuItem, MenuList, Paper, Popper } from '@mui/material';
 import { deepOrange } from '@mui/material/colors';
 import { getItemWithTimeout } from '../../auth/setTimeOut';
+import WorkIcon from '@mui/icons-material/Work';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 
 export default function Header() {
     const [isAuth, setAuth] = useState(false)
@@ -149,6 +149,7 @@ export default function Header() {
                                                     onKeyDown={handleListKeyDown}
                                                 >
                                                     <MenuItem>
+                                                        <div style={{marginRight: "10px"}}><AccountBoxIcon/></div>
                                                         <Link to={'/profile'}
                                                             style={{ color: 'black', textDecoration: 'none' }}
                                                         ><AccountBoxIcon/> My Profile</Link>
@@ -156,32 +157,42 @@ export default function Header() {
                                                     {
                                                         user.roles === 'Admin' ? (
                                                             <MenuItem>
-                                                                <Link to={'/admin/dashboard'}
+                                                                <div style={{marginRight: "10px"}}><WorkIcon/></div>
+                                                                <Link to={'/admin'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
                                                                 ><BusinessCenterIcon/> My Management</Link>
                                                             </MenuItem>
-                                                        ) : user.roles == 'Staff' ? (
+                                                    ) : user.roles == 'Staff' ? (
                                                             <MenuItem>
-                                                                <Link to={'/staff/zooarea'}
+                                                                <div style={{marginRight: "10px"}}><WorkIcon/></div>
+                                                                <Link to={'/staff'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
                                                                 ><BusinessCenterIcon/> My Management</Link>
                                                             </MenuItem>
                                                         ) : user.roles == 'Trainer' ? (
                                                             <MenuItem>
-                                                                <Link to={'/trainer/cages'}
+                                                                <div style={{marginRight: "10px"}}><WorkIcon/></div>
+                                                                <Link to={'/trainer'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
                                                                 ><BusinessCenterIcon/> My Management</Link>
                                                             </MenuItem>
                                                         ) : (
                                                             <MenuItem>
+                                                            <div style={{marginRight: "10px"}}><ListAltIcon/></div>
                                                                 <Link to={'/trainer'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
                                                                 ><ShoppingCartIcon/> My Order</Link>
                                                             </MenuItem>
                                                         )
                                                     }
-                                                    <MenuItem onClick={handleClose}><SettingsIcon/> Setting</MenuItem>
-                                                    <MenuItem onClick={handleClose}><LogoutIcon/> Logout</MenuItem>
+                                                    <MenuItem onClick={handleClose}>
+                                                    <div style={{marginRight: "10px"}}><SettingsIcon/></div>
+                                                        Setting
+                                                    </MenuItem>
+                                                    <MenuItem onClick={handleClose}>
+                                                    <div style={{marginRight: "10px"}}><LogoutIcon/></div>
+                                                        Logout
+                                                    </MenuItem>
                                                 </MenuList>
                                                 {/* </ClickAwayListener> */}
                                             </Paper>
