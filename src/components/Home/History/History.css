@@ -21,7 +21,6 @@
 .left-side p {
     font-size: 0.5cm;
     width: 500px;
-    font-weight: 500;
 }
 
 .right-side{
@@ -41,7 +40,6 @@
     text-align: start;
     width: 550px;
     font-size: 0.5cm;
-    font-weight: 500;
 }
 .right-side h1{
     width: 550px;

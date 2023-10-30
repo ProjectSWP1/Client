@@ -17,10 +17,13 @@ export default function Slide() {
                 </section>
             </div>
             <div className="slide_items carousel-item" data-bs-interval={4000}>
+                <img src="assets/images/wildlife1.jpg" className="d-block " width="2000" height="1333"/>
+            </div>
+            <div className="slide_items carousel-item" data-bs-interval={4000}>
                 <img src="assets/images/Membership.jpg" className="d-block "/>
             </div>
             <div className="slide_items carousel-item" data-bs-interval={4000}>
-                <img src="assets/images/GetATicketNow.png" className="d-block "/>
+                <img src="assets/images/GetATicketNow.jpg" className="d-block "/>
             </div>
             <div className="slide_items carousel-item" data-bs-interval={4000}>
                 <img src="assets/images/Animal Info.jpg" className="d-block "/>
