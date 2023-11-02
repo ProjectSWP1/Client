@@ -12,9 +12,6 @@ export default function Slide() {
         <div className="carousel-inner">
             <div className="slide_items carousel-item active" data-bs-interval={4000}>
                 <img src="assets/images/Welcome.jpg" className="d-block "/>
-                <section className="carousel-caption d-none d-md-block ">
-                    <h2>Welcome to ZooKay</h2>
-                </section>
             </div>
             <div className="slide_items carousel-item" data-bs-interval={4000}>
                 <img src="assets/images/wildlife1.jpg" className="d-block " width="2000" height="1333"/>

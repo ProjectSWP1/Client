@@ -100,17 +100,12 @@ export default function Header() {
                 <div className="nav-menu">
                     <ul className="nav-menu__list">
                         <li className="nav-menu__item">
-                            <a href="#" className="nav-menu__link">
-                                Plan The Visit
-                            </a>
-                        </li>
-                        <li className="nav-menu__item">
                             <Link to={"/register"} className="nav-menu__link">Membership</Link>
                         </li>
                         <li className="nav-menu__item">
-                            <a href="#" className="nav-menu__link">
-                                Contact Us
-                            </a>
+                            <Link to={'/buy-ticket'} className="nav-menu__link">
+                                Buy Ticket
+                            </Link>
                         </li>
                         {isAuth ?
                             <li>
@@ -152,7 +147,7 @@ export default function Header() {
                                                         <div style={{marginRight: "10px"}}><AccountBoxIcon/></div>
                                                         <Link to={'/profile'}
                                                             style={{ color: 'black', textDecoration: 'none' }}
-                                                        ><AccountBoxIcon/> My Profile</Link>
+                                                        >My Profile</Link>
                                                     </MenuItem>
                                                     {
                                                         user.roles === 'Admin' ? (
@@ -160,28 +155,28 @@ export default function Header() {
                                                                 <div style={{marginRight: "10px"}}><WorkIcon/></div>
                                                                 <Link to={'/admin'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
-                                                                ><BusinessCenterIcon/> My Management</Link>
+                                                                >My Management</Link>
                                                             </MenuItem>
                                                     ) : user.roles == 'Staff' ? (
                                                             <MenuItem>
                                                                 <div style={{marginRight: "10px"}}><WorkIcon/></div>
                                                                 <Link to={'/staff'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
-                                                                ><BusinessCenterIcon/> My Management</Link>
+                                                                >My Management</Link>
                                                             </MenuItem>
                                                         ) : user.roles == 'Trainer' ? (
                                                             <MenuItem>
                                                                 <div style={{marginRight: "10px"}}><WorkIcon/></div>
                                                                 <Link to={'/trainer'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
-                                                                ><BusinessCenterIcon/> My Management</Link>
+                                                                >My Management</Link>
                                                             </MenuItem>
                                                         ) : (
                                                             <MenuItem>
                                                             <div style={{marginRight: "10px"}}><ListAltIcon/></div>
                                                                 <Link to={'/trainer'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
-                                                                ><ShoppingCartIcon/> My Order</Link>
+                                                                >My Order</Link>
                                                             </MenuItem>
                                                         )
                                                     }

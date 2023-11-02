@@ -12,7 +12,6 @@ import { Copyright, defaultTheme } from "../Theme/Theme.js";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import CircularProgress from "@mui/material/CircularProgress";
-import Modal from "@mui/material/Modal";
 
 export default class Confirm extends Component {
   state = {
@@ -31,8 +30,6 @@ export default class Confirm extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-
-    this.setState({ loading: true }); // Set loading to true before making the request
     // alert('Please wait a minute! We will send you the OTP to verify your email')
     const { values } = this.props;
     // Construct the payload with accountDto and memberDto
@@ -69,6 +66,7 @@ export default class Confirm extends Component {
             throw new Error(message);
           });
         }
+        this.setState({ loading: true }); // Set loading to true before making the request
         return response.text();
       })
       .then((data) => {

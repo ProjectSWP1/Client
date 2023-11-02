@@ -15,11 +15,13 @@ export default function ManageEmployee() {
     const [accounts, setAccounts] = useState([])
     const [zooAreas, setZooAreas] = useState([])
     const [open, setOpen] = useState(false);
+    const [staffAccounts, setStaffAccounts] = useState([])
     const [changed, setChanged] = useState(false)
 
     const UPDATE_EMPLOYEE_TITLE = "Update empolyee"
+    
 
-    const [popUpTitle, setPopupTitle] = useState(ADD_ACCOUNT_TITLE);
+    const [popUpTitle, setPopupTitle] = useState(UPDATE_EMPLOYEE_TITLE);
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
     const currentAcc = JSON.parse(atob(token.split('.')[1]))
     useEffect(() => {
@@ -32,6 +34,9 @@ export default function ManageEmployee() {
             }
         }).then(response => response.json()).then(data => {
             setAccounts(data)
+            setStaffAccounts(data.filter(acc => {
+                return acc.email.role.roleID === "ST"
+            }))
         })
 
         fetch('http://localhost:8080/trainer/get-zoo-area', {
@@ -54,61 +59,11 @@ export default function ManageEmployee() {
     };
 
     const handleOpenPopupUpdateAction = (account) => {
-        setChanged(false);
-        setOpen(true);
-        setEmail(account.email);
-        setUsername(account.username)
-        setRole(account.role.roleID)
-        setPopupTitle(UPDATE_ROLE_TITLE);
+        
     }
 
     const handleUpdateEmployee = () => {
 
-    }
-
-    const handleDisactiveAction = (email) => {
-        setChanged(false)
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'Are you sure?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#2e7d32',
-            cancelButtonColor: '#DDDDDD',
-            confirmButtonText: 'Yes!',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch(`http://localhost:8080/admin/deactivate-account/${email}`, {
-                    method: 'PUT',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': "Bearer " + token,
-                    },
-                }).then(response => {
-                    if (!response.ok) {
-                        return response.text().then((message) => {
-                            throw new Error(message);
-                        });
-                    }
-                    return response.text()
-                }).then(data => {
-                    Swal.fire({
-                        title: 'Success!',
-                        text: `${data}`,
-                        icon: 'success',
-                    });
-                    setChanged(true)
-                })
-                    .catch(error => {
-                        Swal.fire({
-                            title: 'Fail!',
-                            text: `${error.message}`,
-                            icon: 'error',
-                        });
-                    });
-            }
-        });
     }
 
     const columns = [
@@ -117,16 +72,16 @@ export default function ManageEmployee() {
             name: 'ID',
             selector: (employee, index) => {
                 return (
-                    <p>{employee.id}</p>
+                    <p>{employee.empId}</p>
                 )
             }
         },
         {
             id: 2,
-            name: 'Username',
-            selector: account => {
+            name: 'Email',
+            selector: employee => {
                 return (
-                    <p>{account.username}</p>
+                    <p>{employee.email.email}</p>
                 )
             }
         },
@@ -142,22 +97,30 @@ export default function ManageEmployee() {
         },
         {
             id: 4,
-            name: 'Role',
-            width: '150px',
-            selector: account => {
+            name: 'Zoo Area',
+            selector: employee => {
                 return (
-                    <p>{account.role.authority}</p>
+                    <p>{employee.zooArea?.zooAreaId? employee.zooArea.zooAreaId : employee.zooArea}</p>
                 )
             }
         },
         {
             id: 5,
-            name: 'Delete',
-            selector: account => {
+            name: 'Managed by',
+            width: '150px',
+            selector: employee => {
+                return (
+                    <p>{employee.managedByEmp?.empId? employee.managedByEmp.empId : employee.managedByEmp}</p>
+                )
+            }
+        },
+        {
+            id: 5,
+            name: 'Active',
+            selector: employee => {
                 return (
                     <Box sx={{ '& button': { m: 1 } }}>
-                        <Button variant="contained" size='small' onClick={() => handleDisactiveAction(account.email)}>Disactive</Button>
-                        <Button variant="contained" size='small' onClick={() => handleOpenPopupUpdateAction(account)}>Change Role</Button>
+                        <Button variant="contained" size='small' onClick={() => handleOpenPopupUpdateAction(employee)}>Update</Button>
                     </Box>
                 )
             }
@@ -178,174 +141,7 @@ export default function ManageEmployee() {
                 <DialogTitle>{popUpTitle}</DialogTitle>
                 <DialogContent>
                     <Box component="form" noValidate sx={{ mt: 3 }}>
-                        <Grid container spacing={2}>
-                            {popUpTitle === UPDATE_EMPLOYEE_TITLE ?
-                                <>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            type='email'
-                                            id="email"
-                                            label="Email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            type='password'
-                                            id="password"
-                                            label="Password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            label="Phone Number"
-                                            type="tel"
-                                            id="phoneNumber"
-                                            value={phone}
-                                            onChange={(e) => setPhone(e.target.value)}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <InputLabel id="select-label">Select role</InputLabel>
-                                        <Select
-                                            labelId="select-label"
-                                            id="select"
-                                            value={role}
-                                            onChange={(e) => setRole(e.target.value)}
-                                        >
-                                            <MenuItem value='ST'>Staff</MenuItem>
-                                            <MenuItem value='ZT'>Zoo Trainer</MenuItem>
-                                        </Select>
-                                    </Grid>
-                                    {role == 'ZT' ? <Grid item xs={6}>
-                                        <InputLabel id="select-label">Select an zoo area</InputLabel>
-                                        <Select
-                                            labelId="select-label"
-                                            id="select"
-                                            value={selectedZooArea}
-                                            onChange={(e) => setSelectedZooArea(e.target.value)}
-                                        >
-                                            {zooAreas.map(area => {
-                                                return (
-                                                    <MenuItem key={area.zooAreaId} value={area.zooAreaId}>{area.description}</MenuItem>
-                                                )
-                                            })}
-                                        </Select>
-                                    </Grid> : ""}
-                                    {/* member */}
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            label="EmpID"
-                                            id="empId"
-                                            onChange={(e) => setEmpId(e.target.value)}
-                                            value={empId}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            label="Name"
-                                            id="name"
-                                            onChange={(e) => setName(e.target.value)}
-                                            value={name}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <FormLabel id="gender">Gender</FormLabel>
-                                        <RadioGroup
-                                            row
-                                            aria-labelledby="gender"
-                                            name="Gender"
-                                            onChange={(e) => setGender(e.target.value)}
-                                            value={gender}
-                                        >
-                                            <FormControlLabel value="female" control={<Radio />} label="Female" />
-                                            <FormControlLabel value="male" control={<Radio />} label="Male" />
-                                        </RadioGroup>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DemoContainer components={['DatePicker']} >
-                                                <DatePicker label="Date of Birth"
-                                                    value={dayjs(dob)}
-                                                    onChange={(e) => setDob(`${e.$M + 1}/${e.$D}/${e.$y}`)}
-                                                    format='MM/DD/YYYY'
-                                                />
-                                            </DemoContainer>
-                                        </LocalizationProvider>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            required
-                                            fullWidth
-                                            label="Address"
-                                            id="address"
-                                            onChange={(e) => setAddress(e.target.value)}
-                                            value={address}
-                                        />
-                                    </Grid></> :
-                                <>
-                                    {/* pop up for update role */}
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            fullWidth
-                                            label="Email"
-                                            value={email}
-                                            disabled
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            fullWidth
-                                            label="Username"
-                                            value={username}
-                                            disabled
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <InputLabel id="select-label">Select role</InputLabel>
-                                        <Select
-                                            labelId="select-label"
-                                            id="select"
-                                            value={role}
-                                            onChange={(e) => setRole(e.target.value)}
-                                        >
-                                            {availableRoles.map(validRole => {
-                                                return (
-                                                    <MenuItem key={validRole.key} value={validRole.value}>{validRole.key}</MenuItem>
-                                                )
-                                            })}
-                                        </Select>
-                                    </Grid>
-                                    {role == 'ZT' ? <Grid item xs={6}>
-                                        <InputLabel id="select-label">Select an zoo area</InputLabel>
-                                        <Select
-                                            labelId="select-label"
-                                            id="select"
-                                            value={selectedZooArea}
-                                            onChange={(e) => setSelectedZooArea(e.target.value)}
-                                        >
-                                            {zooAreas.map(area => {
-                                                return (
-                                                    <MenuItem key={area.zooAreaId} value={area.zooAreaId}>{area.description}</MenuItem>
-                                                )
-                                            })}
-                                        </Select>
-                                    </Grid> : ""}
-                                </>}
-                        </Grid>
+                        
                     </Box>
                 </DialogContent>
                 <DialogActions>

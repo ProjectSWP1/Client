@@ -1,12 +1,12 @@
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
 import { createTheme } from '@mui/material/styles';
+import { Link } from 'react-router-dom';
 
 export function Copyright(props) {
     return (
       <Typography variant="body2" color="text.secondary" align="center" {...props}>
         {'Copyright © '}
-        <Link color="inherit" href="/">
+        <Link to={'/'} style={{color: 'inherit'}}>
           ZooKay
         </Link>{' '}
         {new Date().getFullYear()}

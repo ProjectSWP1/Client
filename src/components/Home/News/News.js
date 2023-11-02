@@ -7,14 +7,24 @@ export default function News() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8080/user/get-newest-news')
-      .then((response) => response.json())
+    fetch('http://localhost:8080/user/get-newest-news',{
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+      .then((response) => {
+        if(!response.ok){
+          return response.text().then((message) => {
+            throw new Error(message);
+        })}
+        return response.json()
+      })
       .then((data) => {
         setNews(data);
         setIsLoading(false);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
         setIsLoading(false);
       });
   }, []);

@@ -14,10 +14,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { ThemeProvider } from "@mui/material/styles";
 import { Copyright, defaultTheme } from "./../Theme/Theme.js";
-import GoogleIcon from "@mui/icons-material/Google";
 import axios from 'axios';
 import useAuth from '../auth/auth.js';
-import { NEW_TIMEOUT_IN_SECONDS, setItemWithTimeout, setWithExpiry } from "../auth/setTimeOut.js";
+import { NEW_TIMEOUT_IN_SECONDS, setItemWithTimeout } from "../auth/setTimeOut.js";
 
 
 export default function SignIn() {
