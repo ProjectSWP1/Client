@@ -42,8 +42,14 @@ export default function TicketList() {
   };
 
   const handleBuyTicket = (ticketId) => {
-    openOrderModal();
+    if (!userEmail) {
+      // Nếu chưa đăng nhập (userEmail là null), chuyển hướng người dùng tới trang mua vé trực tiếp
+      window.location.href = "https://buy.stripe.com/test_6oE2bY2ML6kY8ve144";
+    } else {
+      openOrderModal();
+    }
   };
+  
 
   // Update the total price when the quantity changes
   useEffect(() => {
