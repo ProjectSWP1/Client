@@ -7,7 +7,7 @@ export function Copyright(props) {
       <Typography variant="body2" color="text.secondary" align="center" {...props}>
         {'Copyright © '}
         <Link to={'/'} style={{color: 'inherit'}}>
-          ZooKay
+          The ZooKay Park
         </Link>{' '}
         {new Date().getFullYear()}
         {'.'}
