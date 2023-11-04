@@ -45,7 +45,6 @@ export default function Header() {
             setUser(JSON.parse(atob(accessToken.split('.')[1])))
         }
     }, [accessToken])
-    console.log(user);
     // Cái này lấy từ auth.js sau khi setAuth bên login
     // const { user, logout } = useAuth();
     // const { token } = useAuth();
@@ -91,9 +90,9 @@ export default function Header() {
             <section className="nav-bg">
                 {/* logo */}
                 <div className="nav-logo">
-                    <a href="#">
+                    <Link to={'/'}>
                         <img src='assets/images/zookay.png' />
-                    </a>
+                    </Link>
                 </div>
 
                 {/* menu */}
@@ -153,21 +152,21 @@ export default function Header() {
                                                         user.roles === 'Admin' ? (
                                                             <MenuItem>
                                                                 <div style={{marginRight: "10px"}}><WorkIcon/></div>
-                                                                <Link to={'/admin'}
+                                                                <Link to={'/admin/dashboard'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
                                                                 >My Management</Link>
                                                             </MenuItem>
-                                                    ) : user.roles == 'Staff' ? (
+                                                    ) : user.roles === 'Staff' ? (
                                                             <MenuItem>
                                                                 <div style={{marginRight: "10px"}}><WorkIcon/></div>
-                                                                <Link to={'/staff'}
+                                                                <Link to={'/staff/zooarea'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
                                                                 >My Management</Link>
                                                             </MenuItem>
-                                                        ) : user.roles == 'Trainer' ? (
+                                                        ) : user.roles === 'Trainer' ? (
                                                             <MenuItem>
                                                                 <div style={{marginRight: "10px"}}><WorkIcon/></div>
-                                                                <Link to={'/trainer'}
+                                                                <Link to={'/trainer/cages'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
                                                                 >My Management</Link>
                                                             </MenuItem>
@@ -181,15 +180,10 @@ export default function Header() {
                                                         )
                                                     }
                                                     <MenuItem onClick={handleClose}>
-                                                    <div style={{marginRight: "10px"}}><SettingsIcon/></div>
-                                                        Setting
-                                                    </MenuItem>
-                                                    <MenuItem onClick={handleClose}>
                                                     <div style={{marginRight: "10px"}}><LogoutIcon/></div>
                                                         Logout
                                                     </MenuItem>
                                                 </MenuList>
-                                                {/* </ClickAwayListener> */}
                                             </Paper>
                                         </Grow>
                                     )}

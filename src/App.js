@@ -22,11 +22,11 @@ import AnimalSpecies from "./components/Trainer/AnimalSpecies/AnimalSpecies";
 import TrainerProfile from "./components/Trainer/Profile/TrainerProfile";
 import TrainerSchedule from "./components/Trainer/TrainerSchedule/TrainerSchedule";
 import ManageEmployee from "./components/Admin/ManageEmployee/ManageEmployee";
+import TicketLayout from "./components/Ticket/TicketLayout.js";
 
 function App() {
   return (
     <AuthProvider>
-      <Router>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
@@ -52,8 +52,8 @@ function App() {
             <Route exact path="schedule" element={<TrainerSchedule />} />
           </Route>
           <Route path="/profile" element={<UserProfile />} />
+          <Route path="/buy-ticket" element={<TicketLayout/>}/>
         </Routes>
-      </Router>
     </AuthProvider>
   );
 }

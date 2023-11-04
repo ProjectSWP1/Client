@@ -28,18 +28,6 @@ export const mainListItems = (
         <ListItemText primary="Home" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
-    <ListItemButton>
-      <Link to={'/trainer/profile'} style={{
-        textDecoration: 'none',
-        color: 'grey',
-        width: '100%'
-      }}>
-        <ListItemIcon>
-          <AccountBoxIcon />
-        </ListItemIcon>
-        <ListItemText primary="Profile" style={{ display: 'inline-block' }} />
-      </Link>
-    </ListItemButton>
   </React.Fragment>
 )
 export const adminListItems = (
@@ -120,6 +108,18 @@ export const trainerListItems = (
     <ListSubheader component="div" inset>
       Trainer's function
     </ListSubheader>
+    <ListItemButton>
+      <Link to={'/trainer/profile'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <AccountBoxIcon />
+        </ListItemIcon>
+        <ListItemText primary="Profile" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
     <ListItemButton>
       <Link to={'/trainer/cages'} style={{
         textDecoration: 'none',
