@@ -42,14 +42,46 @@ export default function TicketList() {
   };
 
   const handleBuyTicket = (ticketId) => {
-    if (!userEmail) {
-      // Nếu chưa đăng nhập (userEmail là null), chuyển hướng người dùng tới trang mua vé trực tiếp
-      window.location.href = "https://buy.stripe.com/test_6oE2bY2ML6kY8ve144";
-    } else {
-      openOrderModal();
-    }
+    setSelectedTicketId(ticketId); // Set the selected ticket ID
+    openOrderModal();
   };
-  
+
+  const handleOrderSubmit = () => {
+    // Prepare the order data
+    const orderData = {
+      ticketId: selectedTicketId,
+      ticketQuantity: selectedQuantity,
+      email: userEmail,
+    };
+
+    // Send a POST request to create the order
+    axios
+      .post("http://localhost:8080/order/create-order", orderData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((response) => {
+        // Check the response and handle accordingly
+        if (response.status === 201) {
+          // Order was created successfully
+          // You can navigate to the ConfirmOrders page or show a success message
+          console.log("Order created successfully:", response.data);
+          // You can navigate to the ConfirmOrders page here
+        } else {
+          // Handle error or show an error message
+          console.error("Failed to create order:", response.data);
+          // Handle the error or show an error message
+        }
+      })
+      .catch((error) => {
+        console.error("Error creating order:", error);
+        // Handle the error or show an error message
+      });
+
+    // Close the order modal
+    closeOrderModal();
+  };
 
   // Update the total price when the quantity changes
   useEffect(() => {
@@ -123,7 +155,9 @@ export default function TicketList() {
           <Button
             variant="primary"
             onClick={() => {
-              console.log(`Ordered ${selectedQuantity} tickets for email: ${userEmail}`);
+              console.log(
+                `Ordered ${selectedQuantity} tickets for email: ${userEmail}`
+              );
               closeOrderModal();
             }}
           >

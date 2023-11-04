@@ -23,6 +23,7 @@ import TrainerProfile from "./components/Trainer/Profile/TrainerProfile";
 import TrainerSchedule from "./components/Trainer/TrainerSchedule/TrainerSchedule";
 import ManageEmployee from "./components/Admin/ManageEmployee/ManageEmployee";
 import BuyTicket from "./pages/BuyTicket.js";
+import StripePayment from "./stripepayment/StripePayment.jsx";
 
 function App() {
   return (
@@ -35,8 +36,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/forgotpassword" element={<ForgotPassword/>}/>
           <Route path="/resetpassword" element={<ResetPassword/>}/>
-          {/*<Route path="/ticket/:id" component={TicketDetail} />*/}
-          <Route path="/buy-ticket" element={<BuyTicket/>} />
+
+          <Route path="/buy-ticket" element={<BuyTicket/>}/>
+          <Route path="/payment" element={<StripePayment />}/>
 
           <Route path="/admin" element={<Admin />}>
             <Route exact path="dashboard" element={<Dash />} />
