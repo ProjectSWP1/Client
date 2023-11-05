@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import {
   PaymentElement,
   useStripe,
-  useElements
+  useElements,
+  LinkAuthenticationElement
 } from "@stripe/react-stripe-js";
 
-export default function CheckoutForm({orderID}) {
+export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -99,9 +100,9 @@ export default function CheckoutForm({orderID}) {
   }
 
   return (
-    
     <form id="payment-form" onSubmit={handleSubmit}>
-      <h1>You are about to pay order: {orderID}</h1>
+      <h1>You are about to pay order:</h1>
+      <LinkAuthenticationElement id="link-authentication-element"/>
       <PaymentElement id="payment-element" options={paymentElementOptions} />
       <button disabled={isLoading || !stripe || !elements} id="submit">
         <span id="button-text">

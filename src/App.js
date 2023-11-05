@@ -24,11 +24,13 @@ import TrainerSchedule from "./components/Trainer/TrainerSchedule/TrainerSchedul
 import ManageEmployee from "./components/Admin/ManageEmployee/ManageEmployee";
 import BuyTicket from "./pages/BuyTicket.js";
 import StripePayment from "./stripepayment/StripePayment.jsx";
+import TicketLayout from "./components/Ticket/TicketLayout.js";
+import FeedingSchedule from "./components/Trainer/WorkAssignTrainer/FeedingSchedule.js";
+import PostNews from "./components/Home/News/News.js";
 
 function App() {
   return (
     <AuthProvider>
-      <Router>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
@@ -47,7 +49,8 @@ function App() {
           </Route>
           <Route path="/staff" element={<Staff />}>
             <Route exact path="zooarea" element={<ZooArea />} />
-            <Route exact path="trainers" element={<ZooTrainer />} />
+            <Route path="trainers" element={<ZooTrainer />} />
+            <Route path="post-news" element={<PostNews/>}></Route>
           </Route>
           <Route path="/trainer" element={<Trainer />}>
             <Route exact path="cages" element={<AnimalCage />} />
@@ -55,10 +58,11 @@ function App() {
             <Route exact path="animalspecies" element={<AnimalSpecies />} />
             <Route exact path="profile" element={<TrainerProfile />} />
             <Route exact path="schedule" element={<TrainerSchedule />} />
+            <Route exact path="feeding-schedule" element={<FeedingSchedule/>}/>
           </Route>
           <Route path="/profile" element={<UserProfile />} />
+          <Route path="/buy-ticket" element={<TicketLayout/>}/>
         </Routes>
-      </Router>
     </AuthProvider>
   );
 }

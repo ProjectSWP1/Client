@@ -11,6 +11,7 @@ import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import PetsIcon from '@mui/icons-material/Pets';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import FiberNewIcon from '@mui/icons-material/FiberNew';
 
 import { Link } from 'react-router-dom';
 
@@ -26,18 +27,6 @@ export const mainListItems = (
           <HomeIcon />
         </ListItemIcon>
         <ListItemText primary="Home" style={{ display: 'inline-block' }} />
-      </Link>
-    </ListItemButton>
-    <ListItemButton>
-      <Link to={'/trainer/profile'} style={{
-        textDecoration: 'none',
-        color: 'grey',
-        width: '100%'
-      }}>
-        <ListItemIcon>
-          <AccountBoxIcon />
-        </ListItemIcon>
-        <ListItemText primary="Profile" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
   </React.Fragment>
@@ -112,6 +101,18 @@ export const staffListItems = (
         <ListItemText primary="Zoo Trainer Page" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
+    <ListItemButton>
+      <Link to={'/staff/post-news'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <FiberNewIcon />
+        </ListItemIcon>
+        <ListItemText primary="Post News" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
   </React.Fragment>
 );
 
@@ -120,6 +121,18 @@ export const trainerListItems = (
     <ListSubheader component="div" inset>
       Trainer's function
     </ListSubheader>
+    <ListItemButton>
+      <Link to={'/trainer/profile'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <AccountBoxIcon />
+        </ListItemIcon>
+        <ListItemText primary="Profile" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
     <ListItemButton>
       <Link to={'/trainer/cages'} style={{
         textDecoration: 'none',
@@ -166,6 +179,18 @@ export const trainerListItems = (
           <CalendarMonthIcon />
         </ListItemIcon>
         <ListItemText primary="Schedule" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
+    <ListItemButton>
+      <Link to={'/trainer/feeding-schedule'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <CalendarMonthIcon />
+        </ListItemIcon>
+        <ListItemText primary="Feeding Schedule" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
   </React.Fragment>

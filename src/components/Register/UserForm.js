@@ -12,21 +12,29 @@ import { Copyright, defaultTheme } from '../Theme/Theme.js';
 import { Link } from 'react-router-dom';
 
 export default class UserForm extends Component {
+    // componentDidMount() {
+    //     const searchParams = new URLSearchParams(this.props.location.search);
+    //     const email = searchParams.get("email");
+
+    //     console.log("Email from URL:", email);
+    // }
+
     continue = e => {
         e.preventDefault();
         this.props.nextStep()
     }
     render() {
         const { values, handleChange } = this.props
+        const email = window.location.href.split('=')[1]
         return (
             <ThemeProvider theme={defaultTheme}>
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
-                    <Box sx={{marginTop: 8,display: 'flex',flexDirection: 'column',alignItems: 'center',}}>
+                    <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
                         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                             <LockOutlinedIcon />
                         </Avatar>
-                        <h1 style={{color: 'darkgreen'}}>User Details</h1>
+                        <h1 style={{ color: 'darkgreen' }}>User Details</h1>
                         <Box component="form" noValidate sx={{ mt: 3 }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
@@ -36,7 +44,7 @@ export default class UserForm extends Component {
                                         id="email"
                                         label="Email Address"
                                         onChange={handleChange('email')}
-                                        defaultValue={values.email}
+                                        value={email? email : values.email}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -72,7 +80,7 @@ export default class UserForm extends Component {
                             </Button>
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
-                                    <Link to={'/login'} style={{textDecoration: 'none', color: 'green'}}>
+                                    <Link to={'/login'} style={{ textDecoration: 'none', color: 'green' }}>
                                         Already have an account? Sign in
                                     </Link>
                                 </Grid>
