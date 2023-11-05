@@ -68,7 +68,7 @@
     font-family:Verdana, Geneva, Tahoma, sans-serif;
     font-size: 1.6rem;
     font-weight: bold;
-    text-shadow: 2px 2px #095b05;
+    text-shadow: 2px 2px #0a2908;
     transition: 0.3s;
 }
 
@@ -79,7 +79,7 @@
 
 .nav-menu__link:hover{
     font-size: 1.745rem;
-    text-decoration: underline #1f674c;
+    text-decoration: underline #35aa7f;
     text-underline-position: under;
     text-underline-offset: 6px;
     text-decoration-thickness: 1.5px;
