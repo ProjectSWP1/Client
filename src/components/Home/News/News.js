@@ -39,41 +39,7 @@ export default function News() {
       ) : news.length === 0 ? (
         <p>Currently we don't have any news about zoo</p>
       ) : (
-        // <ul>
-        //   {news.map((item) => (
-        //     <li key={item.newsId}>
-        //       <h2>{item.content}</h2>
-        //       <p>{item.description}</p>
-        //       <p>Date created: {item.dateCreated}</p>
-        //     </li>
-        //   ))}
-        // </ul>
-
-        /*<Grid container spacing={0} justifyContent="center" sx={{mt: '100px', mb: '100px'}}>
-          {news.map(item => (
-            <Grid key={item.newsId} container justifyContent="center" xs={4} className='news-container'>
-              <Card sx={{ height: 'auto', width: '70%', mb: '10px' }} className='news-card'>
-                <CardMedia
-                  component="img"
-                  height="100%"
-                  image={'assets/images/wildlife1.jpg'}
-                  className='news-image'
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {item.content}
-                  </Typography>
-                </CardContent>
-              </Card>
-              <div className='news-overlay'>
-                <Typography gutterBottom variant="h5" component="div" className='text-news'>
-                  {item.description}
-                </Typography>
-              </div>
-            </Grid>
-          ))}
-        </Grid>*/
-
+        
         <Container className='news-container'>
           {news.map(item => (
             <div className='news-all-cards'>

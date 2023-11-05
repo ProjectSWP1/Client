@@ -1,159 +1,87 @@
-/* .news-container {
-    position: relative;
+.news-title {
+  font-size: 1.4cm;
+  font-weight: bold;
+  text-align: center;
+  color: rgb(83, 105, 49)
 }
-.news-card{
-    width: 30% !important
+
+.news-container {
+  width: 100% !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: space-between !important;
+  margin-right: 140px !important;
+  margin-top: 50px !important;
+  margin-bottom: 100px !important;
+  align-items: center !important;
 }
+
+.news-all-cards {
+  position: relative;
+  width: 30%;
+  margin: 0 10px !important;
+}
+
+.news-card {
+  width: 100% !important;
+}
+
 .news-overlay {
-    position: absolute;
-    top: 0;
-    bottom: 8px;
-    left: 74px;
-    right: 0;
-    height: auto;
-    width: 70%;
-    opacity: 0;
-    transition: .5s ease;
-    background-color: grey;
+  position: absolute;
+  top: 0;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  height: auto;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: grey;
 }
 
-.news-container:hover .news-overlay {
-    opacity: 0.9;
-  }
-  
-  .text-news {
-    color: white;
-    font-size: 20px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-  }
+.news-all-cards:hover .news-overlay {
+  opacity: 0.9;
+}
 
-  @media(max-width: 1250px){
-    .news-overlay{
-        left: 60px !important
-    }
-  }
-  @media(max-width: 1155px){
-    .news-overlay{
-        left: 55px !important
-    }
-  }
-  @media(max-width: 1055px){
-    .news-overlay{
-        left: 50px !important
-    }
-  }
-  @media(max-width: 980px){
-    .news-overlay{
-        left: 48px !important
-    }
-  }
-  @media(max-width: 940px){
-    .news-container{
-        width: 100% !important;
-        display: flex !important;
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        align-items: center !important;
-        flex-direction: row-reverse !important;
-    }
-     .MuiGrid-root .MuiGrid-container .MuiGrid-grid-xs-4 .news-container .css-1ij6qw1-MuiGrid-root{
-        width: 100% !important;
-        
-    } 
-    .news-card{
-        width: 100% !important;
-        display: flex !important;
-        
-    }
-    .news-image{
-        width: 600px !important;
-    } 
-    .news-overlay{
-        left: 50px !important
-    }
-  } */
+.text-news {
+  color: white;
+  /* font-size: 20px; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
 
-  .news-title{
-    font-size: 1.4cm;
-    font-weight: bold;
-    text-align: center;
-    color: rgb(83, 105, 49)
-  }
-
+@media (max-width: 930px) {
   .news-container {
-    width: 100% !important;
+    /* margin-right: 50px !important; */
     display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: space-between !important;
-    margin-right: 140px !important;
-    margin-top: 50px !important;
-    margin-bottom: 100px !important;
-    align-items: center !important;
-  }
-  .news-all-cards{
-    position: relative;
-    width: 30%;
-    margin: 0 10px !important;
-  }
-  .news-card{
-    width: 100% !important;
+    justify-content: center !important;
   }
 
-  .news-overlay {
-    position: absolute;
-    top: 0;
-    bottom: 8px;
-    left: 0;
-    right: 0;
-    height: auto;
-    width: 100%;
-    opacity: 0;
-    transition: .5s ease;
-    background-color: grey;
+  .news-all-cards {
+    width: 50%;
+    margin-bottom: 50px !important;
   }
+}
 
-  .news-all-cards:hover .news-overlay {
-    opacity: 0.9;
+@media (max-width: 770px) {
+  .news-content {
+    font-size: 20px !important;
   }
 
   .text-news {
-    color: white;
-    /* font-size: 20px; */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
+    font-size: 20px !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .news-content {
+    font-size: 17px !important;
   }
 
-  @media (max-width: 930px) {
-    .news-container{
-      /* margin-right: 50px !important; */
-      display: flex !important;
-      justify-content: center !important;
-    }
-    .news-all-cards{
-      width: 50%;
-      margin-bottom: 50px !important;
-    }
+  .text-news {
+    font-size: 17px !important;
   }
-  @media (max-width: 770px) {
-    .news-content{
-      font-size: 20px !important;
-    }
-    .text-news{
-      font-size: 20px !important;
-    }
-  }
-  @media (max-width: 620px) {
-    .news-content{
-      font-size: 17px !important;
-    }
-    .text-news{
-      font-size: 17px !important;
-    }
-  }
+}

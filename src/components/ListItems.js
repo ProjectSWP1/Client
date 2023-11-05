@@ -11,6 +11,7 @@ import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import PetsIcon from '@mui/icons-material/Pets';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import FiberNewIcon from '@mui/icons-material/FiberNew';
 
 import { Link } from 'react-router-dom';
 
@@ -98,6 +99,18 @@ export const staffListItems = (
           <SupervisedUserCircleIcon />
         </ListItemIcon>
         <ListItemText primary="Zoo Trainer Page" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
+    <ListItemButton>
+      <Link to={'/staff/post-news'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <FiberNewIcon />
+        </ListItemIcon>
+        <ListItemText primary="Post News" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
   </React.Fragment>
