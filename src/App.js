@@ -23,6 +23,7 @@ import TrainerProfile from "./components/Trainer/Profile/TrainerProfile";
 import TrainerSchedule from "./components/Trainer/TrainerSchedule/TrainerSchedule";
 import ManageEmployee from "./components/Admin/ManageEmployee/ManageEmployee";
 import TicketLayout from "./components/Ticket/TicketLayout.js";
+import PostNews from "./components/Staff/PostNews/PostNews.js";
 
 function App() {
   return (
@@ -42,14 +43,15 @@ function App() {
           </Route>
           <Route path="/staff" element={<Staff />}>
             <Route exact path="zooarea" element={<ZooArea />} />
-            <Route exact path="trainers" element={<ZooTrainer />} />
+            <Route path="trainers" element={<ZooTrainer />} />
+            <Route path="post-news" element={<PostNews/>}></Route>
           </Route>
           <Route path="/trainer" element={<Trainer />}>
             <Route exact path="cages" element={<AnimalCage />} />
-            <Route exact path="animals" element={<Animal />} />
-            <Route exact path="animalspecies" element={<AnimalSpecies />} />
-            <Route exact path="profile" element={<TrainerProfile />} />
-            <Route exact path="schedule" element={<TrainerSchedule />} />
+            <Route path="animals" element={<Animal />} />
+            <Route path="animalspecies" element={<AnimalSpecies />} />
+            <Route path="profile" element={<TrainerProfile />} />
+            <Route path="schedule" element={<TrainerSchedule />} />
           </Route>
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/buy-ticket" element={<TicketLayout/>}/>
