@@ -6,7 +6,6 @@ import { deepOrange } from '@mui/material/colors';
 import { getItemWithTimeout } from '../../auth/setTimeOut';
 import WorkIcon from '@mui/icons-material/Work';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 
@@ -16,11 +15,16 @@ export default function Header() {
     // const accessToken = getWithExpiry('token')
     // const accessToken = localStorage.getItem('token')
     const [isScrolled, setIsScrolled] = useState(false);
+    // const [changed, setChanged] = useState(false)
 
     useEffect(() => {
         // Thêm một sự kiện lắng nghe cho việc cuộn trang
-        window.addEventListener('scroll', handleScroll);
-
+        if(window.location.href.split('/')[3] === ""){
+            window.addEventListener('scroll', handleScroll);
+        }else{
+            setIsScrolled(true)
+        }
+        
         return () => {
             // Loại bỏ sự kiện lắng nghe khi component bị hủy
             window.removeEventListener('scroll', handleScroll);
