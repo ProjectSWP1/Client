@@ -23,6 +23,7 @@ import TrainerProfile from "./components/Trainer/Profile/TrainerProfile";
 import TrainerSchedule from "./components/Trainer/TrainerSchedule/TrainerSchedule";
 import ManageEmployee from "./components/Admin/ManageEmployee/ManageEmployee";
 import TicketLayout from "./components/Ticket/TicketLayout.js";
+import FeedingSchedule from "./components/Trainer/WorkAssignTrainer/FeedingSchedule.js";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
             <Route exact path="animalspecies" element={<AnimalSpecies />} />
             <Route exact path="profile" element={<TrainerProfile />} />
             <Route exact path="schedule" element={<TrainerSchedule />} />
+            <Route exact path="feeding-schedule" element={<FeedingSchedule />} />
           </Route>
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/buy-ticket" element={<TicketLayout/>}/>

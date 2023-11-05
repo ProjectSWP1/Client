@@ -168,5 +168,17 @@ export const trainerListItems = (
         <ListItemText primary="Schedule" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
+    <ListItemButton>
+      <Link to={'/trainer/feeding-schedule'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <CalendarMonthIcon />
+        </ListItemIcon>
+        <ListItemText primary="Feeding Schedule" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
   </React.Fragment>
 );
