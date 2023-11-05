@@ -24,6 +24,7 @@ import TrainerSchedule from "./components/Trainer/TrainerSchedule/TrainerSchedul
 import ManageEmployee from "./components/Admin/ManageEmployee/ManageEmployee";
 import TicketLayout from "./components/Ticket/TicketLayout.js";
 import FeedingSchedule from "./components/Trainer/WorkAssignTrainer/FeedingSchedule.js";
+import PostNews from "./components/Home/News/News.js";
 
 function App() {
   return (
