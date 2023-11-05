@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
-  Avatar,
   Button,
   Card,
   CardContent,
-  CardHeader,
   CardMedia,
   Container,
   CssBaseline,
   GlobalStyles,
   Grid,
-  IconButton,
   ThemeProvider,
   Typography,
   createTheme,
@@ -18,18 +15,27 @@ import {
 import axios from "axios";
 import FormBuy from "../FormBuy/FormBuy";
 import Loading from "../Loading/Loading";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { green } from "@mui/material/colors";
+import { getItemWithTimeout } from "../../auth/setTimeOut";
 
 const defaultTheme = createTheme();
 
 export default function TicketList() {
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
+  const [user, setUser] = useState(null)
+
+  const accessToken = getItemWithTimeout('token')
+  useEffect(() => {
+    if (accessToken) {
+        setUser(JSON.parse(atob(accessToken.split('.')[1])))
+        console.log(user);
+    }
+}, [accessToken])
 
   useEffect(() => {
     axios
-      .get("https://654506c45a0b4b04436d7cb5.mockapi.io/api/v1/ticket")
+      .get("http://localhost:8080/user/get-ticket")
       .then((response) => {
         setTickets(response.data);
       })
@@ -38,10 +44,11 @@ export default function TicketList() {
       });
   }, []);
 
-  const convertValue = (value) => {
-    const date = new Date(value * 1000);
-    return date.toLocaleDateString("en-US");
-  };
+  // const convertValue = (value) => {
+  //   console.log(value);
+  //   const date = new Date(value);
+  //   return date.toLocaleDateString("en-US");
+  // };
 
   if (tickets.length <= 0) {
     return (
@@ -58,7 +65,7 @@ export default function TicketList() {
 
   return (
     <>
-      <FormBuy ticket={selectedTicket} setSelectedTicket={setSelectedTicket} />
+      <FormBuy ticket={selectedTicket} setSelectedTicket={setSelectedTicket} email={user}/>
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyles
           styles={{ ul: { margin: 0, padding: 0, listStyle: "none" } }}
@@ -92,17 +99,8 @@ export default function TicketList() {
         <Container maxWidth="md" component="main">
           <Grid container spacing={3}>
             {tickets.map((ticket) => (
-              <Grid item xs={12} sm={6} md={4} key={ticket.id}>
+              <Grid item xs={12} sm={6} md={4} key={ticket.ticketId}>
                 <Card>
-                  <CardHeader
-                    avatar={<Avatar src="assets/images/zookay.png" />}
-                    action={
-                      <IconButton aria-label="settings">
-                        <MoreVertIcon />
-                      </IconButton>
-                    }
-                    title={ticket.title}
-                  />
                   <CardMedia
                     component="img"
                     height="194"
@@ -113,19 +111,16 @@ export default function TicketList() {
                   />
                   <CardContent>
                     <Typography variant="body2" color="text.secondary">
-                      <strong>Description:</strong> {ticket.description}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
                       <strong>Expiration Date:</strong>{" "}
-                      {convertValue(ticket.exp_date)}
+                      {ticket.visitDate}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      <strong>Price:</strong> {ticket.price} $
+                      <strong>Price:</strong> {ticket.ticketPrice} $
                     </Typography>
                     <Button
                       style={{ marginTop: "10px", backgroundColor: green[500] }}
                       variant="contained"
-                      href="#contained-buttons"
+                      // href="#contained-buttons"
                       onClick={() => setSelectedTicket(ticket)}
                     >
                       Buy Ticket

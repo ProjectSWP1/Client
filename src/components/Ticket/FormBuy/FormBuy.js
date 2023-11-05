@@ -2,9 +2,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { green } from "@mui/material/colors";
-import { Button, CardMedia, Container, TextField } from "@mui/material";
+import { Button, CardMedia, Container, TextField, ThemeProvider } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { defaultTheme } from "../../Theme/Theme";
 
 const style = {
   position: "absolute",
@@ -20,7 +21,7 @@ const style = {
 
 export default function FormBuy({ ticket, setSelectedTicket }) {
   const open = Boolean(ticket);
-  const [newPrice, setNewPrice] = useState(ticket?.price || 0);
+  const [newPrice, setNewPrice] = useState(ticket?.ticketPrice || 0);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     number: "",
@@ -29,7 +30,7 @@ export default function FormBuy({ ticket, setSelectedTicket }) {
   const handleChange = (e) => {
     const value = parseInt(e.target.value);
     if (!isNaN(value)) {
-      setNewPrice(value * ticket?.price);
+      setNewPrice(value * ticket?.ticketPrice);
     }
   };
 
@@ -40,7 +41,7 @@ export default function FormBuy({ ticket, setSelectedTicket }) {
   };
 
   return (
-    <div>
+    <ThemeProvider theme={defaultTheme}>
       <Modal
         open={open}
         onClose={() => {
@@ -57,7 +58,7 @@ export default function FormBuy({ ticket, setSelectedTicket }) {
                 textAlign: "center",
               }}
             >
-              <Typography style={{ color: green[500] }} variant="h6">
+              <Typography style={{ color: green[500] }} variant="h4">
                 Buy This Ticket
               </Typography>
               <CardMedia
@@ -73,7 +74,7 @@ export default function FormBuy({ ticket, setSelectedTicket }) {
               Description: {ticket?.description}
             </Typography>
             <Typography variant="h6">
-              Total Price: {newPrice === 0 ? ticket?.price : newPrice} $
+              Total Price: {newPrice === 0 ? ticket?.ticketPrice : newPrice} $
             </Typography>
             <TextField
               style={{ width: "500px", marginTop: "20px" }}
@@ -82,6 +83,7 @@ export default function FormBuy({ ticket, setSelectedTicket }) {
               variant="outlined"
               name="number"
               type="number"
+              
               onChange={handleChange}
             />
             <Container
@@ -104,6 +106,6 @@ export default function FormBuy({ ticket, setSelectedTicket }) {
           </form>
         </Box>
       </Modal>
-    </div>
+    </ThemeProvider>
   );
 }
