@@ -3,7 +3,6 @@ import {
   PaymentElement,
   useStripe,
   useElements,
-  LinkAuthenticationElement
 } from "@stripe/react-stripe-js";
 import { useNavigate } from "react-router-dom";
 import './StripePayment.css'
@@ -11,14 +10,17 @@ import { ThemeProvider, Typography } from "@mui/material";
 import { defaultTheme, Copyright } from "../components/Theme/Theme";
 import Header from "../components/Home/Header/Header.js";
 
-export default function CheckoutForm({ orderData }) {
+export default function CheckoutForm({orderData, intentID}) {
   const stripe = useStripe();
   const elements = useElements();
-
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  const payload = {
+    orderID: orderData.orderID,
+    intentId: intentID
+  }
   useEffect(() => {
     if (!stripe) {
       return;
@@ -46,8 +48,6 @@ export default function CheckoutForm({ orderData }) {
         switch (data.paymentIntent.status) {
           case "succeeded":
             setMessage("Payment succeeded!");
-            // Fetch về confirmPayment rồi sau đó chuyển qua trang xuất hóa đơn
-            // Xuất hóa đơn ở đây
             break;
           case "processing":
             setMessage("Your payment is processing.");
@@ -83,17 +83,34 @@ export default function CheckoutForm({ orderData }) {
       confirmParams: {
       },
       redirect: 'if_required'
-    });
-
-    if (response.error) {
-      setMessage("An unexpected error occurred. Your payment was not successful, please try again.");
-    } else {
-
+     });
+     
+     if(response.error) {
+        setMessage("An unexpected error occurred. Your payment was not successful, please try again.");
+     } else {
+   
       // fetch confirm-payment here
-
-      navigate(`/complete-order?orderID=${orderData.orderID}&redirect_status=succeeded`);
-    }
-
+      fetch('http://localhost:8080/user/confirm-payment', {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        const orderID = data.orderID;
+      
+      });
+        navigate(`/complete-order?orderID=${orderData.orderID}&redirect_status=succeeded`);
+     }
+     
 
     // This point will only be reached if there is an immediate error when
     // confirming the payment. Otherwise, your customer will be redirected to
