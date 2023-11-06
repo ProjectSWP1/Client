@@ -122,13 +122,18 @@ console.log(orderData);
     setIsLoading(false);
   };
 
+  //nơi để bắt sự kiện khi user chưa thanh toán mà quay về home
+  const handleClick = () => {
+
+  }
+
   const paymentElementOptions = {
     layout: "tabs"
   }
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Button className='payment-home-btn'><HomeIcon fontSize='large'/></Button>
+      <Button className='payment-home-btn' onClick={handleClick}><HomeIcon fontSize='large'/></Button>
       <div className="container-payment" style={{}}>
           <Typography
             style={{ fontWeight: 'bold' }}
