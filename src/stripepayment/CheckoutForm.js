@@ -6,9 +6,10 @@ import {
 } from "@stripe/react-stripe-js";
 import { useNavigate } from "react-router-dom";
 import './StripePayment.css'
-import { ThemeProvider, Typography } from "@mui/material";
+import { Button, ThemeProvider, Typography } from "@mui/material";
 import { defaultTheme, Copyright } from "../components/Theme/Theme";
 import Header from "../components/Home/Header/Header.js";
+import HomeIcon from '@mui/icons-material/Home';
 
 export default function CheckoutForm({ orderData, intentID }) {
   const stripe = useStripe();
@@ -127,6 +128,7 @@ export default function CheckoutForm({ orderData, intentID }) {
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      <Button className='payment-home-btn'><HomeIcon fontSize='large'/></Button>
       <div className="container-payment" style={{}}>
           <Typography
             style={{ fontWeight: 'bold' }}
