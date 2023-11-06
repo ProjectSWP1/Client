@@ -34,8 +34,8 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
   useEffect(() => {
     if (token) {
       // User is logged in, set the email and clear guestEmail
-      const tmpEmail = JSON.parse(atob(token.split(".")[1]));
-      setUserEmail(tmpEmail);
+      const tmpEmail = JSON.parse(atob(token.split(".")[1]))
+      setEmail(tmpEmail.email);
     } else {
       // User is not logged in, use the guestEmail if available
       const searchParams = new URLSearchParams(location.search);
@@ -43,7 +43,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
         setUserEmail(searchParams.get("guestEmail"));
       }
     }
-  }, [token, location.search]);
+  }, [token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,15 +70,13 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
         return response.text().then(message => {
           throw new Error(message)
         })
-        return response.text()
       }
+      return response.text()
     }).then(data => {
       navigate(`/payment?userEmail=${encodeURIComponent(userEmail)}`);
     })
     .catch(error => {
       console.log(error.message);
-      console.log(email);
-      console.log(ordersDto);
     })
     // navigate("/payment");
   };
@@ -129,7 +127,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
               // value={formData.number}
               onChange={(e) => setNumberTicket(e.target.value)}
             />
-            {email ? "" :
+            {email ? () => setUserEmail(email) :
               <>
                 <TextField
                   style={{ width: "500px", marginTop: "20px" }}

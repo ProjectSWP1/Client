@@ -34,8 +34,8 @@ export const defaultTheme = createTheme({
   },
   typography: {
     fontWeightLight: 400,
-    h5: {
-      fontSize: '2rem',
+    h2: {
+      fontSize: '3.5rem',
       fontWeight: 600,
       fontVariant: '#1b5e20',
     },

@@ -6,7 +6,7 @@ import TicketList from "./TicketItems/TicketList";
 const TicketLayout = () => {
   return (
     <div>
-      <div className="container-main">
+      <div style={{marginBottom: '50px'}}>
         <Header />
         <TicketList />
       </div>

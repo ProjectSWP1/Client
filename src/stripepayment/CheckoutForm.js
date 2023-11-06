@@ -10,7 +10,7 @@ import { ThemeProvider, Typography } from "@mui/material";
 import { defaultTheme, Copyright } from "../components/Theme/Theme";
 import Header from "../components/Home/Header/Header.js";
 
-export default function CheckoutForm({orderData, intentID}) {
+export default function CheckoutForm({ orderData, intentID }) {
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = useState(null);
@@ -83,12 +83,12 @@ export default function CheckoutForm({orderData, intentID}) {
       confirmParams: {
       },
       redirect: 'if_required'
-     });
-     
-     if(response.error) {
-        setMessage("An unexpected error occurred. Your payment was not successful, please try again.");
-     } else {
-   
+    });
+
+    if (response.error) {
+      setMessage("An unexpected error occurred. Your payment was not successful, please try again.");
+    } else {
+
       // fetch confirm-payment here
       fetch('http://localhost:8080/user/confirm-payment', {
         method: 'PUT',
@@ -98,19 +98,19 @@ export default function CheckoutForm({orderData, intentID}) {
         },
         body: JSON.stringify(payload)
       })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        const orderID = data.orderID;
-      
-      });
-        navigate(`/complete-order?orderID=${orderData.orderID}&redirect_status=succeeded`);
-     }
-     
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+          }
+          return res.json();
+        })
+        .then((data) => {
+          const orderID = data.orderID;
+
+        });
+      navigate(`/complete-order?orderID=${orderData.orderID}&redirect_status=succeeded`);
+    }
+
 
     // This point will only be reached if there is an immediate error when
     // confirming the payment. Otherwise, your customer will be redirected to
@@ -127,44 +127,46 @@ export default function CheckoutForm({orderData, intentID}) {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      
-      <div className="container-payment">
-      {/* <Typography 
-        style={{width: '100%'}}
-        variant="h3" 
-        color={defaultTheme.palette.primary.dark}>Payment</Typography> */}
-        <div className="order-details">
-          <div>
-            <h2>Order Details</h2>
-            <p>
-              <strong>Order ID:</strong> {orderData.orderID}
-            </p>
-            <p>
-              <strong>Description:</strong> {orderData.description}
-            </p>
-            <p>
-              <strong>Ticket Quantity:</strong> {orderData.quantity}
-            </p>
-            <p>
-              <strong>Email:</strong> {orderData.email}
-            </p>
+      <div className="container-payment" style={{}}>
+          <Typography
+            style={{ fontWeight: 'bold' }}
+            variant="h3"
+            color={defaultTheme.palette.primary.dark}>Payment</Typography>
+        <div className="content-container">
+          <div className="order-details">
+            <div className="order-details-inside">
+              <h2 style={{ textAlign: 'center', fontWeight: 'bold', color: '#2e7d32' }} >Order Details</h2>
+              <hr></hr>
+              <p>
+                <strong>Order ID:</strong> {orderData.orderID}
+              </p>
+              <p>
+                <strong>Description:</strong> {orderData.description}
+              </p>
+              <p>
+                <strong>Ticket Quantity:</strong> {orderData.quantity}
+              </p>
+              <p>
+                <strong>Email:</strong> {orderData.email}
+              </p>
+            </div>
+            <Copyright />
           </div>
-          <Copyright />
+          <form className='form-payment' id="payment-form" onSubmit={handleSubmit}>
+            <PaymentElement id="payment-element" options={paymentElementOptions} />
+            <button className='button-payment' disabled={isLoading || !stripe || !elements} id="submit">
+              <span id="button-text">
+                {isLoading ? (
+                  <div className="spinner" id="spinner"></div>
+                ) : (
+                  "Pay now"
+                )}
+              </span>
+            </button>
+            {/* Show any error or success messages */}
+            {message && <div id="payment-message" color="red">{message}</div>}
+          </form>
         </div>
-        <form className='form-payment' id="payment-form" onSubmit={handleSubmit}>
-          <PaymentElement id="payment-element" options={paymentElementOptions} />
-          <button className='button-payment' disabled={isLoading || !stripe || !elements} id="submit">
-            <span id="button-text">
-              {isLoading ? (
-                <div className="spinner" id="spinner"></div>
-              ) : (
-                "Pay now"
-              )}
-            </span>
-          </button>
-          {/* Show any error or success messages */}
-          {message && <div id="payment-message">{message}</div>}
-        </form>
       </div>
     </ThemeProvider>
   );

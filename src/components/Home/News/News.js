@@ -42,7 +42,7 @@ export default function News() {
         
         <Container className='news-container'>
           {news.map(item => (
-            <div className='news-all-cards'>
+            <div key={item.newsId} className='news-all-cards'>
               <Card sx={{ height: 'auto', width: '70%', mb: '10px' }} className='news-card'>
                 <CardMedia
                   component="img"
