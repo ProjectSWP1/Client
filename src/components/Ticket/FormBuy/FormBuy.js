@@ -29,18 +29,18 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
   const [numberTicket, setNumberTicket] = useState(0);
   const [phone, setPhone] = useState("");
   const [guestEmail, setGuestEmail] = useState('');
+  const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
     if (token) {
       // User is logged in, set the email and clear guestEmail
       const tmpEmail = JSON.parse(atob(token.split(".")[1]));
-      setEmail(tmpEmail.email);
-      setGuestEmail('');
+      setUserEmail(tmpEmail);
     } else {
       // User is not logged in, use the guestEmail if available
       const searchParams = new URLSearchParams(location.search);
       if (searchParams.has("guestEmail")) {
-        setGuestEmail(searchParams.get("guestEmail"));
+        setUserEmail(searchParams.get("guestEmail"));
       }
     }
   }, [token, location.search]);
@@ -49,20 +49,20 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
     e.preventDefault();
     const ordersDto = {
       ticketId: ticket.ticketId,
-      email: email,
+      email: userEmail,
       phoneNumber: phone,
-      ticketQuantity: numberTicket,
-      expDate: ticket.expDate,
+      ticketQuantity: parseInt(numberTicket, 10),
+      visitDate: ticket.visitDate,
       description: ticket.description
     }
-    console.log(ordersDto.data);
-    console.log(token.data);
+    console.log('Here orders dto', ordersDto); 
+    console.log('Token is here:', token);
     fetch('http://localhost:8080/order/create-order', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': "Bearer " + token,
+        'Authorization': token,
       },
       body: JSON.stringify(ordersDto)
     }).then(response => {
@@ -73,13 +73,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
         return response.text()
       }
     }).then(data => {
-      if (token) {
-        // User is logged in
-        navigate(`/payment?userEmail=${encodeURIComponent(email)}`);
-      } else {
-        // User is not logged in, use guestEmail as a URL parameter
-        navigate(`/payment?guestEmail=${encodeURIComponent(guestEmail)}`);
-      }
+      navigate(`/payment?userEmail=${encodeURIComponent(userEmail)}`);
     })
     .catch(error => {
       console.log(error.message);
@@ -145,7 +139,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
                   name="email"
                   type="email"
                   // value={formData.number}
-                  onChange={(e) => setGuestEmail(e.target.value)}
+                  onChange={(e) => setUserEmail(e.target.value)}
                 />
               </>
             }

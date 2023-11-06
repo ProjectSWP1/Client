@@ -1,16 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 export default function CompleteOrder() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const redirectStatus = queryParams.get("redirect-status");
-  const orderDataParam = queryParams.get("orderData");
-  const orderData = orderDataParam ? JSON.parse(decodeURIComponent(orderDataParam)) : null;
+  const redirectStatus = queryParams.get("redirect_status");
+  const orderID = queryParams.get("orderID");
+  const [orderData, setOrderData] = useState([]);
+
+  useEffect(() => {
+    if (orderID) {
+      fetch(`http://localhost:8080/order/get-order/${orderID}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+          }
+          return res.json();
+        })
+        .then((data) => {
+          setOrderData(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching order by orderID:", error);
+        });
+    }
+  }, [orderID]);  
 
   return (
     <div className="App">
-      {redirectStatus === "succeed" ? (
+      {redirectStatus === "succeeded" ? (
         <div className="order-receipt">
           <h2>Order Receipt</h2>
           {orderData && (

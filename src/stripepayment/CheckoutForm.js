@@ -5,6 +5,7 @@ import {
   useElements,
   LinkAuthenticationElement
 } from "@stripe/react-stripe-js";
+import { useNavigate } from "react-router-dom";
 
 export default function CheckoutForm({orderData}) {
   const stripe = useStripe();
@@ -12,6 +13,7 @@ export default function CheckoutForm({orderData}) {
 
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!stripe) {
@@ -72,24 +74,28 @@ export default function CheckoutForm({orderData}) {
 
     setIsLoading(true);
 
-    const { error } = await stripe.confirmPayment({
+    const response = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        // Make sure to change this to your payment completion page
-        return_url: "http://localhost:3000/complete-order?orderData=${encodeURIComponent(JSON.stringify(orderData))}",
-      },
-    });
+       },
+      redirect: 'if_required'
+     });
+     
+     if(response.error) {
+        setMessage("An unexpected error occurred. Your payment was not successful, please try again.");
+     } else {
+
+      // fetch confirm-payment here
+
+        navigate(`/complete-order?orderID=${orderData.orderID}&redirect_status=succeeded`);
+     }
+     
 
     // This point will only be reached if there is an immediate error when
     // confirming the payment. Otherwise, your customer will be redirected to
     // your `return_url`. For some payment methods like iDEAL, your customer will
     // be redirected to an intermediate site first to authorize the payment, then
     // redirected to the `return_url`.
-    if (error.type === "card_error" || error.type === "validation_error") {
-      setMessage(error.message);
-    } else {
-      setMessage("An unexpected error occurred.");
-    }
 
     setIsLoading(false);
   };
