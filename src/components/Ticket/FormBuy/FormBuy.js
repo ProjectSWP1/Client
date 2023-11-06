@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import { green } from "@mui/material/colors";
 import { Button, CardMedia, Container, TextField, ThemeProvider } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { defaultTheme } from "../../Theme/Theme";
 
 const style = {
@@ -23,24 +23,27 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
   const open = Boolean(ticket);
   const [newPrice, setNewPrice] = useState(ticket?.ticketPrice || 0);
   const navigate = useNavigate();
-  const [email, setEmail] = useState('')
-  const [numberTicket, setNumberTicket] = useState(0);
-  const [guestEmail, setGuestEmail] = useState('');
-  const [phone, setPhone] = useState('')
+  const location = useLocation();
 
-  const handleChange = (e) => {
-    const value = parseInt(e.target.value);
-    if (!isNaN(value)) {
-      setNewPrice(value * ticket?.ticketPrice);
-    }
-  };
+  const [email, setEmail] = useState("");
+  const [numberTicket, setNumberTicket] = useState(0);
+  const [phone, setPhone] = useState("");
+  const [guestEmail, setGuestEmail] = useState('');
 
   useEffect(() => {
     if (token) {
-      const tmpEmail = JSON.parse(atob(token.split('.')[1]))
-      setEmail(tmpEmail.email)
+      // User is logged in, set the email and clear guestEmail
+      const tmpEmail = JSON.parse(atob(token.split(".")[1]));
+      setEmail(tmpEmail.email);
+      setGuestEmail('');
+    } else {
+      // User is not logged in, use the guestEmail if available
+      const searchParams = new URLSearchParams(location.search);
+      if (searchParams.has("guestEmail")) {
+        setGuestEmail(searchParams.get("guestEmail"));
+      }
     }
-  }, [token])
+  }, [token, location.search]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,8 +52,11 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
       email: email,
       phoneNumber: phone,
       ticketQuantity: numberTicket,
-      ticketPrice: newPrice
+      expDate: ticket.expDate,
+      description: ticket.description
     }
+    console.log(ordersDto.data);
+    console.log(token.data);
     fetch('http://localhost:8080/order/create-order', {
       method: 'POST',
       headers: {
@@ -67,7 +73,13 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
         return response.text()
       }
     }).then(data => {
-      navigate(`/payment`);
+      if (token) {
+        // User is logged in
+        navigate(`/payment?userEmail=${encodeURIComponent(email)}`);
+      } else {
+        // User is not logged in, use guestEmail as a URL parameter
+        navigate(`/payment?guestEmail=${encodeURIComponent(guestEmail)}`);
+      }
     })
     .catch(error => {
       console.log(error.message);
@@ -111,7 +123,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
               Description: {ticket?.description}
             </Typography>
             <Typography variant="h6">
-              Total Price: {newPrice === 0 ? ticket?.ticketPrice : newPrice} $
+              Total Price: {newPrice === 0 ? ticket?.ticketPrice : newPrice} VNĐ
             </Typography>
             <TextField
               style={{ width: "500px", marginTop: "20px" }}
@@ -133,17 +145,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
                   name="email"
                   type="email"
                   // value={formData.number}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <TextField
-                  style={{ width: "500px", marginTop: "20px" }}
-                  id="outlined-basic"
-                  label="Phone"
-                  variant="outlined"
-                  name="phone"
-                  type="tel"
-                  // value={formData.number}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => setGuestEmail(e.target.value)}
                 />
               </>
             }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import { useNavigate } from 'react-router';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -12,6 +13,21 @@ export default function TicketList() {
   const [selectedTicketId, setSelectedTicketId] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0); // State to store the total price
   const [userEmail, setUserEmail] = useState(null);
+  const [_phoneNumber, set_PhoneNumber] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("token");
+    if (accessToken) {
+      const decodedToken = atob(accessToken.split(".")[1]);
+      const tokenData = JSON.parse(decodedToken);
+      setUserEmail(tokenData.email);
+      
+      // Call the function to fetch the member by email
+      getMemberByEmail(tokenData.email);
+    }
+  }, []);
+  
 
   useEffect(() => {
     axios
@@ -22,16 +38,27 @@ export default function TicketList() {
       .catch((error) => {
         console.error("Error fetching tickets:", error);
       });
-  }, []);
+  }, []
+  );
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem("token");
-    if (accessToken) {
-      const decodedToken = atob(accessToken.split(".")[1]);
-      const tokenData = JSON.parse(decodedToken);
-      setUserEmail(tokenData.email);
-    }
-  }, []);
+  const getMemberByEmail = (email) => {
+    axios
+      .get(`http://localhost:8080/get-member-by-email/${email}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        }
+      })
+      .then((response) => {
+        // Handle the response data here
+        console.log("Member data:", response.data);
+        // You can set the phoneNumber state or use the data as needed.
+        set_PhoneNumber(response.data.phoneNumber); 
+      })
+      .catch((error) => {
+        console.error("Error fetching member:", error);
+        // Handle the error or show an error message
+      });
+  };  
 
   const openOrderModal = () => {
     setShowOrderModal(true);
@@ -47,13 +74,26 @@ export default function TicketList() {
   };
 
   const handleOrderSubmit = () => {
+    if (!userEmail || !_phoneNumber) {
+      // Handle the case where the user's email or phone number is not available
+      console.error("User email or phone number not available");
+      return;
+    }
+  
+    if (selectedQuantity <= 0) {
+      // Handle the case where the selected quantity is not valid
+      console.error("Selected quantity is not valid");
+      return;
+    }
+  
     // Prepare the order data
     const orderData = {
       ticketId: selectedTicketId,
       ticketQuantity: selectedQuantity,
       email: userEmail,
+      phoneNumber: _phoneNumber,
     };
-
+  
     // Send a POST request to create the order
     axios
       .post("http://localhost:8080/order/create-order", orderData, {
@@ -62,14 +102,15 @@ export default function TicketList() {
         },
       })
       .then((response) => {
-        // Check the response and handle accordingly
+        // Handle the response data accordingly
         if (response.status === 201) {
           // Order was created successfully
           // You can navigate to the ConfirmOrders page or show a success message
           console.log("Order created successfully:", response.data);
           // You can navigate to the ConfirmOrders page here
+          navigate('/payment', { userEmail });
         } else {
-          // Handle error or show an error message
+          // Handle an error or show an error message
           console.error("Failed to create order:", response.data);
           // Handle the error or show an error message
         }
@@ -78,10 +119,10 @@ export default function TicketList() {
         console.error("Error creating order:", error);
         // Handle the error or show an error message
       });
-
+  
     // Close the order modal
     closeOrderModal();
-  };
+  };  
 
   // Update the total price when the quantity changes
   useEffect(() => {
@@ -155,9 +196,7 @@ export default function TicketList() {
           <Button
             variant="primary"
             onClick={() => {
-              console.log(
-                `Ordered ${selectedQuantity} tickets for email: ${userEmail}`
-              );
+              handleOrderSubmit();
               closeOrderModal();
             }}
           >

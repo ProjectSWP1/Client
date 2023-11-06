@@ -6,7 +6,7 @@ import {
   LinkAuthenticationElement
 } from "@stripe/react-stripe-js";
 
-export default function CheckoutForm() {
+export default function CheckoutForm({orderData}) {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -76,7 +76,7 @@ export default function CheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://localhost:3000",
+        return_url: "http://localhost:3000/complete-order?orderData=${encodeURIComponent(JSON.stringify(orderData))}",
       },
     });
 
@@ -99,17 +99,35 @@ export default function CheckoutForm() {
   }
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
-      <h1>You are about to pay order:</h1>
-      <LinkAuthenticationElement id="link-authentication-element"/>
-      <PaymentElement id="payment-element" options={paymentElementOptions} />
-      <button disabled={isLoading || !stripe || !elements} id="submit">
-        <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
-        </span>
-      </button>
-      {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
-    </form>
+    <div className="order-details">
+      <h2>Order Details</h2>
+      <p>
+        <strong>Order ID:</strong> {orderData.orderID}
+      </p>
+      <p>
+        <strong>Description:</strong> {orderData.description}
+      </p>
+      <p>
+        <strong>Ticket Quantity:</strong> {orderData.quantity}
+      </p>
+      <p>
+        <strong>Email:</strong> {orderData.email}
+      </p>
+
+      <form id="payment-form" onSubmit={handleSubmit}>
+        <PaymentElement id="payment-element" options={paymentElementOptions} />
+        <button disabled={isLoading || !stripe || !elements} id="submit">
+          <span id="button-text">
+            {isLoading ? (
+              <div className="spinner" id="spinner"></div>
+            ) : (
+              "Pay now"
+            )}
+          </span>
+        </button>
+        {/* Show any error or success messages */}
+        {message && <div id="payment-message">{message}</div>}
+      </form>
+    </div>
   );
 }

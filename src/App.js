@@ -23,10 +23,11 @@ import TrainerProfile from "./components/Trainer/Profile/TrainerProfile";
 import TrainerSchedule from "./components/Trainer/TrainerSchedule/TrainerSchedule";
 import ManageEmployee from "./components/Admin/ManageEmployee/ManageEmployee";
 import BuyTicket from "./pages/BuyTicket.js";
-import StripePayment from "./stripepayment/StripePayment.jsx";
+import StripePayment from "./stripepayment/StripePayment.js";
 import TicketLayout from "./components/Ticket/TicketLayout.js";
 import FeedingSchedule from "./components/Trainer/WorkAssignTrainer/FeedingSchedule.js";
 import PostNews from "./components/Home/News/News.js";
+import CompleteOrder from "./stripepayment/completionOrder.js";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/buy-ticket" element={<TicketLayout />} />
         <Route path="/payment" element={<StripePayment />} />
+        <Route path="/complete-order" element={<CompleteOrder/>}/>
 
         <Route path="/admin" element={<Admin />}>
           <Route exact path="dashboard" element={<Dash />} />

@@ -25,7 +25,7 @@ export default function TicketList() {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [user, setUser] = useState(null)
 
-  const accessToken = getItemWithTimeout('token')
+  const accessToken = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
 
   useEffect(() => {
     axios
