@@ -16,7 +16,7 @@ export function getItemWithTimeout(key) {
 
 	window.onload = () => {
 		setItemWithTimeout(key, item.value, NEW_TIMEOUT_IN_SECONDS);
-		return item.value;
+		// return item.value;
 	}
 	// documen.addEventListener('click', () => {
 

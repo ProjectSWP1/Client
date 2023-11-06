@@ -3,7 +3,6 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
 import CheckoutForm from "./CheckoutForm";
-import "./StripePayment.css";
 
 // Make sure to call loadStripe outside of a component’s render to avoid
 // recreating the Stripe object on every render.
@@ -20,11 +19,10 @@ export default function StripePayment() {
   // chỗ này
 
   useEffect(() => {
-  
     fetch("http://localhost:8080/user/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ orderID: 13 }), // Include the order ID in the request body
+      //body: JSON.stringify({ orderID: 13 }), // Include the order ID in the request body
     })
       .then((res) => {
         if (!res.ok) {
@@ -56,7 +54,7 @@ export default function StripePayment() {
     <div className="App">
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm orderID={orderID} />
+          {/* <CheckoutForm orderID={orderID} /> */}
         </Elements>
       )}
     </div>

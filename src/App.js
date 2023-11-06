@@ -31,38 +31,36 @@ import PostNews from "./components/Home/News/News.js";
 function App() {
   return (
     <AuthProvider>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/verifyemail" element={<VerifyEmail />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/forgotpassword" element={<ForgotPassword/>}/>
-          <Route path="/resetpassword" element={<ResetPassword/>}/>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/verifyemail" element={<VerifyEmail />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/resetpassword" element={<ResetPassword />} />
+        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/buy-ticket" element={<TicketLayout />} />
+        <Route path="/payment" element={<StripePayment />} />
 
-          <Route path="/buy-ticket" element={<BuyTicket/>}/>
-          <Route path="/payment" element={<StripePayment />}/>
-
-          <Route path="/admin" element={<Admin />}>
-            <Route exact path="dashboard" element={<Dash />} />
-            <Route path="manage-account" element={<ManageAccount />} />
-            <Route path="manage-employee" element={<ManageEmployee />}/>
-          </Route>
-          <Route path="/staff" element={<Staff />}>
-            <Route exact path="zooarea" element={<ZooArea />} />
-            <Route path="trainers" element={<ZooTrainer />} />
-            <Route path="post-news" element={<PostNews/>}></Route>
-          </Route>
-          <Route path="/trainer" element={<Trainer />}>
-            <Route exact path="cages" element={<AnimalCage />} />
-            <Route exact path="animals" element={<Animal />} />
-            <Route exact path="animalspecies" element={<AnimalSpecies />} />
-            <Route exact path="profile" element={<TrainerProfile />} />
-            <Route exact path="schedule" element={<TrainerSchedule />} />
-            <Route exact path="feeding-schedule" element={<FeedingSchedule/>}/>
-          </Route>
-          <Route path="/profile" element={<UserProfile />} />
-          <Route path="/buy-ticket" element={<TicketLayout/>}/>
-        </Routes>
+        <Route path="/admin" element={<Admin />}>
+          <Route exact path="dashboard" element={<Dash />} />
+          <Route path="manage-account" element={<ManageAccount />} />
+          <Route path="manage-employee" element={<ManageEmployee />} />
+        </Route>
+        <Route path="/staff" element={<Staff />}>
+          <Route exact path="zooarea" element={<ZooArea />} />
+          <Route path="trainers" element={<ZooTrainer />} />
+          <Route path="post-news" element={<PostNews />}></Route>
+        </Route>
+        <Route path="/trainer" element={<Trainer />}>
+          <Route exact path="cages" element={<AnimalCage />} />
+          <Route exact path="animals" element={<Animal />} />
+          <Route exact path="animalspecies" element={<AnimalSpecies />} />
+          <Route exact path="profile" element={<TrainerProfile />} />
+          <Route exact path="schedule" element={<TrainerSchedule />} />
+          <Route exact path="feeding-schedule" element={<FeedingSchedule />} />
+        </Route>
+      </Routes>
     </AuthProvider>
   );
 }

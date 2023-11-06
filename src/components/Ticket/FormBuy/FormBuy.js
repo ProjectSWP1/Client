@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { green } from "@mui/material/colors";
 import { Button, CardMedia, Container, TextField, ThemeProvider } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { defaultTheme } from "../../Theme/Theme";
 
@@ -19,13 +19,14 @@ const style = {
   p: 4,
 };
 
-export default function FormBuy({ ticket, setSelectedTicket }) {
+export default function FormBuy({ ticket, setSelectedTicket, token }) {
   const open = Boolean(ticket);
   const [newPrice, setNewPrice] = useState(ticket?.ticketPrice || 0);
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    number: "",
-  });
+  const [email, setEmail] = useState('')
+  const [numberTicket, setNumberTicket] = useState(0);
+  const [guestEmail, setGuestEmail] = useState('');
+  const [phone, setPhone] = useState('')
 
   const handleChange = (e) => {
     const value = parseInt(e.target.value);
@@ -34,10 +35,46 @@ export default function FormBuy({ ticket, setSelectedTicket }) {
     }
   };
 
+  useEffect(() => {
+    if (token) {
+      const tmpEmail = JSON.parse(atob(token.split('.')[1]))
+      setEmail(tmpEmail.email)
+    }
+  }, [token])
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    navigate("/payment");
+    const ordersDto = {
+      ticketId: ticket.ticketId,
+      email: email,
+      phoneNumber: phone,
+      ticketQuantity: numberTicket,
+      ticketPrice: newPrice
+    }
+    fetch('http://localhost:8080/order/create-order', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer " + token,
+      },
+      body: JSON.stringify(ordersDto)
+    }).then(response => {
+      if(!response.ok){
+        return response.text().then(message => {
+          throw new Error(message)
+        })
+        return response.text()
+      }
+    }).then(data => {
+      navigate(`/payment`);
+    })
+    .catch(error => {
+      console.log(error.message);
+      console.log(email);
+      console.log(ordersDto);
+    })
+    // navigate("/payment");
   };
 
   return (
@@ -83,9 +120,33 @@ export default function FormBuy({ ticket, setSelectedTicket }) {
               variant="outlined"
               name="number"
               type="number"
-              
-              onChange={handleChange}
+              // value={formData.number}
+              onChange={(e) => setNumberTicket(e.target.value)}
             />
+            {email ? "" :
+              <>
+                <TextField
+                  style={{ width: "500px", marginTop: "20px" }}
+                  id="outlined-basic"
+                  label="Email"
+                  variant="outlined"
+                  name="email"
+                  type="email"
+                  // value={formData.number}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <TextField
+                  style={{ width: "500px", marginTop: "20px" }}
+                  id="outlined-basic"
+                  label="Phone"
+                  variant="outlined"
+                  name="phone"
+                  type="tel"
+                  // value={formData.number}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </>
+            }
             <Container
               maxWidth="lg"
               style={{

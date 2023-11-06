@@ -26,12 +26,6 @@ export default function TicketList() {
   const [user, setUser] = useState(null)
 
   const accessToken = getItemWithTimeout('token')
-  useEffect(() => {
-    if (accessToken) {
-        setUser(JSON.parse(atob(accessToken.split('.')[1])))
-        console.log(user);
-    }
-}, [accessToken])
 
   useEffect(() => {
     axios
@@ -65,7 +59,7 @@ export default function TicketList() {
 
   return (
     <>
-      <FormBuy ticket={selectedTicket} setSelectedTicket={setSelectedTicket} email={user}/>
+      <FormBuy ticket={selectedTicket} setSelectedTicket={setSelectedTicket} token={accessToken}/>
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyles
           styles={{ ul: { margin: 0, padding: 0, listStyle: "none" } }}
