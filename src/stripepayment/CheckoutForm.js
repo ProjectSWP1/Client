@@ -3,23 +3,25 @@ import {
   PaymentElement,
   useStripe,
   useElements,
-  LinkAuthenticationElement
 } from "@stripe/react-stripe-js";
 import { useNavigate } from "react-router-dom";
 
-export default function CheckoutForm({orderData}) {
+export default function CheckoutForm({orderData, intentID}) {
   const stripe = useStripe();
   const elements = useElements();
-
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  const payload = {
+    orderID: orderData.orderID,
+    intentId: intentID
+  }
   useEffect(() => {
     if (!stripe) {
       return;
     }
-  
+
     const clientSecret = new URLSearchParams(window.location.search).get(
       "payment_intent_client_secret"
     );
@@ -42,8 +44,6 @@ export default function CheckoutForm({orderData}) {
         switch (data.paymentIntent.status) {
           case "succeeded":
             setMessage("Payment succeeded!");
-            // Fetch về confirmPayment rồi sau đó chuyển qua trang xuất hóa đơn
-            // Xuất hóa đơn ở đây
             break;
           case "processing":
             setMessage("Your payment is processing.");
@@ -84,9 +84,26 @@ export default function CheckoutForm({orderData}) {
      if(response.error) {
         setMessage("An unexpected error occurred. Your payment was not successful, please try again.");
      } else {
-
+   
       // fetch confirm-payment here
-
+      fetch('http://localhost:8080/user/confirm-payment', {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        const orderID = data.orderID;
+      
+      });
         navigate(`/complete-order?orderID=${orderData.orderID}&redirect_status=succeeded`);
      }
      

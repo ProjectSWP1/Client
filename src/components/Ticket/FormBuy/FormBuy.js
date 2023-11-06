@@ -50,7 +50,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
     const ordersDto = {
       ticketId: ticket.ticketId,
       email: userEmail,
-      phoneNumber: phone,
+      //phoneNumber: phone,
       ticketQuantity: parseInt(numberTicket, 10),
       visitDate: ticket.visitDate,
       description: ticket.description
