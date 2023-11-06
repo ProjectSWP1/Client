@@ -387,16 +387,6 @@ export default function ManageAccount() {
                     <TextField
                       required
                       fullWidth
-                      label="EmpID"
-                      id="empId"
-                      onChange={(e) => setEmpId(e.target.value)}
-                      value={empId}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
                       label="Name"
                       id="name"
                       onChange={(e) => setName(e.target.value)}
