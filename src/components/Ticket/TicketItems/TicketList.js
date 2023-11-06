@@ -19,7 +19,6 @@ import { defaultTheme } from "../../Theme/Theme";
 export default function TicketList() {
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
-  const [user, setUser] = useState(null)
 
   const accessToken = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
 

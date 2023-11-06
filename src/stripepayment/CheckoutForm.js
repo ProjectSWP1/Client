@@ -11,12 +11,12 @@ import { defaultTheme, Copyright } from "../components/Theme/Theme";
 import Header from "../components/Home/Header/Header.js";
 
 export default function CheckoutForm({ orderData, intentID }) {
-  const stripe = useStripe();
-  const elements = useElements();
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const stripe = useStripe();
+  const elements = useElements();
   const navigate = useNavigate();
-
+console.log(orderData);
   const payload = {
     orderID: orderData.orderID,
     intentId: intentID
@@ -144,11 +144,15 @@ export default function CheckoutForm({ orderData, intentID }) {
                 <strong>Description:</strong> {orderData.description}
               </p>
               <p>
-                <strong>Ticket Quantity:</strong> {orderData.quantity}
+                <strong>Ticket quantity:</strong> {orderData.quantity} 
               </p>
               <p>
                 <strong>Email:</strong> {orderData.email}
               </p>
+              <hr></hr>
+              <h2 style={{marginTop: '30px', textAlign: 'center'}}>
+                <strong style={{color: '#2e7d32'}}>Total:</strong> {orderData.quantity * orderData.ticket.ticketPrice} VND
+              </h2>
             </div>
             <Copyright />
           </div>

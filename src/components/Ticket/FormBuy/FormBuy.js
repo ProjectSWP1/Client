@@ -27,8 +27,6 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
 
   const [email, setEmail] = useState("");
   const [numberTicket, setNumberTicket] = useState(0);
-  const [phone, setPhone] = useState("");
-  const [guestEmail, setGuestEmail] = useState('');
   const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
@@ -49,14 +47,12 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
     e.preventDefault();
     const ordersDto = {
       ticketId: ticket.ticketId,
-      email: userEmail,
+      email: email || userEmail,
       //phoneNumber: phone,
       ticketQuantity: parseInt(numberTicket, 10),
       visitDate: ticket.visitDate,
       description: ticket.description
     }
-    console.log('Here orders dto', ordersDto); 
-    console.log('Token is here:', token);
     fetch('http://localhost:8080/order/create-order', {
       method: 'POST',
       headers: {
@@ -66,18 +62,18 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
       },
       body: JSON.stringify(ordersDto)
     }).then(response => {
-      if(!response.ok){
+      if (!response.ok) {
         return response.text().then(message => {
           throw new Error(message)
         })
       }
       return response.text()
     }).then(data => {
-      navigate(`/payment?userEmail=${encodeURIComponent(userEmail)}`);
+      navigate(`/payment?userEmail=${encodeURIComponent(email || userEmail)}`);
     })
-    .catch(error => {
-      console.log(error.message);
-    })
+      .catch(error => {
+        console.log(error.message);
+      })
     // navigate("/payment");
   };
 
@@ -115,7 +111,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
               Description: {ticket?.description}
             </Typography>
             <Typography variant="h6">
-              Total Price: {newPrice === 0 ? ticket?.ticketPrice : newPrice} VNĐ
+              Price: {newPrice === 0 ? ticket?.ticketPrice : newPrice} VNĐ
             </Typography>
             <TextField
               style={{ width: "500px", marginTop: "20px" }}
@@ -127,8 +123,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
               // value={formData.number}
               onChange={(e) => setNumberTicket(e.target.value)}
             />
-            {email ? () => setUserEmail(email) :
-              <>
+            {email ? "" : (
                 <TextField
                   style={{ width: "500px", marginTop: "20px" }}
                   id="outlined-basic"
@@ -139,7 +134,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
                   // value={formData.number}
                   onChange={(e) => setUserEmail(e.target.value)}
                 />
-              </>
+              )
             }
             <Container
               maxWidth="lg"
