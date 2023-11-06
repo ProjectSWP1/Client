@@ -26,6 +26,7 @@ export default function StripePayment() {
       })
       .then((data) => {
         const orderID = data.orderID;
+        console.log(orderID);
         setOrderData(data);
 
         // After obtaining the orderID, make the second fetch request for clientSecret

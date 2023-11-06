@@ -6,8 +6,12 @@ import {
   LinkAuthenticationElement
 } from "@stripe/react-stripe-js";
 import { useNavigate } from "react-router-dom";
+import './StripePayment.css'
+import { ThemeProvider, Typography } from "@mui/material";
+import { defaultTheme, Copyright } from "../components/Theme/Theme";
+import Header from "../components/Home/Header/Header.js";
 
-export default function CheckoutForm({orderData}) {
+export default function CheckoutForm({ orderData }) {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -19,15 +23,15 @@ export default function CheckoutForm({orderData}) {
     if (!stripe) {
       return;
     }
-  
+
     const clientSecret = new URLSearchParams(window.location.search).get(
       "payment_intent_client_secret"
     );
-  
+
     if (!clientSecret) {
       return;
     }
-  
+
     stripe
       .retrievePaymentIntent(clientSecret)
       .then((response) => {
@@ -77,19 +81,19 @@ export default function CheckoutForm({orderData}) {
     const response = await stripe.confirmPayment({
       elements,
       confirmParams: {
-       },
+      },
       redirect: 'if_required'
-     });
-     
-     if(response.error) {
-        setMessage("An unexpected error occurred. Your payment was not successful, please try again.");
-     } else {
+    });
+
+    if (response.error) {
+      setMessage("An unexpected error occurred. Your payment was not successful, please try again.");
+    } else {
 
       // fetch confirm-payment here
 
-        navigate(`/complete-order?orderID=${orderData.orderID}&redirect_status=succeeded`);
-     }
-     
+      navigate(`/complete-order?orderID=${orderData.orderID}&redirect_status=succeeded`);
+    }
+
 
     // This point will only be reached if there is an immediate error when
     // confirming the payment. Otherwise, your customer will be redirected to
@@ -105,35 +109,46 @@ export default function CheckoutForm({orderData}) {
   }
 
   return (
-    <div className="order-details">
-      <h2>Order Details</h2>
-      <p>
-        <strong>Order ID:</strong> {orderData.orderID}
-      </p>
-      <p>
-        <strong>Description:</strong> {orderData.description}
-      </p>
-      <p>
-        <strong>Ticket Quantity:</strong> {orderData.quantity}
-      </p>
-      <p>
-        <strong>Email:</strong> {orderData.email}
-      </p>
-
-      <form id="payment-form" onSubmit={handleSubmit}>
-        <PaymentElement id="payment-element" options={paymentElementOptions} />
-        <button disabled={isLoading || !stripe || !elements} id="submit">
-          <span id="button-text">
-            {isLoading ? (
-              <div className="spinner" id="spinner"></div>
-            ) : (
-              "Pay now"
-            )}
-          </span>
-        </button>
-        {/* Show any error or success messages */}
-        {message && <div id="payment-message">{message}</div>}
-      </form>
-    </div>
+    <ThemeProvider theme={defaultTheme}>
+      
+      <div className="container-payment">
+      {/* <Typography 
+        style={{width: '100%'}}
+        variant="h3" 
+        color={defaultTheme.palette.primary.dark}>Payment</Typography> */}
+        <div className="order-details">
+          <div>
+            <h2>Order Details</h2>
+            <p>
+              <strong>Order ID:</strong> {orderData.orderID}
+            </p>
+            <p>
+              <strong>Description:</strong> {orderData.description}
+            </p>
+            <p>
+              <strong>Ticket Quantity:</strong> {orderData.quantity}
+            </p>
+            <p>
+              <strong>Email:</strong> {orderData.email}
+            </p>
+          </div>
+          <Copyright />
+        </div>
+        <form className='form-payment' id="payment-form" onSubmit={handleSubmit}>
+          <PaymentElement id="payment-element" options={paymentElementOptions} />
+          <button className='button-payment' disabled={isLoading || !stripe || !elements} id="submit">
+            <span id="button-text">
+              {isLoading ? (
+                <div className="spinner" id="spinner"></div>
+              ) : (
+                "Pay now"
+              )}
+            </span>
+          </button>
+          {/* Show any error or success messages */}
+          {message && <div id="payment-message">{message}</div>}
+        </form>
+      </div>
+    </ThemeProvider>
   );
 }
