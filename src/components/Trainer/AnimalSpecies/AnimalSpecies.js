@@ -15,6 +15,7 @@ export default function AnimalSpecies() {
     const UPDATE_ANIMAL_SPECIES_TITLE = "Update animal species";
     const [specieId, setSpecieId] = useState(0);
     const [popUpTitle, setPopupTitle] = useState(ADD_ANIMAL_SPECIES_TITLE);
+    const [changed, setChanged] = useState(false)
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
     useEffect(() => {
         fetch('http://localhost:8080/trainer/get-all-animalSpecies', {
@@ -30,13 +31,14 @@ export default function AnimalSpecies() {
         }).then(data => {
             setSpecies(data);
         })
-    }, []);
+    }, [changed]);
 
     const handleClose = () => {
         setOpen(false);
     };
 
     const handleOpenPopupUpdateAction = (id) => {
+        setChanged(false)
         const specieById = species.filter(specie => {
             return specie.speciesId == id;
         })[0];
@@ -48,6 +50,7 @@ export default function AnimalSpecies() {
     }
 
     const handleOpenPopupAddAction = () => {
+        setChanged(false)
         setOpen(true);
         setGroups("");
         setName("");
@@ -77,6 +80,7 @@ export default function AnimalSpecies() {
             return response.text();
         }).then(data => {
             setOpen(false);
+            setChanged(true)
             // setSpecies([...species, animalSpeciesDto]);
             Swal.fire({
                 title: 'Success!',
@@ -115,6 +119,7 @@ export default function AnimalSpecies() {
             }
             return response.text();
         }).then(data => {
+            setChanged(true)
             setOpen(false);
             // setSpecies(species.map(specie => {
             //     if (specie.speciesId === specieId) return animalSpeciesDto;
@@ -161,15 +166,15 @@ export default function AnimalSpecies() {
                     }
                     return response.text()
 
-                    // setSpecies(species.filter(specie => {
-                    //     return specie.speciesId != id;
-                    // }));
                 }).then(data => {
                     Swal.fire({
                         title: 'Success!',
                         text: `${data}`,
                         icon: 'success',
                     });
+                    setSpecies(species.filter(specie => {
+                        return specie.speciesId != id;
+                    }));
                 })
                     .catch(error => {
                         Swal.fire({
