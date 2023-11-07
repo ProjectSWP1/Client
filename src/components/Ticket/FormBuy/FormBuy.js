@@ -78,7 +78,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
       return;
     }
 
-    if (!userEmail) {
+    if (!token && !userEmail) {
       setEmailError('Please enter an email address.');
       return;
     }
@@ -186,7 +186,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
               />
             )}
             {/* Display error messages */}
-            {emailError && <div style={{ color: 'red' }}>{emailError}</div>}
+            {!token && emailError && <div style={{ color: 'red' }}>{emailError}</div>}
             
             <Container
               maxWidth="lg"
