@@ -3,7 +3,7 @@ import UploadImage from "./UploadImage";
 import { getItemWithTimeout } from "../../auth/setTimeOut";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { DatePicker, LocalizationProvider  } from "@mui/x-date-pickers";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs';
 
@@ -32,8 +32,8 @@ const TrainerProfile = () => {
             setName(data.name);
             setPhoneNumber(data.phoneNumber);
             setAddress(data.address);
-            if(data.doB)
-            setDob(dayjs(new Date(data.doB)));
+            if (data.doB)
+                setDob(dayjs(new Date(data.doB)));
             console.log(data);
         }).catch(error => {
             console.log(error);
@@ -74,7 +74,7 @@ const TrainerProfile = () => {
                 name: name,
                 address: address,
                 phoneNumber: phoneNumber,
-                dob : dob
+                dob: dob
             });
             Swal.fire({
                 title: 'Success!',
@@ -134,12 +134,12 @@ const TrainerProfile = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                            label="Date of birth"
-                            value={dob}
-                            sx={{width : '100%' , borderColor : 'black'}}
-                            onChange={(date) => setDob(date)}
-                        />
+                            <DatePicker
+                                label="Date of birth"
+                                value={dob}
+                                sx={{ width: '100%', borderColor: 'black' }}
+                                onChange={(date) => setDob(date)}
+                            />
                         </LocalizationProvider>
                     </Grid>
                     <Grid item xs={12}>

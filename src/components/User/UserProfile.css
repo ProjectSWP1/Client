@@ -11,10 +11,11 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    width: 100%;
+    /* width: 100%; */
     background-color: rgb(239, 240, 223);
     box-shadow: 4px -1px 16px 1px grey ;
     width: 80%;
+    height: auto;
 }
 
 .profile-header{
@@ -47,7 +48,7 @@
     font-weight: bold;
     text-align: center;
     width: 100%;
-    margin-top: 30px;
+    /* margin-top: 30px; */
 }
 
 .profile-left{
@@ -95,6 +96,12 @@
 
 .radio-profile{
     width: 730px !important
+}
+.profile-right-btn{
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
 }
 
 /* .css-fd5v35-MuiInputBase-root-MuiOutlinedInput-root{

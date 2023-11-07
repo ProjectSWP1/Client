@@ -108,9 +108,6 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
               />
             </Box>
             <Typography variant="h6">
-              Description: {ticket?.description}
-            </Typography>
-            <Typography variant="h6">
               Price: {newPrice === 0 ? ticket?.ticketPrice : newPrice} VNĐ
             </Typography>
             <TextField
