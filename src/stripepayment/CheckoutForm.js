@@ -16,12 +16,45 @@ export default function CheckoutForm({ orderData, intentID }) {
   const [isLoading, setIsLoading] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
+  const [ticketData, setTicketData] = useState(null);
   const navigate = useNavigate();
-console.log(orderData);
   const payload = {
     orderID: orderData.orderID,
     intentId: intentID
   }
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = ''; // Prompt the user to confirm leaving the page
+    };
+  
+    window.addEventListener('beforeunload', handleBeforeUnload);
+  
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+  const handleBeforeUnloadConfirm = async () => {
+    const response = await fetch(`http://localhost:8080/user/cancel-payment/${orderData.orderID}`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+  
+    if (response.ok) {
+      // Payment canceled successfully
+      console.log('Payment canceled.');
+    } else {
+      // Handle the error, e.g., display a message to the user
+      console.error('Payment cancellation failed.');
+    }
+  };
+
+
   useEffect(() => {
     if (!stripe) {
       return;
@@ -107,9 +140,9 @@ console.log(orderData);
         })
         .then((data) => {
           const orderID = data.orderID;
-
+          
         });
-      navigate(`/complete-order?orderID=${orderData.orderID}&redirect_status=succeeded`);
+        navigate(`/complete-order?orderID=${orderData.orderID}&redirect_status=succeeded`);
     }
 
 
@@ -124,8 +157,11 @@ console.log(orderData);
 
   //nơi để bắt sự kiện khi user chưa thanh toán mà quay về home
   const handleClick = () => {
-
-  }
+    if (window.confirm('Your payment has not been completed yet, are you sure you want to exit?')) {
+      handleBeforeUnloadConfirm();
+      navigate('/');
+    }
+  };  
 
   const paymentElementOptions = {
     layout: "tabs"
@@ -147,9 +183,9 @@ console.log(orderData);
               <p>
                 <strong>Order ID:</strong> {orderData.orderID}
               </p>
-              <p>
+              {/* <p>
                 <strong>Description:</strong> {orderData.description}
-              </p>
+              </p> */}
               <p>
                 <strong>Ticket quantity:</strong> {orderData.quantity} 
               </p>

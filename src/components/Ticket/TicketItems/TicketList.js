@@ -92,7 +92,7 @@ export default function TicketList() {
                   />
                   <CardContent>
                     <Typography variant="body2" color="text.secondary">
-                      <strong>Expiration Date:</strong>{" "}
+                      <strong>Visit Date:</strong>{" "}
                       {ticket.visitDate}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
