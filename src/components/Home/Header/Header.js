@@ -67,7 +67,9 @@ export default function Header() {
             return;
         }
         setAuth(false);
-        localStorage.removeItem('token')
+        localStorage.removeItem('token');
+
+        window.location.href = '/';
     };
 
     function handleListKeyDown(event) {
