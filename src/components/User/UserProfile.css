@@ -2,6 +2,8 @@
     padding-bottom: 50px;
     display: flex;
     justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
     background-image: url(https://img.freepik.com/free-vector/detailed-jungle-background_23-2148953379.jpg?size=626&ext=jpg&ga=GA1.1.1826414947.1699056000&semt=ais);
 }
 
@@ -53,6 +55,7 @@
 
 .profile-left{
     width: 30%;
+    padding-bottom: 20px;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
