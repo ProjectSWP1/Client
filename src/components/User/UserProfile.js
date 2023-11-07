@@ -9,7 +9,23 @@ import HomeIcon from '@mui/icons-material/Home';
 import { Link } from 'react-router-dom';
 import { getItemWithTimeout } from '../auth/setTimeOut';
 import dayjs from 'dayjs';
-import DataTable from 'react-data-table-component';
+import DataTable, { createTheme } from 'react-data-table-component';
+createTheme('solarized', {
+    text: {
+        primary: 'darkgreen',
+        secondary: 'darkgreen',
+    },
+    background: {
+        default: 'rgb(239, 240, 223)',
+    },
+    context: {
+        background: '#cb4b16',
+        text: '#FFFFFF',
+    },
+    divider: {
+        default: 'white',
+    }
+}, 'dark');
 
 export default function UserProfile() {
     const [orders, setOrders] = useState([]);
@@ -232,23 +248,23 @@ export default function UserProfile() {
                                     />
                                 </Grid>
                                 <div className='profile-right-btn'>
-                                    <Button
+                                    {/* <Button
                                         onClick={handleSubmit}
                                         color="primary"
                                         variant="contained"
                                         style={{ width: '100px', textAlign: 'center' }}
                                     >
                                         Update
-                                    </Button>
+                                    </Button> */}
                                 </div>
                             </form> : (
                                 <TableContainer>
                                     <DataTable
+                                        theme='solarized'
                                         columns={columns}
                                         data={orders.map(item => ({
                                             ...item,
                                         }))}
-                                        title="Orders"
                                         pagination
                                         keyField='orderID'
                                         paginationPerPage={5} // Number of rows per page
