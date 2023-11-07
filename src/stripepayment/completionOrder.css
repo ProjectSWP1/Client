@@ -51,9 +51,4 @@
     background-color: #f1f8e9;
     padding: 20px;
 }
-/* 
-@media (max-width: 1000px) {
-    .completed-order-container{
-        flex-direction: column;
-    }
-} */
+
