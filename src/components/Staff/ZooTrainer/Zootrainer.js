@@ -125,7 +125,6 @@ export default function ZooTrainer() {
                                 value={selectedRole}
                                 onChange={(e) => setSelectedRole(e.target.value)}
                             >
-                                <MenuItem value="AD">Admin</MenuItem>
                                 <MenuItem value="MB">Member</MenuItem>
                                 <MenuItem value="ST">Staff</MenuItem>
                             </Select>

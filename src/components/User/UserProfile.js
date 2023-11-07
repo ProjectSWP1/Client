@@ -12,7 +12,7 @@ import dayjs from 'dayjs';
 import DataTable from 'react-data-table-component';
 
 export default function UserProfile() {
-    const [orders, setOrders] = useState([])
+    const [orders, setOrders] = useState([]);
     const [name, setName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [address, setAddress] = useState("");
@@ -50,7 +50,7 @@ export default function UserProfile() {
 
     useEffect(() => {
         if (!token) return;
-        fetch(`http://localhost:8080/order/find-order-by-email/${token.email}`, {
+        fetch(`http://localhost:8080/order/find-orders-by-email/${token.email}`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
