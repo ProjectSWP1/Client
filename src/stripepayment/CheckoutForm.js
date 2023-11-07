@@ -140,8 +140,9 @@ export default function CheckoutForm({ orderData, intentID }) {
         })
         .then((data) => {
           const orderID = data.orderID;
-          navigate(`/complete-order?orderID=${orderData.orderID}&redirect_status=succeeded`);
+          
         });
+        navigate(`/complete-order?orderID=${orderData.orderID}&redirect_status=succeeded`);
     }
 
 
