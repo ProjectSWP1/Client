@@ -5,25 +5,20 @@ import {
   CardContent,
   CardMedia,
   Container,
-  CssBaseline,
-  GlobalStyles,
   Grid,
   ThemeProvider,
   Typography,
-  createTheme,
 } from "@mui/material";
 import axios from "axios";
 import FormBuy from "../FormBuy/FormBuy";
 import Loading from "../Loading/Loading";
 import { green } from "@mui/material/colors";
-import { getItemWithTimeout } from "../../auth/setTimeOut";
+import { defaultTheme } from "../../Theme/Theme";
 
-const defaultTheme = createTheme();
 
 export default function TicketList() {
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
-  const [user, setUser] = useState(null)
 
   const accessToken = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
 
@@ -38,19 +33,17 @@ export default function TicketList() {
       });
   }, []);
 
-  // const convertValue = (value) => {
-  //   console.log(value);
-  //   const date = new Date(value);
-  //   return date.toLocaleDateString("en-US");
-  // };
-
   if (tickets.length <= 0) {
     return (
       <Container
         disableGutters
         maxWidth="sm"
         component="main"
-        sx={{ pt: 8, pb: 6 }}
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignContent: 'center'
+        }}
       >
         <Loading />
       </Container>
@@ -61,10 +54,6 @@ export default function TicketList() {
     <>
       <FormBuy ticket={selectedTicket} setSelectedTicket={setSelectedTicket} token={accessToken}/>
       <ThemeProvider theme={defaultTheme}>
-        <GlobalStyles
-          styles={{ ul: { margin: 0, padding: 0, listStyle: "none" } }}
-        />
-        <CssBaseline />
         <Container
           disableGutters
           maxWidth="sm"
@@ -72,10 +61,9 @@ export default function TicketList() {
           sx={{ pt: 16, pb: 6 }}
         >
           <Typography
-            component="h1"
             variant="h2"
             align="center"
-            color="text.primary"
+            color={defaultTheme.palette.primary.dark}
             gutterBottom
           >
             Tickets Pricing
@@ -84,7 +72,6 @@ export default function TicketList() {
             variant="h5"
             align="center"
             color="text.secondary"
-            component="p"
           >
             Open the gates to animal love, get your tickets now and enjoy
             limitless joy
@@ -109,7 +96,7 @@ export default function TicketList() {
                       {ticket.visitDate}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      <strong>Price:</strong> {ticket.ticketPrice} $
+                      <strong>Price:</strong> {ticket.ticketPrice} VND
                     </Typography>
                     <Button
                       style={{ marginTop: "10px", backgroundColor: green[500] }}

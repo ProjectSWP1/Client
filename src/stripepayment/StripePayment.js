@@ -11,6 +11,7 @@ const stripePromise = loadStripe(
 
 export default function StripePayment() {
   const [clientSecret, setClientSecret] = useState("");
+  const [intentId, setIntentId] = useState("");
   const location = useLocation();
   const userEmail = new URLSearchParams(location.search).get("userEmail");
   const [orderData, setOrderData] = useState([]);
@@ -26,6 +27,7 @@ export default function StripePayment() {
       })
       .then((data) => {
         const orderID = data.orderID;
+        console.log(orderID);
         setOrderData(data);
 
         // After obtaining the orderID, make the second fetch request for clientSecret
@@ -41,8 +43,8 @@ export default function StripePayment() {
             return res.json();
           })
           .then((data) => {
+            setIntentId(data.intentId);
             setClientSecret(data.clientSecret);
-            console.log(data.clientSecret);
           })
           .catch((error) => {
             console.error("Error fetching clientSecret:", error);
@@ -94,7 +96,7 @@ export default function StripePayment() {
     <div className="App">
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
-          {<CheckoutForm orderData={orderData} />}
+          {<CheckoutForm orderData={orderData} intentID={intentId} />}
         </Elements>
       )}
     </div>

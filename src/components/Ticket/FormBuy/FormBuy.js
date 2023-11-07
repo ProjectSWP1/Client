@@ -2,10 +2,18 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { green } from "@mui/material/colors";
-import { Button, CardMedia, Container, TextField, ThemeProvider } from "@mui/material";
+import {
+  Button,
+  CardMedia,
+  Container,
+  TextField,
+  ThemeProvider,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { defaultTheme } from "../../Theme/Theme";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 const style = {
   position: "absolute",
@@ -26,16 +34,28 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
   const location = useLocation();
 
   const [email, setEmail] = useState("");
-  const [numberTicket, setNumberTicket] = useState(0);
-  const [phone, setPhone] = useState("");
-  const [guestEmail, setGuestEmail] = useState('');
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState("");
+  const [emailError, setEmailError] = useState('');
+  const [numberTicketError, setNumberTicketError] = useState('');
+  const [numberTicket, setNumberTicket] = useState(1); // Initialize with 1 ticket
+
+  const handleDecrement = () => {
+    if (numberTicket > 1) {
+      setNumberTicket(numberTicket - 1);
+      setNumberTicketError('');
+    }
+  };
+
+  const handleIncrement = () => {
+    setNumberTicket(numberTicket + 1);
+    setNumberTicketError('');
+  };
 
   useEffect(() => {
     if (token) {
       // User is logged in, set the email and clear guestEmail
       const tmpEmail = JSON.parse(atob(token.split(".")[1]));
-      setUserEmail(tmpEmail);
+      setEmail(tmpEmail.email);
     } else {
       // User is not logged in, use the guestEmail if available
       const searchParams = new URLSearchParams(location.search);
@@ -43,43 +63,59 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
         setUserEmail(searchParams.get("guestEmail"));
       }
     }
-  }, [token, location.search]);
+  }, [token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Clear any previous error messages
+    setEmailError('');
+    setNumberTicketError('');
+
+    // Validate input fields
+    if (numberTicket < 1) {
+      setNumberTicketError('Please enter a valid number of tickets.');
+      return;
+    }
+
+    if (!userEmail) {
+      setEmailError('Please enter an email address.');
+      return;
+    }
+
     const ordersDto = {
       ticketId: ticket.ticketId,
-      email: userEmail,
-      phoneNumber: phone,
+      email: email || userEmail,
+      //phoneNumber: phone,
       ticketQuantity: parseInt(numberTicket, 10),
       visitDate: ticket.visitDate,
-      description: ticket.description
-    }
-    console.log('Here orders dto', ordersDto); 
-    console.log('Token is here:', token);
-    fetch('http://localhost:8080/order/create-order', {
-      method: 'POST',
+      description: ticket.description,
+    };
+    fetch("http://localhost:8080/order/create-order", {
+      method: "POST",
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: token,
       },
-      body: JSON.stringify(ordersDto)
-    }).then(response => {
-      if(!response.ok){
-        return response.text().then(message => {
-          throw new Error(message)
-        })
-        return response.text()
-      }
-    }).then(data => {
-      navigate(`/payment?userEmail=${encodeURIComponent(userEmail)}`);
+      body: JSON.stringify(ordersDto),
     })
-    .catch(error => {
-      console.log(error.message);
-      console.log(email);
-      console.log(ordersDto);
-    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((message) => {
+            throw new Error(message);
+          });
+        }
+        return response.text();
+      })
+      .then((data) => {
+        navigate(
+          `/payment?userEmail=${encodeURIComponent(email || userEmail)}`
+        );
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
     // navigate("/payment");
   };
 
@@ -117,32 +153,41 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
               Description: {ticket?.description}
             </Typography>
             <Typography variant="h6">
-              Total Price: {newPrice === 0 ? ticket?.ticketPrice : newPrice} VNĐ
+              Price: {newPrice === 0 ? ticket?.ticketPrice : newPrice} VNĐ
             </Typography>
-            <TextField
-              style={{ width: "500px", marginTop: "20px" }}
-              id="outlined-basic"
-              label="Number Ticket"
-              variant="outlined"
-              name="number"
-              type="number"
-              // value={formData.number}
-              onChange={(e) => setNumberTicket(e.target.value)}
-            />
-            {email ? "" :
-              <>
-                <TextField
-                  style={{ width: "500px", marginTop: "20px" }}
-                  id="outlined-basic"
-                  label="Email"
-                  variant="outlined"
-                  name="email"
-                  type="email"
-                  // value={formData.number}
-                  onChange={(e) => setUserEmail(e.target.value)}
-                />
-              </>
-            }
+            {/* Numeric input with Material-UI components */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '20px' }}>
+              <Button onClick={handleDecrement}>
+                <RemoveIcon />
+              </Button>
+              <TextField
+                type="number"
+                value={numberTicket}
+                onChange={(e) => setNumberTicket(parseInt(e.target.value, 10))}
+                InputProps={{ inputProps: { min: 1 } }}
+              />
+              <Button onClick={handleIncrement}>
+                <AddIcon />
+              </Button>
+            </div>
+            {numberTicketError && <Typography variant="body2" color="error">{numberTicketError}</Typography>}
+            {email ? (
+              ""
+            ) : (
+              <TextField
+                style={{ width: "500px", marginTop: "20px" }}
+                id="outlined-basic"
+                label="Email"
+                variant="outlined"
+                name="email"
+                type="email"
+                // value={formData.number}
+                onChange={(e) => setUserEmail(e.target.value)}
+              />
+            )}
+            {/* Display error messages */}
+            {emailError && <div style={{ color: 'red' }}>{emailError}</div>}
+            
             <Container
               maxWidth="lg"
               style={{

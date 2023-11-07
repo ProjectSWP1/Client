@@ -387,16 +387,6 @@ export default function ManageAccount() {
                     <TextField
                       required
                       fullWidth
-                      label="EmpID"
-                      id="empId"
-                      onChange={(e) => setEmpId(e.target.value)}
-                      value={empId}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
                       label="Name"
                       id="name"
                       onChange={(e) => setName(e.target.value)}
@@ -471,7 +461,7 @@ export default function ManageAccount() {
                     </Select>
                   </Grid>
                   {role == 'ZT' ? <Grid item xs={6}>
-                    <InputLabel id="select-label">Select an zoo area</InputLabel>
+                    <InputLabel id="select-label">Select a zoo area</InputLabel>
                     <Select
                       labelId="select-label"
                       id="select"
@@ -480,7 +470,7 @@ export default function ManageAccount() {
                     >
                       {zooAreas.map(area => {
                         return (
-                          <MenuItem key={area.zooAreaId} value={area.zooAreaId}>{area.description}</MenuItem>
+                          <MenuItem key={area.zooAreaId} value={area.zooAreaId}>{area.zooAreaId}</MenuItem>
                         )
                       })}
                     </Select>
