@@ -183,9 +183,9 @@ export default function CheckoutForm({ orderData, intentID }) {
               <p>
                 <strong>Order ID:</strong> {orderData.orderID}
               </p>
-              <p>
+              {/* <p>
                 <strong>Description:</strong> {orderData.description}
-              </p>
+              </p> */}
               <p>
                 <strong>Ticket quantity:</strong> {orderData.quantity} 
               </p>

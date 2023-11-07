@@ -85,6 +85,7 @@ export default function ManageAccount() {
 
   const handleOpenPopupAddAction = () => {
     //account
+    setChanged(false)
     setOpen(true);
     setEmail("");
     setPassword("");
@@ -138,14 +139,15 @@ export default function ManageAccount() {
       return response.text();
     }).then(data => {
       setOpen(false);
-      setAccounts([...accounts, {
-        email: accountDto.email,
-        password: accountDto.password,
-        phoneNumber: accountDto.phone,
-        role: {
-          authority: role
-        }
-      }]);
+      setChanged(true)
+      // setAccounts([...accounts, {
+      //   email: accountDto.email,
+      //   password: accountDto.password,
+      //   phoneNumber: accountDto.phone,
+      //   role: {
+      //     authority: role
+      //   }
+      // }]);
       Swal.fire({
         title: 'Success!',
         text: `${data}`,
