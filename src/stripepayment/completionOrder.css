@@ -1,0 +1,59 @@
+.completed-order-container{
+    width: 100%;
+    padding: 50px 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.completed-order-thank-you{
+    width: 60%;
+    background-color: #f1f8e9;
+}
+.completed-order-thank-you-header{
+    text-align: center;
+    margin-bottom: 50px;
+    margin-top: 20px;
+}
+
+.completed-order-thank-you-body{
+    margin: 70px 70px 0 70px;
+    display: flex;
+    justify-content: space-between;
+}
+.completed-order-thank-you-btn{
+    color: darkcyan;
+    text-decoration: none;
+    font-size: 20px;
+}
+.completed-order-thank-you-btn:hover{
+    text-shadow: 0 0 5px rgb(236, 236, 95)
+}
+
+.completed-order-thank-you-footer{
+    margin: 0 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+}
+.thank-you-img{
+    width: 270px;
+    height: 250px;
+}
+.thank-you-img img{
+    width: 130%;
+    height: 130%;
+}
+
+
+.completed-order-your-order{
+    width: 35%;
+    background-color: #f1f8e9;
+    padding: 20px;
+}
+/* 
+@media (max-width: 1000px) {
+    .completed-order-container{
+        flex-direction: column;
+    }
+} */
