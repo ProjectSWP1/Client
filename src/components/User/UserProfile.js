@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './UserProfile.css'
-import { Button, Container, FormControl, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, TextField } from '@mui/material'
+import { Button, Container, FormControl, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, TableContainer, TextField } from '@mui/material'
 import { ThemeProvider } from "@mui/material/styles";
 import { defaultTheme } from '../Theme/Theme';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -126,7 +126,7 @@ export default function UserProfile() {
             name: 'Status',
             selector: (order) => {
                 return (
-                    <p>{order.orderPayments?.success? "Finished" : "Order has been cancel"}</p>
+                    <p>{order.orderPayments?.success ? "Finished" : "Order has been cancel"}</p>
                 )
             }
         },
@@ -232,25 +232,29 @@ export default function UserProfile() {
                                     />
                                 </Grid>
                                 <div className='profile-right-btn'>
-                                    {/* <Button
+                                    <Button
                                         onClick={handleSubmit}
                                         color="primary"
                                         variant="contained"
                                         style={{ width: '100px', textAlign: 'center' }}
                                     >
                                         Update
-                                    </Button> */}
+                                    </Button>
                                 </div>
                             </form> : (
-                                <DataTable
-                                    columns={columns}
-                                    data={orders.map((item) => ({ ...item }))}
-                                    title="Orders"
-                                    pagination
-                                    keyField='orderID'
-                                    paginationPerPage={5} // Number of rows per page
-                                    paginationRowsPerPageOptions={[5, 10, 20, 50]} // Rows per page options
-                                />
+                                <TableContainer>
+                                    <DataTable
+                                        columns={columns}
+                                        data={orders.map(item => ({
+                                            ...item,
+                                        }))}
+                                        title="Orders"
+                                        pagination
+                                        keyField='orderID'
+                                        paginationPerPage={5} // Number of rows per page
+                                        paginationRowsPerPageOptions={[5, 10, 20, 50]} // Rows per page options
+                                    />
+                                </TableContainer>
                             )}
                         </div>
                     </div>
