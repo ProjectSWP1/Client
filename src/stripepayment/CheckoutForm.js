@@ -13,7 +13,29 @@ export default function CheckoutForm({orderData}) {
 
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [ticketData, setTicketData] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Define the URL for your backend endpoint, replacing {ticketId} with the actual ticketId.
+    const apiUrl = `http://localhost:8080/user/get-ticket/${orderData.ticketId}`;
+
+    fetch(apiUrl)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Handle the response data here, e.g., set it in the state.
+        setTicketData(data);
+      })
+      .catch((error) => {
+        // Handle errors, e.g., display an error message to the user.
+        console.error('Error fetching ticket data:', error);
+      });
+  }, [ticketId]);
 
   useEffect(() => {
     if (!stripe) {
@@ -118,6 +140,9 @@ export default function CheckoutForm({orderData}) {
       </p>
       <p>
         <strong>Email:</strong> {orderData.email}
+      </p>
+      <p>
+        <strong>Total Price:</strong> {orderData.quantity * ticketData.ticketPrice}
       </p>
 
       <form id="payment-form" onSubmit={handleSubmit}>
