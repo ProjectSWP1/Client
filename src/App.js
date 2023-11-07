@@ -26,7 +26,7 @@ import BuyTicket from "./pages/BuyTicket.js";
 import StripePayment from "./stripepayment/StripePayment.js";
 import TicketLayout from "./components/Ticket/TicketLayout.js";
 import FeedingSchedule from "./components/Trainer/WorkAssignTrainer/FeedingSchedule.js";
-import PostNews from "./components/Home/News/News.js";
+import PostNews from "./components/Staff/PostNews/PostNews.js";
 import CompleteOrder from "./stripepayment/completionOrder.js";
 
 function App() {
