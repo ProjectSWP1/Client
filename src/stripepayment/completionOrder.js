@@ -9,7 +9,7 @@ export default function CompleteOrder() {
   const queryParams = new URLSearchParams(location.search);
   const redirectStatus = queryParams.get("redirect_status");
   const orderID = queryParams.get("orderID");
-  const [orderData, setOrderData] = useState([]);
+  const [orderData, setOrderData] = useState(null);
 
   useEffect(() => {
     if (orderID) {
