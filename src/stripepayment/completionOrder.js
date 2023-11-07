@@ -3,6 +3,9 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import './completionOrder.css'
 import { defaultTheme } from "../components/Theme/Theme";
+import PaidIcon from '@mui/icons-material/Paid';
+import HomeIcon from '@mui/icons-material/Home';
+import ReviewsIcon from '@mui/icons-material/Reviews';
 
 export default function CompleteOrder() {
   const location = useLocation();
@@ -62,8 +65,8 @@ export default function CompleteOrder() {
                     style={{ margin: '0 30px', width: '90%' }}
                   />
                   <div className="completed-order-thank-you-body">
-                    <Link to='/' className="completed-order-thank-you-btn">Go back to Main Page</Link>
-                    <Link className="completed-order-thank-you-btn">View Order History</Link>
+                    <Link to='/' className="completed-order-thank-you-btn"> <HomeIcon className="completed-order-thank-you-icon" style={{marginRight: '10px'}}/>Go back to Main Page</Link>
+                    <Link className="completed-order-thank-you-btn"><ReviewsIcon className="completed-order-thank-you-icon" style={{marginRight: '10px'}}/>View Order History</Link>
                   </div>
                   <div className="completed-order-thank-you-footer">
                     <Link className="social-btn">Any problems? Contact Us on Social Media</Link>
@@ -88,9 +91,9 @@ export default function CompleteOrder() {
                     {/* <Typography variant="body1">Subtotal: </Typography>
                     <Typography variant="body1">Voucher Discount: </Typography> */}
                   </div>
-                  <div style={{marginBottom: '170px'}}>
+                  <div style={{marginBottom: '270px'}}>
                   <Typography style={{fontSize: '30px'}}>Total Price: {orderData.quantity * orderData.ticket.ticketPrice} VND</Typography>
-                  <Typography variant="body1" style={{color: 'darkgreen'}}>[Paid]</Typography>
+                  <Typography variant="body1" style={{color: 'darkgreen'}}><PaidIcon/></Typography>
                   </div>
                 </div>
               </div>
