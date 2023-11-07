@@ -22,7 +22,6 @@ export default function CompleteOrder() {
         })
         .then((data) => {
           setOrderData(data);
-          console.log(data);
         })
         .catch((error) => {
           console.error("Error fetching order by orderID:", error);
