@@ -21,7 +21,6 @@ export default function CompleteOrder() {
           return res.json();
         })
         .then((data) => {
-          console.log(data);
           setOrderData(data);
         })
         .catch((error) => {
