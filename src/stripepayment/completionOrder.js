@@ -22,6 +22,7 @@ export default function CompleteOrder() {
         })
         .then((data) => {
           setOrderData(data);
+          console.log(data);
         })
         .catch((error) => {
           console.error("Error fetching order by orderID:", error);
@@ -46,7 +47,7 @@ export default function CompleteOrder() {
                 <div className="completed-order-thank-you">
                   <div className="completed-order-thank-you-header">
                     <Typography style={{ fontWeight: '700', fontSize: '50px' }}>THANK YOU!</Typography>
-                    <Typography variant="body1">Email</Typography>
+                    <Typography variant="body1">{orderData.email}</Typography>
                   </div>
                   <TextField
                     id="outlined-read-only-input"
@@ -76,20 +77,20 @@ export default function CompleteOrder() {
                 <div className="completed-order-your-order">
                   <Typography style={{ fontWeight: '700', fontSize: '40px', textAlign: 'center', paddingTop: '0' }}>Your Order</Typography>
                   <div style={{ padding: '40px 0' }}>
-                    <Typography variant="body1">*Your Visit Date: YYYY/MM/DD</Typography>
-                    <Typography variant="body1">*Ticker Quantity (1 ticket/person)</Typography>
+                    <Typography variant="body1">Your Visit Date: {orderData.ticket.visitDate}</Typography>
+                    <Typography variant="body1">Ticker Quantity (1 ticket/person): {orderData.quantity}</Typography>
                   </div>
                   <div style={{ paddingBottom: '40px' }}>
-                    <Typography variant="body1">Adult Ticket: </Typography>
-                    <Typography variant="body1">Children Ticket: </Typography>
+                    {/* <Typography variant="body1">Adult Ticket: </Typography>
+                    <Typography variant="body1">Children Ticket: </Typography> */}
                   </div>
                   <div style={{ borderTop: '4px solid black', marginBottom: '40px' }}></div>
                   <div style={{marginBottom: '10px'}}>
-                    <Typography variant="body1">Subtotal: </Typography>
-                    <Typography variant="body1">Voucher Discount: </Typography>
+                    {/* <Typography variant="body1">Subtotal: </Typography>
+                    <Typography variant="body1">Voucher Discount: </Typography> */}
                   </div>
                   <div style={{marginBottom: '170px'}}>
-                  <Typography style={{fontSize: '30px'}}>Total Price: </Typography>
+                  <Typography style={{fontSize: '30px'}}>Total Price: {orderData.quantity * orderData.ticket.ticketPrice} VND</Typography>
                   <Typography variant="body1" style={{color: 'darkgreen'}}>[Paid]</Typography>
                   </div>
                 </div>
