@@ -66,7 +66,7 @@ export default function CompleteOrder() {
                     <Link className="completed-order-thank-you-btn">View Order History</Link>
                   </div>
                   <div className="completed-order-thank-you-footer">
-                    <Link className="completed-order-thank-you-btn" style={{ paddingBottom: '30px' }}>Any problems? Contact Us on Social Media</Link>
+                    <Link className="social-btn">Any problems? Contact Us on Social Media</Link>
                     <div className="thank-you-img">
                       <img src="assets/images/zookay2.png" />
                     </div>
