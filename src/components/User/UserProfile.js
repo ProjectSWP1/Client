@@ -9,6 +9,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import { Link } from 'react-router-dom';
 import { getItemWithTimeout } from '../auth/setTimeOut';
 import dayjs from 'dayjs';
+import DataTable from 'react-data-table-component';
 
 export default function UserProfile() {
     const [orders, setOrders] = useState([])
@@ -100,6 +101,45 @@ export default function UserProfile() {
     const handleOrders = () => {
         setOpenProfile(false)
     }
+
+    const columns = [
+        {
+            id: 1,
+            name: 'OrderID',
+            selector: (order) => {
+                return (
+                    <p>{order.orderID}</p>
+                )
+            }
+        },
+        {
+            id: 2,
+            name: 'TicketID',
+            selector: (order) => {
+                return (
+                    <p>{order.ticket.ticketId}</p>
+                )
+            }
+        },
+        {
+            id: 3,
+            name: 'Status',
+            selector: (order) => {
+                return (
+                    <p>{order.orderPayments?.success? "Finished" : "Order has been cancel"}</p>
+                )
+            }
+        },
+        {
+            id: 4,
+            name: 'Total',
+            selector: (order) => {
+                return (
+                    <p>{order.quantity * order.ticket.ticketPrice} VND</p>
+                )
+            }
+        }
+    ]
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -202,18 +242,17 @@ export default function UserProfile() {
                                     </Button> */}
                                 </div>
                             </form> : (
-                                <p>hello</p>
-                                // <DataTable
-                                //     columns={columns}
-                                //     data={animals.map(item => ({
-                                //         ...item,
-                                //     }))}
-                                //     title="Animals"
-                                //     pagination
-                                //     keyField='animalId'
-                                //     paginationPerPage={5} // Number of rows per page
-                                //     paginationRowsPerPageOptions={[5, 10, 20, 50]} // Rows per page options
-                                // />
+                                <DataTable
+                                    columns={columns}
+                                    data={orders.map(item => ({
+                                        ...item,
+                                    }))}
+                                    title="Orders"
+                                    pagination
+                                    keyField='orderID'
+                                    paginationPerPage={5} // Number of rows per page
+                                    paginationRowsPerPageOptions={[5, 10, 20, 50]} // Rows per page options
+                                />
                             )}
                         </div>
                     </div>
