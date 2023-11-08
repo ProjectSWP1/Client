@@ -27,7 +27,6 @@ export default function StripePayment() {
       })
       .then((data) => {
         const orderID = data.orderID;
-        console.log(orderID);
         setOrderData(data);
 
         // After obtaining the orderID, make the second fetch request for clientSecret
@@ -45,6 +44,25 @@ export default function StripePayment() {
           .then((data) => {
             setIntentId(data.intentId);
             setClientSecret(data.clientSecret);
+
+            fetch(
+              "http://localhost:8080/qrcode/generateAndDownloadQRCode/350/350",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ orderID }), // Include the orderID in the request body
+              }
+            )
+              .then((res) => {
+                if (!res.ok) {
+                  throw new Error(`HTTP error! Status: ${res.status}`);
+                }
+              })
+              .catch((error) => {
+                console.error("Error fetching and creating QR code:", error);
+              });
           })
           .catch((error) => {
             console.error("Error fetching clientSecret:", error);
@@ -57,35 +75,38 @@ export default function StripePayment() {
 
   const appearance = {
     theme: "stripe",
-    labels: 'floating',
+    labels: "floating",
     variables: {
-      colorPrimary: '#0570de',
-      colorBackground: '#ffffff',
-      colorText: '#30313d',
-      colorDanger: '#df1b41',
-      fontFamily: 'Ideal Sans, system-ui, sans-serif',
-      spacingUnit: '2px',
-      borderRadius: '4px',
+      colorPrimary: "#0570de",
+      colorBackground: "#ffffff",
+      colorText: "#30313d",
+      colorDanger: "#df1b41",
+      fontFamily: "Ideal Sans, system-ui, sans-serif",
+      spacingUnit: "2px",
+      borderRadius: "4px",
     },
     rules: {
-      '.Tab': {
-        border: '1px solid #E0E6EB',
-        boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(18, 42, 66, 0.02)',
+      ".Tab": {
+        border: "1px solid #E0E6EB",
+        boxShadow:
+          "0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(18, 42, 66, 0.02)",
       },
 
-      '.Tab:hover': {
-        color: 'var(--colorText)',
+      ".Tab:hover": {
+        color: "var(--colorText)",
       },
 
-      '.Tab--selected': {
-        borderColor: '#E0E6EB',
-        boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(18, 42, 66, 0.02), 0 0 0 2px var(--colorPrimary)',
+      ".Tab--selected": {
+        borderColor: "#E0E6EB",
+        boxShadow:
+          "0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(18, 42, 66, 0.02), 0 0 0 2px var(--colorPrimary)",
       },
 
-      '.Input--invalid': {
-        boxShadow: '0 1px 1px 0 rgba(0, 0, 0, 0.07), 0 0 0 2px var(--colorDanger)',
+      ".Input--invalid": {
+        boxShadow:
+          "0 1px 1px 0 rgba(0, 0, 0, 0.07), 0 0 0 2px var(--colorDanger)",
       },
-    }
+    },
   };
   const options = {
     clientSecret,
