@@ -235,7 +235,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
                 <AddIcon />
               </Button>
               <TextField
-                style={{ width: "500px", marginTop: "20px" }}
+                style={{ width: "500px" }}
                 id="voucher-id"
                 label="Voucher ID"
                 variant="outlined"
