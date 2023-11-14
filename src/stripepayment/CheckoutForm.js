@@ -23,6 +23,26 @@ export default function CheckoutForm({ orderData, intentID }) {
     intentId: intentID
   }
 
+  // Calculate the discounted price based on the coupon
+  const calculateDiscountedPrice = (originalPrice, coupon) => {
+    return originalPrice - originalPrice * coupon;
+  };
+
+  // Calculate the total amount considering the coupon
+  const calculateTotalAmount = () => {
+    const ticketPrice = orderData.ticket.ticketPrice || 0;
+    const quantity = orderData.quantity || 0;
+    const coupon = orderData.orderVoucher ? orderData.orderVoucher.coupon : 0;
+
+    // Calculate the total amount without discount
+    const totalAmountWithoutDiscount = ticketPrice * quantity;
+
+    // Calculate the discounted price
+    const discountedPrice = calculateDiscountedPrice(totalAmountWithoutDiscount, coupon);
+
+    return discountedPrice;
+  };
+
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       e.preventDefault();
@@ -194,7 +214,7 @@ export default function CheckoutForm({ orderData, intentID }) {
               </p>
               <hr></hr>
               <h2 style={{marginTop: '30px', textAlign: 'center'}}>
-                <strong style={{color: '#2e7d32'}}>Total:</strong> {orderData.quantity * orderData.ticket.ticketPrice} VND
+                <strong style={{color: '#2e7d32'}}>Total:</strong> {calculateTotalAmount()} VND
               </h2>
             </div>
             <Copyright />

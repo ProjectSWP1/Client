@@ -10,10 +10,13 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { defaultTheme } from "../../Theme/Theme";
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const style = {
   position: "absolute",
@@ -35,20 +38,32 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
 
   const [email, setEmail] = useState("");
   const [userEmail, setUserEmail] = useState("");
-  const [emailError, setEmailError] = useState('');
-  const [numberTicketError, setNumberTicketError] = useState('');
+  const [emailError, setEmailError] = useState("");
+  const [voucherIdInput, setVoucherIdInput] = useState("");
+  const [voucher, setVoucher] = useState([]);
+  const [numberTicketError, setNumberTicketError] = useState("");
   const [numberTicket, setNumberTicket] = useState(1); // Initialize with 1 ticket
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("");
 
   const handleDecrement = () => {
     if (numberTicket > 1) {
       setNumberTicket(numberTicket - 1);
-      setNumberTicketError('');
+      setNumberTicketError("");
     }
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
   };
 
   const handleIncrement = () => {
     setNumberTicket(numberTicket + 1);
-    setNumberTicketError('');
+    setNumberTicketError("");
   };
 
   useEffect(() => {
@@ -65,21 +80,66 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
     }
   }, [token]);
 
+  const applyVoucher = async () => {
+    // Call your backend API to check and apply the voucher
+    if (!voucherIdInput) {
+      setSnackbarMessage(`Please enter the voucher code!`);
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/voucher/id/${voucherIdInput}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data) {
+        // Voucher found, set voucherId in state
+        console.log(response.data);
+        setVoucher(response.data);
+        setSnackbarMessage(`Voucher applied successfully: ${voucherIdInput}`);
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
+      } else {
+        // Voucher not found
+        setSnackbarMessage(`Voucher not found: ${voucherIdInput}`);
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        // Unauthorized, user has not got membership
+        setSnackbarMessage("You have not got membership yet!");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
+      } else {
+        setSnackbarMessage(`Error applying voucher: ${error.message}`);
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
+      }
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Clear any previous error messages
-    setEmailError('');
-    setNumberTicketError('');
+    setEmailError("");
+    setNumberTicketError("");
 
     // Validate input fields
     if (numberTicket < 1) {
-      setNumberTicketError('Please enter a valid number of tickets.');
+      setNumberTicketError("Please enter a valid number of tickets.");
       return;
     }
 
     if (!token && !userEmail) {
-      setEmailError('Please enter an email address.');
+      setEmailError("Please enter an email address.");
       return;
     }
 
@@ -87,6 +147,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
       ticketId: ticket.ticketId,
       email: email || userEmail,
       //phoneNumber: phone,
+      voucherId: voucher.voucherId, // Add voucherId
       ticketQuantity: parseInt(numberTicket, 10),
       visitDate: ticket.visitDate,
       description: ticket.description,
@@ -153,7 +214,14 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
               Price: {newPrice === 0 ? ticket?.ticketPrice : newPrice} VNĐ
             </Typography>
             {/* Numeric input with Material-UI components */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '20px' }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: "20px",
+              }}
+            >
               <Button onClick={handleDecrement}>
                 <RemoveIcon />
               </Button>
@@ -166,8 +234,30 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
               <Button onClick={handleIncrement}>
                 <AddIcon />
               </Button>
+              <TextField
+                style={{ width: "500px", marginTop: "20px" }}
+                id="voucher-id"
+                label="Voucher ID"
+                variant="outlined"
+                name="voucherId"
+                type="text"
+                value={voucherIdInput}
+                onChange={(e) => setVoucherIdInput(e.target.value)}
+              />
+
+              <Button
+                style={{ margin: "10px", backgroundColor: green[500] }}
+                variant="contained"
+                onClick={applyVoucher}
+              >
+                Apply Voucher
+              </Button>
             </div>
-            {numberTicketError && <Typography variant="body2" color="error">{numberTicketError}</Typography>}
+            {numberTicketError && (
+              <Typography variant="body2" color="error">
+                {numberTicketError}
+              </Typography>
+            )}
             {email ? (
               ""
             ) : (
@@ -183,8 +273,10 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
               />
             )}
             {/* Display error messages */}
-            {!token && emailError && <div style={{ color: 'red' }}>{emailError}</div>}
-            
+            {!token && emailError && (
+              <div style={{ color: "red" }}>{emailError}</div>
+            )}
+
             <Container
               maxWidth="lg"
               style={{
@@ -205,6 +297,20 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
           </form>
         </Box>
       </Modal>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </ThemeProvider>
   );
 }
