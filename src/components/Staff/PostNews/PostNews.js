@@ -1,9 +1,133 @@
-import { Button, Container, Grid, TextField, ThemeProvider, Typography } from '@mui/material'
-import React from 'react'
+import { Button, Container, Grid, Paper, TableContainer, TextField, ThemeProvider, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import './PostNews.css'
 import { defaultTheme } from '../../Theme/Theme'
+import { URL_FETCH_AZURE_SERVER } from '../../../config'
+import DataTable from 'react-data-table-component'
+import Swal from 'sweetalert2'
 
 export default function PostNews() {
+  const [listNews, setListNews] = useState([])
+  const [employee, setEmployee] = useState(null)
+  const [changed, setChanged] = useState(false)
+  const [open, setOpen] = useState(false)
+
+  const [content, setContent] = useState("")
+  const [description, setDescription] = useState("")
+
+  const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
+  const email = !token ? null : JSON.parse(atob(token.split('.')[1])).email;
+
+  useEffect(() => {
+    fetch(`${URL_FETCH_AZURE_SERVER}user/getnews`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer " + token,
+      }
+    }).then(response => response.json())
+      .then(data => {
+        setListNews(data)
+        const sortedNews = data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
+        setListNews(sortedNews);
+      })
+      .catch(error => console.log(error))
+
+    fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-employee-by/${email}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer " + token,
+      }
+    }).then(response => response.json())
+      .then(data => {
+        setEmployee(data)
+      })
+      .catch(error => console.log(error))
+  }, [changed])
+
+  const handlePostNews = () => {
+    setOpen(true)
+    setChanged(false)
+    setContent("")
+    setDescription("")
+  }
+
+  const handlePostButton = () => {
+    const newsDto = {
+      empId: employee.empId,
+      content: content,
+      description: description
+    }
+    fetch(`${URL_FETCH_AZURE_SERVER}staff/postnews`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer " + token,
+      },
+      body: JSON.stringify(newsDto)
+    }).then(response => {
+      if (!response.ok) {
+        return response.text().then((message) => {
+          throw new Error(message);
+        });
+      }
+      return response.text();
+    }).then(data => {
+      setOpen(false);
+      setChanged(true)
+      Swal.fire({
+        title: 'Success!',
+        text: `${data}`,
+        icon: 'success',
+      });
+    }).catch(error => {
+      setOpen(false);
+      Swal.fire({
+        title: 'Fail!',
+        text: `${error}`,
+        icon: 'error',
+      });
+    });
+  }
+
+  const handleCancelButton = () => {
+    setOpen(false)
+  }
+
+  const columns = [
+    {
+      id: 1,
+      name: 'Credit',
+      selector: (news) => {
+        return (
+          <p>{news.empId}</p>
+        )
+      }
+    },
+    {
+      id: 2,
+      name: 'Content',
+      selector: (news) => {
+        return (
+          <p>{news.content}</p>
+        )
+      }
+    },
+    {
+      id: 3,
+      name: 'Date Created',
+      selector: (news) => {
+        return (
+          <p>{news.dateCreated}</p>
+        )
+      }
+    }
+  ]
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container sx={{
@@ -16,14 +140,14 @@ export default function PostNews() {
         overflow: 'auto',
         marginTop: '100px'
       }}>
-        <div className='staff-news-container'>
+        {open ? <div className='staff-news-container'>
           <Typography style={{ marginBottom: '20px', fontSize: '25px', fontWeight: '400' }}>Create News</Typography>
           <div className='staff-news-header'>
             <div className='staff-news-header-left'>
               <img src="https://i.pinimg.com/736x/f0/f6/30/f0f63081e758c96e4051a865fb2293b8.jpg" />
             </div>
             <div className='staff-news-header-right'>
-              <Typography style={{ fontSize: '0.6cm' }}>Mót</Typography>
+              <Typography style={{ fontSize: '0.6cm' }}>{email}</Typography>
             </div>
           </div>
 
@@ -35,9 +159,10 @@ export default function PostNews() {
                   id="TextInput-38"
                   label="Your Content"
                   name="content"
-                  value=""
+                  value={content}
                   style={{ marginBottom: '35px' }}
                   multiline
+                  onChange={(e) => setContent(e.target.value)}
                   rows={4}
                 />
               </Grid>
@@ -47,19 +172,33 @@ export default function PostNews() {
                   id="TextInput-39"
                   label="Your Description"
                   name="description"
-                  value=""
+                  value={description}
                   style={{ marginBottom: '35px' }}
                   multiline
+                  onChange={(e) => setDescription(e.target.value)}
                   rows={6}
                 />
               </Grid>
             </form>
             <div className='staff-news-footer'>
-              <Button className='staff-news-footer-btn'>Post</Button>
-              <Button className='staff-news-footer-btn'>Cancel</Button>
+              <Button className='staff-news-footer-btn' onClick={handlePostButton}>Post</Button>
+              <Button className='staff-news-footer-btn' onClick={handleCancelButton}>Cancel</Button>
             </div>
           </div>
-        </div>
+        </div> : <TableContainer component={Paper} sx={{ mt: '100px' }}>
+          <DataTable
+            columns={columns}
+            data={listNews.map(item => ({
+              ...item,
+            }))}
+            title="News"
+            pagination
+            keyField='email'
+            paginationPerPage={5} // Number of rows per page
+            paginationRowsPerPageOptions={[5, 10, 20, 50]} // Rows per page options
+          />
+          <Button variant='text' fullWidth onClick={handlePostNews}>Post news</Button>
+        </TableContainer>}
       </Container>
     </ThemeProvider>
   )

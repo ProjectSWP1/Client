@@ -1,6 +1,6 @@
 import Avatar from "@mui/material/Avatar";
-import React, { useState } from 'react'; // Removed unnecessary import
-import { useNavigate, useLocation } from 'react-router';
+import React, { useState } from "react"; // Removed unnecessary import
+import { useNavigate, useLocation } from "react-router";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -14,11 +14,13 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { ThemeProvider } from "@mui/material/styles";
 import { Copyright, defaultTheme } from "./../Theme/Theme.js";
-import axios from 'axios';
-import useAuth from '../auth/auth.js';
-import { NEW_TIMEOUT_IN_SECONDS, setItemWithTimeout } from "../auth/setTimeOut.js";
+import axios from "axios";
+import useAuth from "../auth/auth.js";
+import {
+  NEW_TIMEOUT_IN_SECONDS,
+  setItemWithTimeout,
+} from "../auth/setTimeOut.js";
 import { URL_FETCH_AZURE_SERVER } from "../../config.js";
-
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -28,11 +30,6 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const API = axios.create({
-    baseURL: "http://localhost:8000",
-    withCredentials: true,
-  });
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -47,21 +44,35 @@ export default function SignIn() {
     setLoading(true);
 
     try {
-      const response = await API.post(`${URL_FETCH_AZURE_SERVER}user/login`, { email, password });
-      
+      // Create an axios instance with CORS configuration
+      const axiosInstance = axios.create({
+        withCredentials: true, // Include credentials (cookies)
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "https://zookay-web.vercel.app",
+          // Add any other necessary headers
+        },
+      });
+
+      // Use the axios instance for the request
+      const response = await axiosInstance.post(
+        `${URL_FETCH_AZURE_SERVER}user/login`,
+        { email, password }
+      );
+
       if (response.data.account != null) {
-        const token = response.data.jwt
+        const token = response.data.jwt;
         // const token = JSON.stringify(response.data.jwt)
         // login(user, token);
-      // setWithExpiry('token', token, 2000)
-      // localStorage.setItem('token', JSON.stringify({data: token, timestamp: Date.now()}))
-      setItemWithTimeout('token', token, NEW_TIMEOUT_IN_SECONDS)
+        // setWithExpiry('token', token, 2000)
+        // localStorage.setItem('token', JSON.stringify({data: token, timestamp: Date.now()}))
+        setItemWithTimeout("token", token, NEW_TIMEOUT_IN_SECONDS);
         navigate("/");
       } else {
         setError("Invalid email or password");
       }
     } catch (error) {
-      console.error('Login failed: ', error);
+      console.error("Login failed: ", error);
       setError("Login failed. Please try again later.");
     } finally {
       setLoading(false); // Ensure loading state is reset

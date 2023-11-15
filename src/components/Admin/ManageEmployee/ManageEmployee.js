@@ -37,7 +37,6 @@ export default function ManageEmployee() {
             setStaffAccounts(data.filter(acc => {
                 return acc.email.role.roleID === "ST"
             }))
-            console.log(data);
         })
 
         fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-zoo-area`, {
