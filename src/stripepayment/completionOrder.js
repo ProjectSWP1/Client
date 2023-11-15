@@ -17,7 +17,7 @@ export default function CompleteOrder() {
 
   useEffect(() => {
     if (orderID) {
-      fetch(`${URL_FETCH_AZURE_SERVER}order/${orderID}`)
+      fetch(`${URL_FETCH_AZURE_SERVER}order/get-order/${orderID}`)
         .then((res) => {
           if (!res.ok) {
             throw new Error(`HTTP error! Status: ${res.status}`);
