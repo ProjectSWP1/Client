@@ -3,6 +3,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import React, { useEffect, useState } from "react";
 import { getItemWithTimeout } from "../../auth/setTimeOut";
 import { Box, Button, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from "@mui/material";
+import { URL_FETCH_AZURE_SERVER } from "../../../config";
 const TrainerSchedule = () => {
     const [schedules, setSchedules] = useState([]);
     const [open, setOpen] = useState(false);
@@ -20,7 +21,7 @@ const TrainerSchedule = () => {
         const accessToken = getItemWithTimeout('token');
         const email = !accessToken ? null : JSON.parse(atob(accessToken.split('.')[1]))?.email;
         if (!email) return;
-        fetch(`http://localhost:8080/trainer/get-employee-by/${email}`, {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-employee-by/${email}`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -31,7 +32,7 @@ const TrainerSchedule = () => {
             if (!response.ok) throw new Error("");
             return response.json();
         }).then(employee => {
-            fetch(`http://localhost:8080/staff/view-trainer-schedule?empId=${employee.empId}`, {
+            fetch(`${URL_FETCH_AZURE_SERVER}staff/view-trainer-schedule?empId=${employee.empId}`, {
                 method: 'GET',
                 headers: {
                     Accept: 'application/json',

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import './ResetPassword.css';
+import { URL_FETCH_AZURE_SERVER } from '../../config';
 
 export default function ResetPassword() {
   const [password, setPassword] = useState('');
@@ -17,7 +18,7 @@ export default function ResetPassword() {
   
     if (tokenFromURL) {
       // Thực hiện kiểm tra token bằng cách gửi yêu cầu đến máy chủ
-      fetch(`http://localhost:8080/forgot/check-token?token=${tokenFromURL}`, {
+      fetch(`${URL_FETCH_AZURE_SERVER}forgot/check-token?token=${tokenFromURL}`, {
         method: 'POST'
       })
         .then((response) => {
@@ -65,7 +66,7 @@ export default function ResetPassword() {
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/forgot/reset_password?token=${tokenFromURL}`, {
+      const response = await fetch(`${URL_FETCH_AZURE_SERVER}forgot/reset_password?token=${tokenFromURL}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

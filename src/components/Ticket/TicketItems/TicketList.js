@@ -14,6 +14,7 @@ import FormBuy from "../FormBuy/FormBuy";
 import Loading from "../Loading/Loading";
 import { green } from "@mui/material/colors";
 import { defaultTheme } from "../../Theme/Theme";
+import { URL_FETCH_AZURE_SERVER } from "../../../config";
 
 
 export default function TicketList() {
@@ -24,7 +25,7 @@ export default function TicketList() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/user/get-ticket")
+      .get(`${URL_FETCH_AZURE_SERVER}user/get-ticket`)
       .then((response) => {
         setTickets(response.data);
       })

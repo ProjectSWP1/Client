@@ -17,6 +17,7 @@ import { Copyright, defaultTheme } from "./../Theme/Theme.js";
 import axios from 'axios';
 import useAuth from '../auth/auth.js';
 import { NEW_TIMEOUT_IN_SECONDS, setItemWithTimeout } from "../auth/setTimeOut.js";
+import { URL_FETCH_AZURE_SERVER } from "../../config.js";
 
 
 export default function SignIn() {
@@ -46,7 +47,7 @@ export default function SignIn() {
     setLoading(true);
 
     try {
-      const response = await API.post('http://localhost:8080/user/login', { email, password });
+      const response = await API.post(`${URL_FETCH_AZURE_SERVER}user/login`, { email, password });
       
       if (response.data.account != null) {
         const token = response.data.jwt

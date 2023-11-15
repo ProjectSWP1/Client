@@ -2,11 +2,30 @@ import { Button, Container, InputLabel, MenuItem, Paper, Select, TableContainer 
 import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
 import Swal from 'sweetalert2';
+import { URL_FETCH_AZURE_SERVER } from '../../../config';
 export default function ZooTrainer() {
     const [zooTrainers, setZooTrainers] = useState([]);
     const [currentUpdatedTrainerEmail, setTrainerEmail] = useState("");
     const [selectedRole, setSelectedRole] = useState("");
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
+
+    useEffect(() => {
+        fetch(`${URL_FETCH_AZURE_SERVER}staff/view-trainer`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token,
+            }
+        }).then(response => {
+            if (!response.ok) return [];
+            return response.json();
+        }).then(data => {
+            setZooTrainers(data);
+            console.log(data);
+        })
+    }, []);
+
     const handleSaveRole = () => {
         if (selectedRole.length === 0) {
             Swal.fire({
@@ -29,7 +48,7 @@ export default function ZooTrainer() {
                 const accountDto = {
                     email: currentUpdatedTrainerEmail
                 };
-                fetch(`http://localhost:8080/staff/modify-trainer?newRole=${selectedRole}`, {
+                fetch(`${URL_FETCH_AZURE_SERVER}staff/modify-trainer?newRole=${selectedRole}`, {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -61,22 +80,6 @@ export default function ZooTrainer() {
             }
         })
     }
-
-    useEffect(() => {
-        fetch('http://localhost:8080/staff/view-trainer', {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token,
-            }
-        }).then(response => {
-            if (!response.ok) return [];
-            return response.json();
-        }).then(data => {
-            setZooTrainers(data);
-        })
-    }, []);
 
     const columns = [
         {

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './VerifyEmail.css'
 import { useNavigate, useLocation } from 'react-router-dom'
 import Swal from 'sweetalert2';
+import { URL_FETCH_AZURE_SERVER } from '../../config';
 
 export default function VerifyEmail() {
   const location = useLocation();
@@ -11,7 +12,7 @@ export default function VerifyEmail() {
   const [otp, setOtp] = useState('');
 
   const handleSubmit = () => {
-    const url = `http://localhost:8080/user/verify?email=${email}&otp=${otp}`;
+    const url = `${URL_FETCH_AZURE_SERVER}user/verify?email=${email}&otp=${otp}`;
     fetch(url, {
       method: 'PUT'
     }).then(response => {

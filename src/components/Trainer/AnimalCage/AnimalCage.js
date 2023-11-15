@@ -7,6 +7,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
+import { URL_FETCH_AZURE_SERVER } from '../../../config';
+
 export default function AnimalCage() {
     const [cages, setCages] = useState([]);
     const [zooAreas, setZooAreas] = useState([]);
@@ -20,7 +22,7 @@ export default function AnimalCage() {
     const [popUpTitle, setPopupTitle] = useState(ADD_CAGE_TITLE);
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
     useEffect(() => {
-        fetch('http://localhost:8080/trainer/get-cage', {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-cage`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -34,7 +36,7 @@ export default function AnimalCage() {
             console.log(data);
             setCages(data);
         })
-        fetch('http://localhost:8080/trainer/get-zoo-area', {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-zoo-area`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -90,7 +92,7 @@ export default function AnimalCage() {
             capacity: capacity,
             zoo_AreaID: selectedZooArea
         }
-        fetch('http://localhost:8080/trainer/create-cage', {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/create-cage`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -137,7 +139,7 @@ export default function AnimalCage() {
             capacity: capacity,
             zoo_AreaID: selectedZooArea
         }
-        fetch('http://localhost:8080/trainer/update-cage', {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/update-cage`, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
@@ -191,7 +193,7 @@ export default function AnimalCage() {
             confirmButtonText: 'Yes!',
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:8080/trainer/remove-cage/${id}`, {
+                fetch(`${URL_FETCH_AZURE_SERVER}trainer/remove-cage/${id}`, {
                     method: 'DELETE',
                     headers: {
                         Accept: 'application/json',

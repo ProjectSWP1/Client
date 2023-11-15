@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './ForgotPassword.css';
+import { URL_FETCH_AZURE_SERVER } from '../../config';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -14,7 +15,7 @@ export default function ForgotPassword() {
     event.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8080/forgot/send-email', {
+      const response = await fetch(`${URL_FETCH_AZURE_SERVER}forgot/send-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

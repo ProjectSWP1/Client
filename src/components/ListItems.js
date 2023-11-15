@@ -74,9 +74,9 @@ export const adminListItems = (
 
 export const staffListItems = (
   <React.Fragment>
-    <ListSubheader component="div" inset>
+    {/* <ListSubheader component="div" inset>
       Staff's function
-    </ListSubheader>
+    </ListSubheader> */}
     <ListItemButton>
       <Link to={'/staff/zooarea'} style={{
         textDecoration: 'none',
@@ -118,10 +118,7 @@ export const staffListItems = (
 
 export const trainerListItems = (
   <React.Fragment>
-    <ListSubheader component="div" inset>
-      Trainer's function
-    </ListSubheader>
-    <ListItemButton>
+    {/* <ListItemButton>
       <Link to={'/trainer/profile'} style={{
         textDecoration: 'none',
         color: 'grey',
@@ -132,7 +129,7 @@ export const trainerListItems = (
         </ListItemIcon>
         <ListItemText primary="Profile" style={{ display: 'inline-block' }} />
       </Link>
-    </ListItemButton>
+    </ListItemButton> */}
     <ListItemButton>
       <Link to={'/trainer/cages'} style={{
         textDecoration: 'none',

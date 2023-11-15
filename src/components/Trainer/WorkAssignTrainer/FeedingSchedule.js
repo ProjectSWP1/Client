@@ -17,6 +17,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import Swal from 'sweetalert2';
+import { URL_FETCH_AZURE_SERVER } from '../../../config';
 
 export default function FeedingSchedule() {
   const [feedingSchedules, setFeedingSchedules] = useState([]);
@@ -37,7 +38,7 @@ export default function FeedingSchedule() {
     : '';
 
   useEffect(() => {
-    fetch('http://localhost:8080/trainer/get-all-feedingSchedule', {
+    fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-all-feedingSchedule`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -59,7 +60,7 @@ export default function FeedingSchedule() {
   };
 
   const handleOpenPopupDetail = (id) => {
-    fetch(`http://localhost:8080/trainer/get-feedingSchedule/${id}`, {
+    fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-feedingSchedule/${id}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -101,7 +102,7 @@ export default function FeedingSchedule() {
       foodId: foodId,
       speciesId: speciesId,
     };
-    fetch('http://localhost:8080/trainer/add-feedingSchedule', {
+    fetch(`${URL_FETCH_AZURE_SERVER}trainer/add-feedingSchedule`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -120,7 +121,7 @@ export default function FeedingSchedule() {
       })
       .then(() => {
         setOpen(false);
-        fetch('http://localhost:8080/trainer/get-all-feedingSchedule', {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-all-feedingSchedule`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -156,7 +157,7 @@ export default function FeedingSchedule() {
       foodId: foodId,
       speciesId: speciesId,
     };
-    fetch('http://localhost:8080/trainer/update-feedingSchedule', {
+    fetch(`${URL_FETCH_AZURE_SERVER}trainer/update-feedingSchedule`, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
@@ -175,7 +176,7 @@ export default function FeedingSchedule() {
       })
       .then(() => {
         setOpen(false);
-        fetch(`http://localhost:8080/trainer/get-feedingSchedule/${scheduleDto.feedScheduleId}`, {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-feedingSchedule/${scheduleDto.feedScheduleId}`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
@@ -221,7 +222,7 @@ export default function FeedingSchedule() {
       confirmButtonText: 'Yes!',
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:8080/trainer/remove-feedingSchedule/${id}`, {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/remove-feedingSchedule/${id}`, {
           method: 'DELETE',
           headers: {
             Accept: 'application/json',

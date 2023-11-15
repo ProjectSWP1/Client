@@ -7,6 +7,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import AnimalDetail from './AnimalDetail';
+import { URL_FETCH_AZURE_SERVER } from '../../../config';
+
 export default function Animal() {
     const genders = ["male", "female"];
     const [animals, setAnimals] = useState([]);
@@ -28,7 +30,7 @@ export default function Animal() {
     const [popUpTitle, setPopupTitle] = useState(ADD_ANIMAL_TITLE);
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
     useEffect(() => {
-        fetch('http://localhost:8080/trainer/get-animal', {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-animal`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -41,7 +43,7 @@ export default function Animal() {
         }).then(data => {
             setAnimals(data.animal);
         });
-        fetch('http://localhost:8080/trainer/get-cage/ascending', {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-cage/ascending`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -54,7 +56,7 @@ export default function Animal() {
         }).then(data => {
             setCages(data);
         });
-        fetch('http://localhost:8080/trainer/get-all-animalSpecies', {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-all-animalSpecies`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -74,7 +76,7 @@ export default function Animal() {
     };
 
     const handleOpenPopupDetail = (id) => {
-        fetch(`http://localhost:8080/trainer/get-animal/${id}`, {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-animal/${id}`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -128,7 +130,7 @@ export default function Animal() {
             description: description,
             name: name
         }
-        fetch('http://localhost:8080/trainer/create-animal', {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/create-animal`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -146,7 +148,7 @@ export default function Animal() {
         })
             .then(data => {
                 setOpen(false);
-                fetch('http://localhost:8080/trainer/get-animal', {
+                fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-animal`, {
                     method: 'GET',
                     headers: {
                         Accept: 'application/json',
@@ -183,7 +185,7 @@ export default function Animal() {
             description: description,
             name: name
         }
-        fetch('http://localhost:8080/trainer/update-animal', {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/update-animal`, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
@@ -200,7 +202,7 @@ export default function Animal() {
             return response.text();
         }).then(data => {
             setOpen(false);
-            fetch(`http://localhost:8080/trainer/get-animal/${animalDto.animalId}`, {
+            fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-animal/${animalDto.animalId}`, {
                 method: 'GET',
                 headers: {
                     Accept: 'application/json',
@@ -240,7 +242,7 @@ export default function Animal() {
             confirmButtonText: 'Yes!',
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:8080/trainer/remove-animal/${id}`, {
+                fetch(`${URL_FETCH_AZURE_SERVER}trainer/remove-animal/${id}`, {
                     method: 'DELETE',
                     headers: {
                         Accept: 'application/json',

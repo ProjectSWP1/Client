@@ -17,6 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { URL_FETCH_AZURE_SERVER } from "../../../config";
 
 const style = {
   position: "absolute",
@@ -91,7 +92,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
 
     try {
       const response = await axios.get(
-        `http://localhost:8080/voucher/id/${voucherIdInput}`,
+        `${URL_FETCH_AZURE_SERVER}voucher/id/${voucherIdInput}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -152,7 +153,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
       visitDate: ticket.visitDate,
       description: ticket.description,
     };
-    fetch("http://localhost:8080/order/create-order", {
+    fetch(`${URL_FETCH_AZURE_SERVER}order/create-order`, {
       method: "POST",
       headers: {
         Accept: "application/json",

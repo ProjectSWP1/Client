@@ -10,6 +10,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { URL_FETCH_AZURE_SERVER } from '../../../config';
 
 export default function ManageAccount() {
   const [accounts, setAccounts] = useState([])
@@ -46,7 +47,7 @@ export default function ManageAccount() {
   const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
   const currentAcc = JSON.parse(atob(token.split('.')[1]))
   useEffect(() => {
-    fetch('http://localhost:8080/admin/getAccount', {
+    fetch(`${URL_FETCH_AZURE_SERVER}admin/getAccount`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -64,7 +65,7 @@ export default function ManageAccount() {
       // setAccounts(data)
     })
 
-    fetch('http://localhost:8080/trainer/get-zoo-area', {
+    fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-zoo-rea`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -119,7 +120,7 @@ export default function ManageAccount() {
     }
     // const roleID = role
     // }
-    fetch(`http://localhost:8080/admin/create-account?roleId=${role}&zooArea_Id=${selectedZooArea}`, {
+    fetch(`${URL_FETCH_AZURE_SERVER}admin/create-accunt?roleId=${role}&zooArea_Id=${selectedZooArea}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -176,7 +177,7 @@ export default function ManageAccount() {
     const accountDto = {
       email: email
     }
-    fetch(`http://localhost:8080/admin/assignRole?roleId=${role}`, {
+    fetch(`${URL_FETCH_AZURE_SERVER}admin/assignRoleroleId=${role}`, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
@@ -221,7 +222,7 @@ export default function ManageAccount() {
       confirmButtonText: 'Yes!',
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:8080/admin/deactivate-account/${email}`, {
+        fetch(`${URL_FETCH_AZURE_SERVER}admin/deactivateaccount/${email}`, {
           method: 'PUT',
           headers: {
             Accept: 'application/json',

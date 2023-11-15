@@ -12,6 +12,7 @@ import { Copyright, defaultTheme } from "../Theme/Theme.js";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import CircularProgress from "@mui/material/CircularProgress";
+import { URL_FETCH_AZURE_SERVER } from "../../config.js";
 
 export default class Confirm extends Component {
   state = {
@@ -52,7 +53,7 @@ export default class Confirm extends Component {
 
     console.log(payload);
     // Make a POST request to the backend to submit the registration data
-    fetch("http://localhost:8080/user/register", {
+    fetch(`${URL_FETCH_AZURE_SERVER}user/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -72,7 +73,7 @@ export default class Confirm extends Component {
       .then((data) => {
         // Handle the response from the backend, if needed
         //   alert(`Register success!! Welcome ${values.email}`);
-        return fetch("http://localhost:8080/user/send-email", {
+        return fetch('${URL_FETCH_AZURE_SERVER}user/send-email', {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

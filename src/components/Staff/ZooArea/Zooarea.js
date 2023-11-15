@@ -1,11 +1,13 @@
 import { Container, Paper, TableContainer } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
+import { URL_FETCH_AZURE_SERVER } from '../../../config';
+
 export default function ZooArea() {
   const [zooAreas, setZooAreas] = useState([]);
   const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
   useEffect(() => {
-    fetch('http://localhost:8080/trainer/get-zoo-area', {
+    fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-zoo-area`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -13,10 +15,12 @@ export default function ZooArea() {
         'Authorization': "Bearer " + token,
       }
     }).then(response => {
-      if(!response.ok) return [];
+      if (!response.ok) return [];
       return response.json();
     }).then(data => {
-      setZooAreas(data);
+      const sortedZooAreas = data.sort((a, b) => a.zooAreaId - b.zooAreaId);
+      setZooAreas(sortedZooAreas);
+
     })
   }, []);
 
@@ -51,18 +55,18 @@ export default function ZooArea() {
       overflow: 'auto',
     }}>
       <TableContainer component={Paper} sx={{ mt: '100px' }}>
-      <DataTable
-        columns={columns}
-        data={zooAreas.map(item => ({
-          ...item,
-        }))}
-        title="Zoo Area"
-        pagination
-        
-        keyField='zooAreaId'
-        paginationPerPage={5} // Number of rows per page
-        paginationRowsPerPageOptions={[5, 10, 20, 50]} // Rows per page options
-      />
+        <DataTable
+          columns={columns}
+          data={zooAreas.map(item => ({
+            ...item,
+          }))}
+          title="Zoo Area"
+          pagination
+
+          keyField='zooAreaId'
+          paginationPerPage={5} // Number of rows per page
+          paginationRowsPerPageOptions={[5, 10, 20, 50]} // Rows per page options
+        />
       </TableContainer>
     </Container>
   )

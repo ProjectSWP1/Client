@@ -6,6 +6,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import { URL_FETCH_AZURE_SERVER } from '../../../config';
 export default function AnimalSpecies() {
     const [species, setSpecies] = useState([]);
     const [groups, setGroups] = useState("");
@@ -18,7 +19,7 @@ export default function AnimalSpecies() {
     const [changed, setChanged] = useState(false)
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
     useEffect(() => {
-        fetch('http://localhost:8080/trainer/get-all-animalSpecies', {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-all-animalSpecies`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -63,7 +64,7 @@ export default function AnimalSpecies() {
             groups: groups,
             name: name
         }
-        fetch('http://localhost:8080/trainer/create-animal-species', {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/create-animal-species`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -103,7 +104,7 @@ export default function AnimalSpecies() {
             groups: groups,
             name: name
         }
-        fetch('http://localhost:8080/trainer/update-animal-species', {
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/update-animal-species`, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
@@ -151,7 +152,7 @@ export default function AnimalSpecies() {
             confirmButtonText: 'Yes!',
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:8080/trainer/remove-animal-species/${id}`, {
+                fetch(`${URL_FETCH_AZURE_SERVER}trainer/remove-animal-species/${id}`, {
                     method: 'DELETE',
                     headers: {
                         Accept: 'application/json',
