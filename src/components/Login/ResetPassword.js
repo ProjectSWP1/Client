@@ -30,7 +30,7 @@ export default function ResetPassword() {
             setMessage('Invalid token or your link has expired.');
             setShowMessage(true);
             setTimeout(() => {
-              window.location.href = 'http://localhost:3000'; // Thực hiện điều hướng đến localhost:3000
+              window.location.href = 'https://zookay-web.vercel.app'; // Thực hiện điều hướng đến homepage
             }, 3000); // Chuyển hướng sau 3 giây
           }
         })
@@ -78,7 +78,7 @@ export default function ResetPassword() {
         setMessage('You have changed your password successfully.');
         setShowMessage(true);
 
-        window.location.href = 'http://localhost:3000/login';
+        window.location.href = 'https://zookay-web.vercel.app/login';
       } else {
         throw new Error('An error occurred while resetting the password.');
       }

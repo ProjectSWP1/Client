@@ -15,7 +15,8 @@ export default function TicketList() {
   const [userEmail, setUserEmail] = useState(null);
   const [_phoneNumber, set_PhoneNumber] = useState(null);
   const navigate = useNavigate();
-
+  
+  
   useEffect(() => {
     const accessToken = localStorage.getItem("token");
     if (accessToken) {
@@ -31,7 +32,7 @@ export default function TicketList() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/user/get-ticket")
+      .get("https://zookay.azurewebsites.net/user/get-ticket")
       .then((response) => {
         setTickets(response.data);
       })
@@ -43,7 +44,7 @@ export default function TicketList() {
 
   const getMemberByEmail = (email) => {
     axios
-      .get(`http://localhost:8080/get-member-by-email/${email}`, {
+      .get(`https://zookay.azurewebsites.net/get-member-by-email/${email}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
@@ -96,7 +97,7 @@ export default function TicketList() {
   
     // Send a POST request to create the order
     axios
-      .post("http://localhost:8080/order/create-order", orderData, {
+      .post("https://zookay.azurewebsites.net/order/create-order", orderData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
