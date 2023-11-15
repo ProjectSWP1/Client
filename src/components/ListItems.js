@@ -57,7 +57,7 @@ export const adminListItems = (
         <ListItemText primary="Manage Account" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
-    {/* <ListItemButton>
+    <ListItemButton>
       <Link to={'/admin/manage-employee'} style={{
         textDecoration: 'none',
         color: 'grey',
@@ -68,7 +68,7 @@ export const adminListItems = (
         </ListItemIcon>
         <ListItemText primary="Manage Employee" style={{ display: 'inline-block' }} />
       </Link>
-    </ListItemButton> */}
+    </ListItemButton>
   </React.Fragment>
 );
 

@@ -1,0 +1,10 @@
+.qualification-img {
+    display: flex;
+    justify-content: center;
+}
+@media (max-width: 1250px) {
+    .qualification-img img {
+        width: 80% !important;
+        height: 80% !important;
+    }
+}

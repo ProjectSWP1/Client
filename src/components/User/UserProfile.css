@@ -1,4 +1,4 @@
-.profile-container{
+/* .profile-container{
     padding-bottom: 50px;
     display: flex;
     justify-content: center;
@@ -13,7 +13,6 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    /* width: 100%; */
     background-color: rgb(239, 240, 223);
     box-shadow: 4px -1px 16px 1px grey ;
     width: 80%;
@@ -26,16 +25,15 @@
     margin-top: 10px;
 }
 .profile-home-btn{
-    /* font-size: 0.5cm !important; */
+   
     padding: 0 10px !important;
-    /* background-color: red !important; */
+
 }
 .profile-home-btn:hover {
     color: rgb(23, 176, 23) !important;
 }
 
 .profile-body{
-    /* margin-top: 10px; */
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -50,7 +48,7 @@
     font-weight: bold;
     text-align: center;
     width: 100%;
-    /* margin-top: 30px; */
+
 }
 
 .profile-left{
@@ -107,9 +105,7 @@
     justify-content: center;
 }
 
-/* .css-fd5v35-MuiInputBase-root-MuiOutlinedInput-root{
-    width: 730px !important;
-} */
+
 
 
 @media (max-width: 1250px) {
@@ -125,9 +121,7 @@
         width: 570px !important 
     }
 
-    /* .css-fd5v35-MuiInputBase-root-MuiOutlinedInput-root{
-        width: 570px !important;
-    } */
+
 }
 
 @media (max-width: 1147px) {
@@ -143,9 +137,6 @@
         width: 470px !important 
     }
 
-    /* .css-fd5v35-MuiInputBase-root-MuiOutlinedInput-root{
-        width: 470px !important;
-    } */
 }
 
 @media (max-width: 1020px) {
@@ -159,6 +150,193 @@
     }
     .profile-left{
         align-items: center;
+    }
+    .profile-left img{
+        margin-left: 0;
+    }
+
+    .profile-form{
+        justify-content: center;
+    }
+}
+@media (max-width: 700px){
+    .text-profile{
+        width: 370px !important;
+    }
+
+    .radio-profile{
+        width: 370px !important 
+    }
+}
+
+@media (max-width: 570px){
+    .text-profile{
+        width: 270px !important;
+    }
+
+    .radio-profile{
+        width: 270px !important 
+    }
+} */
+
+
+.profile-container{
+    padding-bottom: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 150vh;
+    background-image: url(https://img.freepik.com/free-vector/detailed-jungle-background_23-2148953379.jpg?size=626&ext=jpg&ga=GA1.1.1826414947.1699056000&semt=ais);
+}
+
+
+.profile{
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    /* width: 100%; */
+    background-color: rgb(239, 240, 223);
+    box-shadow: 4px -1px 16px 1px grey ;
+    width: 80%;
+    height: auto;
+}
+
+.profile-header{
+    width: 100%;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+.profile-home-btn{
+    /* font-size: 0.5cm !important; */
+    padding: 0 10px !important;
+    /* background-color: red !important; */
+}
+.profile-home-btn:hover {
+    color: rgb(23, 176, 23) !important;
+}
+
+.profile-body{
+    /* margin-top: 10px; */
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    background-color: rgb(239, 240, 223);
+}
+
+.profile-title {
+    font-size: 0.85cm;
+    color: darkgreen;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    /* margin-top: 30px; */
+}
+
+.profile-left{
+    width: 30%;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    align-content: space-around;
+    flex-wrap: wrap
+}
+.profile-left img{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+.profile-left-btn{
+    margin-top: 20px !important;
+    width: 90%;
+    background-color: rgba(27, 94, 32, 0.04) !important;
+}
+.css-1m5hcby-MuiButtonBase-root-MuiButton-root:hover{
+    background-color: rgb(236, 239, 230) !important;
+}
+
+
+.profile-right{
+    margin-top: 10px;
+    width: 70%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.profile-form{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.text-profile{
+    width: 730px !important;
+}
+
+.radio-profile{
+    width: 730px !important
+}
+.profile-right-btn{
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+/* .css-fd5v35-MuiInputBase-root-MuiOutlinedInput-root{
+    width: 730px !important;
+} */
+
+
+@media (max-width: 1250px) {
+    .text-profile{
+        width: 570px !important;
+    }
+
+    .radio-profile{
+        width: 570px !important 
+    }
+
+    /* .css-fd5v35-MuiInputBase-root-MuiOutlinedInput-root{
+        width: 570px !important;
+    } */
+}
+
+@media (max-width: 1147px) {
+    .text-profile{
+        width: 470px !important;
+    }
+
+    .radio-profile{
+        width: 470px !important 
+    }
+
+    /* .css-fd5v35-MuiInputBase-root-MuiOutlinedInput-root{
+        width: 470px !important;
+    } */
+}
+
+@media (max-width: 1020px) {
+    .profile-container{
+        height: 200vh;
+    }
+    .profile-left img{
+        margin-left: 80px;
+    }
+
+    .profile-body{
+        flex-direction: column;
+        align-items: center;
+    }
+    .profile-left{
+        align-items: center;
+        width: 50%;
     }
     .profile-left img{
         margin-left: 0;

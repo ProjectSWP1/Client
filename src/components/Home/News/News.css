@@ -1,8 +1,13 @@
+.newImage {
+  margin-bottom: 50px;
+}
+
 .news-title {
   font-size: 1.4cm;
   font-weight: bold;
   text-align: center;
-  color: rgb(83, 105, 49)
+  color: rgb(83, 105, 49);
+  margin-bottom: 80px;
 }
 
 .news-container {
