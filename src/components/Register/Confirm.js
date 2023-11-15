@@ -73,7 +73,7 @@ export default class Confirm extends Component {
       .then((data) => {
         // Handle the response from the backend, if needed
         //   alert(`Register success!! Welcome ${values.email}`);
-        return fetch('${URL_FETCH_AZURE_SERVER}user/send-email', {
+        return fetch(`${URL_FETCH_AZURE_SERVER}user/send-email`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
