@@ -20,7 +20,7 @@ export default function StripePayment() {
 
   useEffect(() => {
     // First, fetch the order by email to get the order ID
-    fetch(`${URL_FETCH_AZURE_SERVER}find-order-by-email/` + userEmail)
+    fetch(`${URL_FETCH_AZURE_SERVER}/order/find-order-by-email/` + userEmail)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
