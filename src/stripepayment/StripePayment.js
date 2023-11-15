@@ -4,6 +4,8 @@ import { Elements } from "@stripe/react-stripe-js";
 import { useLocation } from "react-router-dom";
 
 import CheckoutForm from "./CheckoutForm";
+import { URL_FETCH_AZURE_SERVER } from '../config.js';
+
 
 const stripePromise = loadStripe(
   "pk_test_51NyBn2FupeTxyP9y9poEP8oX5pPErTIvqmPpv3SeSXAFYOUVREsvnCRnmeQy7npxpR7SH3eRIQ4q14JTm5BHHtBK005HxUm2qZ"
@@ -18,7 +20,7 @@ export default function StripePayment() {
 
   useEffect(() => {
     // First, fetch the order by email to get the order ID
-    fetch("https://zookay.azurewebsites.net/find-order-by-email/" + userEmail)
+    fetch(`${URL_FETCH_AZURE_SERVER}find-order-by-email/` + userEmail)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
@@ -31,7 +33,7 @@ export default function StripePayment() {
         setOrderData(data);
 
         // After obtaining the orderID, make the second fetch request for clientSecret
-        fetch("https://zookay.azurewebsites.net/user/create-payment-intent", {
+        fetch(`${URL_FETCH_AZURE_SERVER}user/create-payment-intent`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ orderID: orderID }),
@@ -47,7 +49,7 @@ export default function StripePayment() {
             setClientSecret(data.clientSecret);
 
             fetch(
-              "https://zookay.azurewebsites.net/qrcode/generateAndDownloadQRCode/350/350",
+              `${URL_FETCH_AZURE_SERVER}qrcode/generateAndDownloadQRCode/350/350`,
               {
                 method: "POST",
                 headers: {

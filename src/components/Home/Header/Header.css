@@ -204,3 +204,55 @@
         transition: 0.3s;
     }
 }
+
+@media (max-width: 768px) {
+    .nav-logo {
+        margin-left: 1rem; /* Adjust margin for smaller screens */
+    }
+
+    .nav-menu {
+        display: none; /* Hide the menu by default on smaller screens */
+    }
+
+    .btn-toggle-menu {
+        display: block; /* Display the toggle button */
+    }
+
+    .btn-toggle-menu:checked ~ .nav-menu {
+        height: auto; /* Expand the menu when the toggle button is checked */
+    }
+
+    .nav-menu__list {
+        flex-direction: column; /* Stack menu items vertically */
+        align-items: center;
+        text-align: center;
+        background-color: #1ba340; /* Add background color to the menu */
+        position: absolute;
+        top: 80px; /* Adjust the top position to avoid overlapping with the header */
+        width: 100%;
+        z-index: 998; /* Adjust z-index to make sure it's above the header */
+        transition: 0.3s;
+        overflow: hidden;
+    }
+
+    .nav-menu__item {
+        padding: 1rem 0; /* Adjust padding for better spacing */
+    }
+
+    .nav-menu__link {
+        font-size: 1.2rem; /* Adjust font size for smaller screens */
+    }
+
+    .toggle-menu-icon {
+        display: block; /* Display the toggle menu icon */
+    }
+
+    .toggle-menu-icon span {
+        width: 25px; /* Adjust width of the menu icon bars */
+    }
+
+    .toggle-menu-icon span::before,
+    .toggle-menu-icon span::after {
+        width: 25px; /* Adjust width of the menu icon bars */
+    }
+}

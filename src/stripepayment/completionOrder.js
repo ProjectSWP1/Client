@@ -6,6 +6,7 @@ import { defaultTheme } from "../components/Theme/Theme";
 import PaidIcon from '@mui/icons-material/Paid';
 import HomeIcon from '@mui/icons-material/Home';
 import ReviewsIcon from '@mui/icons-material/Reviews';
+import { URL_FETCH_AZURE_SERVER } from '../config.js';
 
 export default function CompleteOrder() {
   const location = useLocation();
@@ -16,7 +17,7 @@ export default function CompleteOrder() {
 
   useEffect(() => {
     if (orderID) {
-      fetch(`http://localhost:8080/order/get-order/${orderID}`)
+      fetch(`${URL_FETCH_AZURE_SERVER}order/get-order/${orderID}`)
         .then((res) => {
           if (!res.ok) {
             throw new Error(`HTTP error! Status: ${res.status}`);

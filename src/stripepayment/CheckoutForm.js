@@ -10,6 +10,7 @@ import { Button, ThemeProvider, Typography } from "@mui/material";
 import { defaultTheme, Copyright } from "../components/Theme/Theme";
 import Header from "../components/Home/Header/Header.js";
 import HomeIcon from '@mui/icons-material/Home';
+import { URL_FETCH_AZURE_SERVER } from '../config.js';
 
 export default function CheckoutForm({ orderData, intentID }) {
   const [message, setMessage] = useState(null);
@@ -57,7 +58,7 @@ export default function CheckoutForm({ orderData, intentID }) {
   }, []);
 
   const handleBeforeUnloadConfirm = async () => {
-    const response = await fetch(`http://localhost:8080/user/cancel-payment/${orderData.orderID}`, {
+    const response = await fetch(`${URL_FETCH_AZURE_SERVER}user/cancel-payment/${orderData.orderID}`, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
@@ -144,7 +145,7 @@ export default function CheckoutForm({ orderData, intentID }) {
     } else {
 
       // fetch confirm-payment here
-      fetch('http://localhost:8080/user/confirm-payment', {
+      fetch(`${URL_FETCH_AZURE_SERVER}user/confirm-payment`, {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
