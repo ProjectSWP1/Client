@@ -57,7 +57,7 @@ export default function CheckoutForm({ orderData, intentID }) {
   }, []);
 
   const handleBeforeUnloadConfirm = async () => {
-    const response = await fetch(`http://localhost:8080/user/cancel-payment/${orderData.orderID}`, {
+    const response = await fetch(`https://zookay.azurewebsites.net/user/cancel-payment/${orderData.orderID}`, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
@@ -144,7 +144,7 @@ export default function CheckoutForm({ orderData, intentID }) {
     } else {
 
       // fetch confirm-payment here
-      fetch('http://localhost:8080/user/confirm-payment', {
+      fetch('https://zookay.azurewebsites.net/user/confirm-payment', {
         method: 'PUT',
         headers: {
           Accept: 'application/json',

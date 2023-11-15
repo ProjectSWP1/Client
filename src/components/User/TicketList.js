@@ -3,7 +3,7 @@ import axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from 'react-router';
-import { URL_FETCH_AZURE_SERVER } from '../../../config';
+
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function TicketList() {
@@ -15,8 +15,8 @@ export default function TicketList() {
   const [userEmail, setUserEmail] = useState(null);
   const [_phoneNumber, set_PhoneNumber] = useState(null);
   const navigate = useNavigate();
-
-  const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
+  
+  
   useEffect(() => {
     const accessToken = localStorage.getItem("token");
     if (accessToken) {
@@ -97,8 +97,10 @@ export default function TicketList() {
   
     // Send a POST request to create the order
     axios
-      .post(`${URL_FETCH_AZURE_SERVER}order/create-order?token=${token}`, orderData, {
-       
+      .post("https://zookay.azurewebsites.net/order/create-order", orderData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       })
       .then((response) => {
         // Handle the response data accordingly

@@ -17,7 +17,7 @@ const TrainerProfile = () => {
     useEffect(() => {
         const email = !accessToken ? null : JSON.parse(atob(accessToken.split('.')[1]))?.email;
         if (!email) return;
-        fetch(`http://localhost:8080/trainer/get-employee-by/${email}`, {
+        fetch(`https://zookay.azurewebsites.net/trainer/get-employee-by/${email}`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -53,7 +53,7 @@ const TrainerProfile = () => {
         employeeDTO.zoo_areaID = employee?.zooArea?.zooAreaId;
         employeeDTO.managedByEmpID = employee?.managedByEmp?.empId
         console.log(employeeDTO);
-        fetch(`http://localhost:8080/trainer/update-profile`, {
+        fetch(`https://zookay.azurewebsites.net/trainer/update-profile`, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',

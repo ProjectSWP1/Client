@@ -16,7 +16,7 @@ export default function CompleteOrder() {
 
   useEffect(() => {
     if (orderID) {
-      fetch(`http://localhost:8080/order/get-order/${orderID}`)
+      fetch(`https://zookay.azurewebsites.net/order/get-order/${orderID}`)
         .then((res) => {
           if (!res.ok) {
             throw new Error(`HTTP error! Status: ${res.status}`);
