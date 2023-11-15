@@ -18,7 +18,7 @@ export default function StripePayment() {
 
   useEffect(() => {
     // First, fetch the order by email to get the order ID
-    fetch("http://localhost:8080/order/find-order-by-email/" + userEmail)
+    fetch("https://zookay.azurewebsites.net/find-order-by-email/" + userEmail)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
@@ -31,7 +31,7 @@ export default function StripePayment() {
         setOrderData(data);
 
         // After obtaining the orderID, make the second fetch request for clientSecret
-        fetch("http://localhost:8080/user/create-payment-intent", {
+        fetch("https://zookay.azurewebsites.net/user/create-payment-intent", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ orderID: orderID }),
@@ -47,7 +47,7 @@ export default function StripePayment() {
             setClientSecret(data.clientSecret);
 
             fetch(
-              "http://localhost:8080/qrcode/generateAndDownloadQRCode/350/350",
+              "https://zookay.azurewebsites.net/qrcode/generateAndDownloadQRCode/350/350",
               {
                 method: "POST",
                 headers: {
