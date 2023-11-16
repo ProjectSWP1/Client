@@ -153,7 +153,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
       visitDate: ticket.visitDate,
       description: ticket.description,
     };
-    fetch(`${URL_FETCH_AZURE_SERVER}order/create-order`, {
+    fetch(`${URL_FETCH_AZURE_SERVER}order/create-order?token=${token}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
