@@ -165,7 +165,7 @@ export default function ManageEmployee() {
             width: '150px',
             selector: employee => {
                 return (
-                    <p>{employee.managedByEmp?.empId ? employee.managedByEmp.empId : employee.managedByEmp}</p>
+                    <p>{employee.managedByEmp?.empId ? employee.managedByEmp.name : employee.managedByEmp}</p>
                 )
             }
         },
