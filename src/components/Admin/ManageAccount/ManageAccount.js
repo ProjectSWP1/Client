@@ -65,7 +65,7 @@ export default function ManageAccount() {
       // setAccounts(data)
     })
 
-    fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-zoo-rea`, {
+    fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-zoo-area`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -177,7 +177,7 @@ export default function ManageAccount() {
     const accountDto = {
       email: email
     }
-    fetch(`${URL_FETCH_AZURE_SERVER}admin/assignRoleroleId=${role}`, {
+    fetch(`${URL_FETCH_AZURE_SERVER}admin/assignRole?roleId=${role}`, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
@@ -222,7 +222,7 @@ export default function ManageAccount() {
       confirmButtonText: 'Yes!',
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`${URL_FETCH_AZURE_SERVER}admin/deactivateaccount/${email}`, {
+        fetch(`${URL_FETCH_AZURE_SERVER}admin/deactivate-account/${email}`, {
           method: 'PUT',
           headers: {
             Accept: 'application/json',
