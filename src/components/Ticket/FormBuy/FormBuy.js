@@ -41,7 +41,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
   const [userEmail, setUserEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [voucherIdInput, setVoucherIdInput] = useState("");
-  const [voucher, setVoucher] = useState([]);
+  const [voucher, setVoucher] = useState(null);
   const [numberTicketError, setNumberTicketError] = useState("");
   const [numberTicket, setNumberTicket] = useState(1); // Initialize with 1 ticket
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -52,6 +52,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
     if (numberTicket > 1) {
       setNumberTicket(numberTicket - 1);
       setNumberTicketError("");
+      console.log(`Decrement ` + numberTicket);
     }
   };
 
@@ -65,6 +66,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
   const handleIncrement = () => {
     setNumberTicket(numberTicket + 1);
     setNumberTicketError("");
+    console.log(`Increment ` + numberTicket);
   };
 
   useEffect(() => {
@@ -109,7 +111,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
         setSnackbarOpen(true);
       } else {
         // Voucher not found
-        setSnackbarMessage(`Voucher not found: ${voucherIdInput}`);
+        setSnackbarMessage(`Voucher not found: ${voucherIdInput}, this voucher does not exist or has expired.`);
         setSnackbarSeverity("error");
         setSnackbarOpen(true);
       }
@@ -126,6 +128,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
       }
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -212,8 +215,19 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
               />
             </Box>
             <Typography variant="h6">
-              Price: {newPrice === 0 ? ticket?.ticketPrice : newPrice} VNĐ
+              Price:{" "}
+              {voucher && voucher.coupon
+                ? ticket?.ticketPrice * numberTicket * (1 - voucher.coupon) // If voucher applied
+                : ticket?.ticketPrice * numberTicket}{" "}
+              VNĐ
             </Typography>
+
+            {voucher && (
+              <Typography variant="body2">
+                Applied Voucher: {voucher.coupon * 100}% off
+              </Typography>
+            )}
+
             {/* Numeric input with Material-UI components */}
             <div
               style={{
