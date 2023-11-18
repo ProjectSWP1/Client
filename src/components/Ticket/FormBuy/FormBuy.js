@@ -50,18 +50,18 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
   const [snackbarSeverity, setSnackbarSeverity] = useState("");
 
   const handleDecrement = () => {
-    if (numberTicket > 1) {
+    if (numberTicket > 1 && numberTicket < 100) {
       setNumberTicket(numberTicket - 1);
       setNumberTicketError("");
     }
   };
 
   const handleDecrementChildren = () => {
-    if (numberChildrenTicket > 0) {
+    if (numberChildrenTicket > 0 && numberTicket < 100) {
       setNumberChildrenTicket(numberChildrenTicket - 1);
       setNumberTicketError("");
     }
-  };  
+  };
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -71,13 +71,17 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
   };
 
   const handleIncrement = () => {
-    setNumberTicket(numberTicket + 1);
-    setNumberTicketError("");
+    if (numberTicket < 99) {
+      setNumberTicket(numberTicket + 1);
+      setNumberTicketError("");
+    }
   };
 
   const handleIncrementChildren = () => {
-    setNumberChildrenTicket(numberChildrenTicket + 1);
-    setNumberTicketError("");
+    if (numberTicket < 99) {
+      setNumberChildrenTicket(numberChildrenTicket + 1);
+      setNumberTicketError("");
+    }
   };
 
   useEffect(() => {
@@ -150,7 +154,12 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
     setNumberTicketError("");
 
     // Validate input fields
-    if (numberTicket < 1) {
+    if (numberTicket < 1 && numberTicket > 99) {
+      setNumberTicketError("Please enter a valid number of tickets.");
+      return;
+    }
+
+    if(numberChildrenTicket > 99) {
       setNumberTicketError("Please enter a valid number of tickets.");
       return;
     }
@@ -254,7 +263,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
                 marginTop: "20px",
               }}
             >
-              <div style={{marginTop: "20px"}}>
+              <div style={{ marginTop: "20px" }}>
                 <Button onClick={handleDecrement}>
                   <RemoveIcon />
                 </Button>
@@ -265,13 +274,13 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
                   onChange={(e) =>
                     setNumberTicket(parseInt(e.target.value, 10))
                   }
-                  InputProps={{ inputProps: { min: 1 } }}
+                  InputProps={{ inputProps: { min: 1, max: 99 } }}
                 />
                 <Button onClick={handleIncrement}>
                   <AddIcon />
                 </Button>
               </div>
-              <div style={{marginTop: "20px"}}>
+              <div style={{ marginTop: "20px" }}>
                 <Button onClick={handleDecrementChildren}>
                   <RemoveIcon />
                 </Button>
@@ -282,34 +291,40 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
                   onChange={(e) =>
                     setNumberChildrenTicket(parseInt(e.target.value, 10))
                   }
-                  InputProps={{ inputProps: { min: 0 } }}
+                  InputProps={{ inputProps: { min: 0, max: 99 } }}
                 />
                 <Button onClick={handleIncrementChildren}>
                   <AddIcon />
                 </Button>
               </div>
 
-             <div style={{marginTop: "20px", display: "flex", alignItems: "center", justifyContent: "center"}}>
-             <TextField
-                style={{ width: "300px" }}
-                id="voucher-id"
-                label="Voucher ID"
-                variant="outlined"
-                name="voucherId"
-                type="text"
-                value={voucherIdInput}
-                onChange={(e) => setVoucherIdInput(e.target.value)}
-              />
-
-              <Button
-                style={{ margin: "20px", backgroundColor: green[500] }}
-                variant="contained"
-                onClick={applyVoucher}
+              <div
+                style={{
+                  marginTop: "20px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
-                Apply Voucher
-              </Button>
-             </div>
-              
+                <TextField
+                  style={{ width: "300px" }}
+                  id="voucher-id"
+                  label="Voucher ID"
+                  variant="outlined"
+                  name="voucherId"
+                  type="text"
+                  value={voucherIdInput}
+                  onChange={(e) => setVoucherIdInput(e.target.value)}
+                />
+
+                <Button
+                  style={{ margin: "20px", backgroundColor: green[500] }}
+                  variant="contained"
+                  onClick={applyVoucher}
+                >
+                  Apply Voucher
+                </Button>
+              </div>
             </div>
             {numberTicketError && (
               <Typography variant="body2" color="error">

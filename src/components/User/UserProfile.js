@@ -269,8 +269,8 @@ export default function UserProfile() {
         return (
           <p>
             {order.orderVoucher?.coupon
-          ? `${(order.quantity * order.ticket.ticketPrice * (1 - order.orderVoucher.coupon)).toFixed(2)} VND`
-          : `${(order.quantity * order.ticket.ticketPrice).toFixed(2)} VND`}
+          ? `${(((order.quantity * order.ticket.ticketPrice) + (order.childrenQuantity * order.ticket.childrenTicketPrice)) * (1 - order.orderVoucher.coupon)).toFixed(2)} VND`
+          : `${((order.quantity * order.ticket.ticketPrice) + (order.childrenQuantity * order.ticket.childrenTicketPrice)).toFixed(2)} VND`}
       </p>
         );
       },
