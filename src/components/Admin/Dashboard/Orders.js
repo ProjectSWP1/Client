@@ -62,12 +62,12 @@ export default function Orders() {
   const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
 
   React.useEffect(() => {
-    fetch(`${URL_FETCH_AZURE_SERVER}order/get-all-order`, {
+    fetch(`${URL_FETCH_AZURE_SERVER}order/all`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': "Bearer " + token,
+        
       }
     }).then(response => {
       if (!response.ok) return [];

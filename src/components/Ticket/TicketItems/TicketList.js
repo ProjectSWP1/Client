@@ -25,7 +25,7 @@ export default function TicketList() {
 
   useEffect(() => {
     axios
-      .get(`${URL_FETCH_AZURE_SERVER}user/get-ticket`)
+      .get(`${URL_FETCH_AZURE_SERVER}user/by-visit-date-asc`)
       .then((response) => {
         setTickets(response.data);
       })
