@@ -44,6 +44,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
   const [voucher, setVoucher] = useState(null);
   const [numberTicketError, setNumberTicketError] = useState("");
   const [numberTicket, setNumberTicket] = useState(1); // Initialize with 1 ticket
+  const [numberChildrenTicket, setNumberChildrenTicket] = useState(0);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("");
@@ -52,9 +53,15 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
     if (numberTicket > 1) {
       setNumberTicket(numberTicket - 1);
       setNumberTicketError("");
-      console.log(`Decrement ` + numberTicket);
     }
   };
+
+  const handleDecrementChildren = () => {
+    if (numberChildrenTicket > 0) {
+      setNumberChildrenTicket(numberChildrenTicket - 1);
+      setNumberTicketError("");
+    }
+  };  
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -66,7 +73,11 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
   const handleIncrement = () => {
     setNumberTicket(numberTicket + 1);
     setNumberTicketError("");
-    console.log(`Increment ` + numberTicket);
+  };
+
+  const handleIncrementChildren = () => {
+    setNumberChildrenTicket(numberChildrenTicket + 1);
+    setNumberTicketError("");
   };
 
   useEffect(() => {
@@ -111,7 +122,9 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
         setSnackbarOpen(true);
       } else {
         // Voucher not found
-        setSnackbarMessage(`Voucher not found: ${voucherIdInput}, this voucher does not exist or has expired.`);
+        setSnackbarMessage(
+          `Voucher not found: ${voucherIdInput}, this voucher does not exist or has expired.`
+        );
         setSnackbarSeverity("error");
         setSnackbarOpen(true);
       }
@@ -151,11 +164,13 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
       ticketId: ticket.ticketId,
       email: email || userEmail,
       //phoneNumber: phone,
-      voucherId: voucher.voucherId, // Add voucherId
+      voucherId: voucher?.voucherId || null, // Add voucherId
       ticketQuantity: parseInt(numberTicket, 10),
+      ticketChildrenQuantity: parseInt(numberChildrenTicket, 10),
       visitDate: ticket.visitDate,
       description: ticket.description,
     };
+    console.log(ordersDto);
     fetch(`${URL_FETCH_AZURE_SERVER}order/create-order?token=${token}`, {
       method: "POST",
       headers: {
@@ -217,8 +232,11 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
             <Typography variant="h6">
               Price:{" "}
               {voucher && voucher.coupon
-                ? ticket?.ticketPrice * numberTicket * (1 - voucher.coupon) // If voucher applied
-                : ticket?.ticketPrice * numberTicket}{" "}
+                ? (ticket?.ticketPrice * numberTicket +
+                    ticket?.childrenTicketPrice * numberChildrenTicket) *
+                  (1 - voucher.coupon) // If voucher applied
+                : ticket?.ticketPrice * numberTicket +
+                  ticket?.childrenTicketPrice * numberChildrenTicket}{" "}
               VNĐ
             </Typography>
 
@@ -231,26 +249,49 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
             {/* Numeric input with Material-UI components */}
             <div
               style={{
-                display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 marginTop: "20px",
               }}
             >
-              <Button onClick={handleDecrement}>
-                <RemoveIcon />
-              </Button>
-              <TextField
-                type="number"
-                value={numberTicket}
-                onChange={(e) => setNumberTicket(parseInt(e.target.value, 10))}
-                InputProps={{ inputProps: { min: 1 } }}
-              />
-              <Button onClick={handleIncrement}>
-                <AddIcon />
-              </Button>
-              <TextField
-                style={{ width: "500px" }}
+              <div style={{marginTop: "20px"}}>
+                <Button onClick={handleDecrement}>
+                  <RemoveIcon />
+                </Button>
+                <TextField
+                  type="number"
+                  label="Adult Ticket"
+                  value={numberTicket}
+                  onChange={(e) =>
+                    setNumberTicket(parseInt(e.target.value, 10))
+                  }
+                  InputProps={{ inputProps: { min: 1 } }}
+                />
+                <Button onClick={handleIncrement}>
+                  <AddIcon />
+                </Button>
+              </div>
+              <div style={{marginTop: "20px"}}>
+                <Button onClick={handleDecrementChildren}>
+                  <RemoveIcon />
+                </Button>
+                <TextField
+                  type="number"
+                  label="Children Ticket"
+                  value={numberChildrenTicket}
+                  onChange={(e) =>
+                    setNumberChildrenTicket(parseInt(e.target.value, 10))
+                  }
+                  InputProps={{ inputProps: { min: 0 } }}
+                />
+                <Button onClick={handleIncrementChildren}>
+                  <AddIcon />
+                </Button>
+              </div>
+
+             <div style={{marginTop: "20px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+             <TextField
+                style={{ width: "300px" }}
                 id="voucher-id"
                 label="Voucher ID"
                 variant="outlined"
@@ -261,12 +302,14 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
               />
 
               <Button
-                style={{ margin: "10px", backgroundColor: green[500] }}
+                style={{ margin: "20px", backgroundColor: green[500] }}
                 variant="contained"
                 onClick={applyVoucher}
               >
                 Apply Voucher
               </Button>
+             </div>
+              
             </div>
             {numberTicketError && (
               <Typography variant="body2" color="error">

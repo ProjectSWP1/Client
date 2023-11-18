@@ -105,7 +105,7 @@ export default function UserProfile() {
   useEffect(() => {
     if (!token) return;
     fetch(
-      `${URL_FETCH_AZURE_SERVER}order/find-orders-by-email/${token.email}`,
+      `${URL_FETCH_AZURE_SERVER}order/find-success-orders-by-email/${token.email}`,
       {
         method: "GET",
         headers: {

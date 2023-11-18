@@ -21,8 +21,11 @@ export default function CompleteOrder() {
     const quantity = orderData.quantity || 0;
     const coupon = orderData.orderVoucher ? orderData.orderVoucher.coupon : 0;
 
+    const childrenTicketPrice = orderData.ticket.childrenTicketPrice;
+    const childrenQuantity = orderData.childrenQuantity;
     // Calculate the total amount without discount
-    const totalAmountWithoutDiscount = ticketPrice * quantity;
+    const totalAmountWithoutDiscount =
+      ticketPrice * quantity + childrenTicketPrice * childrenQuantity;
 
     // Calculate the discounted total
     const discountedTotal =
@@ -112,7 +115,7 @@ export default function CompleteOrder() {
                       />
                       Go back to Main Page
                     </Link>
-                    <Link className="completed-order-thank-you-btn">
+                    <Link to="/profile" className="completed-order-thank-you-btn">
                       <ReviewsIcon
                         className="completed-order-thank-you-icon"
                         style={{ marginRight: "10px" }}
@@ -146,12 +149,30 @@ export default function CompleteOrder() {
                       Your Visit Date: {orderData.ticket.visitDate}
                     </Typography>
                     <Typography variant="body1">
-                      Ticker Quantity (1 ticket/person): {orderData.quantity}
+                      Ticket Quantity (1 ticket/person): {orderData.quantity}
                     </Typography>
                   </div>
                   <div style={{ paddingBottom: "40px" }}>
-                    {/* <Typography variant="body1">Adult Ticket: </Typography>
-                    <Typography variant="body1">Children Ticket: </Typography> */}
+                    <Typography variant="body1">
+                      Adult Ticket: {orderData.quantity}{" "}
+                    </Typography>
+                    <Typography variant="body1">
+                      Children Ticket: {orderData.childrenQuantity}
+                    </Typography>
+                  </div>
+                  <div style={{ marginBottom: "10px" }}>
+                    <Typography variant="body1">
+                      Subtotal:{" "}
+                      {orderData.quantity * orderData.ticket.ticketPrice +
+                        orderData.childrenQuantity * orderData.ticket.childrenTicketPrice}{" "}
+                      VND
+                    </Typography>
+                    {orderData.orderVoucher && (
+                      <Typography variant="body1">
+                        Voucher Discount: -{orderData.orderVoucher.coupon * 100}
+                        %{" "}
+                      </Typography>
+                    )}
                   </div>
                   <div
                     style={{
@@ -159,14 +180,9 @@ export default function CompleteOrder() {
                       marginBottom: "40px",
                     }}
                   ></div>
-                  <div style={{ marginBottom: "10px" }}>
-                    {/* <Typography variant="body1">Subtotal: </Typography>
-                    <Typography variant="body1">Voucher Discount: </Typography> */}
-                  </div>
                   <div style={{ marginBottom: "270px" }}>
                     <Typography style={{ fontSize: "30px" }}>
-                      Total Price:{" "}
-                      {calculateDiscountedTotal()} VND
+                      Total Price: {calculateDiscountedTotal()} VND
                     </Typography>
                     <Typography variant="body1" style={{ color: "darkgreen" }}>
                       <PaidIcon />
