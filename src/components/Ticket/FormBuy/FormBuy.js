@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import Link from '@mui/material/Link';
 import { green } from "@mui/material/colors";
 import {
   Button,
@@ -263,7 +264,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
                 marginTop: "20px",
               }}
             >
-              <div style={{ marginTop: "20px" }}>
+              <div style={{ marginTop: "20px", display: "flex", justifyItems: "left" }}>
                 <Button onClick={handleDecrement}>
                   <RemoveIcon />
                 </Button>
@@ -279,8 +280,11 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
                 <Button onClick={handleIncrement}>
                   <AddIcon />
                 </Button>
+                <Typography mt={2}>
+                  Height from above 1.3m - {ticket?.ticketPrice} VND
+                </Typography>
               </div>
-              <div style={{ marginTop: "20px" }}>
+              <div style={{ marginTop: "20px", display: "flex", justifyItems: "left" }}>
                 <Button onClick={handleDecrementChildren}>
                   <RemoveIcon />
                 </Button>
@@ -296,6 +300,9 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
                 <Button onClick={handleIncrementChildren}>
                   <AddIcon />
                 </Button>
+                <Typography mt={2}>
+                  Height from above 1m and below 1.3m - {ticket?.childrenTicketPrice} VND
+                </Typography>
               </div>
 
               <div
@@ -324,6 +331,11 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
                 >
                   Apply Voucher
                 </Button>
+                {email ? ( "" ) : (
+                  <Link href="/register" style={{textAlign:"left"}}>
+                  Click here to register and become a member of our zoo
+                </Link>
+                )}
               </div>
             </div>
             {numberTicketError && (

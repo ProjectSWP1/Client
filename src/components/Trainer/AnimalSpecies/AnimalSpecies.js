@@ -46,7 +46,7 @@ export default function AnimalSpecies() {
         setSpecieId(id);
         setOpen(true);
         setGroups(specieById.groups);
-        setName(specieById.name);
+        setName("species.name");
         setPopupTitle(`${UPDATE_ANIMAL_SPECIES_TITLE} ${specieById.name}`);
     }
 
@@ -62,7 +62,7 @@ export default function AnimalSpecies() {
     const handleAddSave = () => {
         const animalSpeciesDto = {
             groups: groups,
-            name: name
+            name: "species.name"
         }
         fetch(`${URL_FETCH_AZURE_SERVER}trainer/create-animal-species`, {
             method: 'POST',
@@ -102,7 +102,7 @@ export default function AnimalSpecies() {
         const animalSpeciesDto = {
             speciesId: specieId,
             groups: groups,
-            name: name
+            name: "species.name"
         }
         fetch(`${URL_FETCH_AZURE_SERVER}trainer/update-animal-species`, {
             method: 'PUT',
@@ -209,15 +209,6 @@ export default function AnimalSpecies() {
         },
         {
             id: 3,
-            name: 'Name',
-            selector: specie => {
-                return (
-                    <p>{specie.name}</p>
-                )
-            }
-        },
-        {
-            id: 4,
             name: 'Actions',
             selector: specie => {
                 return (
@@ -252,16 +243,6 @@ export default function AnimalSpecies() {
                                     label="Groups"
                                     value={groups}
                                     onChange={(e) => setGroups(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    label="Name"
-                                    id="name"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
                                 />
                             </Grid>
                         </Grid>

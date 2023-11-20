@@ -13,37 +13,39 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-} from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import DataTable from 'react-data-table-component';
-import Swal from 'sweetalert2';
-import { URL_FETCH_AZURE_SERVER } from '../../../config';
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import DataTable from "react-data-table-component";
+import Swal from "sweetalert2";
+import { URL_FETCH_AZURE_SERVER } from "../../../config";
 
 export default function FeedingSchedule() {
   const [feedingSchedules, setFeedingSchedules] = useState([]);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(0);
-  const [foodId, setFoodId] = useState(null);
-  const [speciesId, setSpeciesId] = useState(null);
+  const [food, setFood] = useState(null);
+  const [species, setSpecies] = useState(null);
+  const [selectedFoodId, setSelectedFoodId] = useState("");
+  const [selectedSpeciesId, setSelectedSpeciesId] = useState("");
 
   const [open, setOpen] = useState(false);
   const [feedingScheduleDetail, setFeedingScheduleDetail] = useState(null);
   const [feedingSchedule, setFeedingSchedule] = useState(null);
 
-  const ADD_SCHEDULE_TITLE = 'Add Feeding Schedule';
-  const UPDATE_SCHEDULE_TITLE = 'Update Feeding Schedule';
+  const ADD_SCHEDULE_TITLE = "Add Feeding Schedule";
+  const UPDATE_SCHEDULE_TITLE = "Update Feeding Schedule";
 
-  const token = localStorage.getItem('token')
-    ? JSON.parse(localStorage.getItem('token')).value
-    : '';
+  const token = localStorage.getItem("token")
+    ? JSON.parse(localStorage.getItem("token")).value
+    : "";
 
   useEffect(() => {
     fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-all-feedingSchedule`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
       },
     })
       .then((response) => {
@@ -52,6 +54,36 @@ export default function FeedingSchedule() {
       })
       .then((data) => {
         setFeedingSchedules(data);
+        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-all-animal-food`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) return { feedingSchedules: [] };
+            return response.json();
+          })
+          .then((data) => {
+            setFood(data);
+            fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-all-animalSpecies`, {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token,
+              },
+            })
+              .then((response) => {
+                if (!response.ok) return { feedingSchedules: [] };
+                return response.json();
+              })
+              .then((data) => {
+                setSpecies(data);
+              });
+          });
       });
   }, []);
 
@@ -61,11 +93,11 @@ export default function FeedingSchedule() {
 
   const handleOpenPopupDetail = (id) => {
     fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-feedingSchedule/${id}`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
       },
     })
       .then((response) => response.json())
@@ -82,32 +114,32 @@ export default function FeedingSchedule() {
     setOpen(true);
     setDescription(scheduleById.description);
     setQuantity(scheduleById.quantity);
-    setFoodId(scheduleById.food.foodId);
-    setSpeciesId(scheduleById.species.speciesId);
+    setSelectedFoodId(scheduleById.food.foodId);
+    setSelectedSpeciesId(scheduleById.species.speciesId);
   };
 
   const handleOpenPopupAddAction = () => {
     setFeedingSchedule(null);
     setOpen(true);
-    setDescription('');
+    setDescription("");
     setQuantity(0);
-    setFoodId(null);
-    setSpeciesId(null);
+    setSelectedFoodId(null);
+    setSelectedSpeciesId(null);
   };
 
   const handleAddSave = () => {
     const scheduleDto = {
       description: description,
       quantity: quantity,
-      foodId: foodId,
-      speciesId: speciesId,
+      foodId: selectedFoodId,
+      speciesId: selectedSpeciesId,
     };
     fetch(`${URL_FETCH_AZURE_SERVER}trainer/add-feedingSchedule`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
       },
       body: JSON.stringify(scheduleDto),
     })
@@ -122,29 +154,29 @@ export default function FeedingSchedule() {
       .then(() => {
         setOpen(false);
         fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-all-feedingSchedule`, {
-          method: 'GET',
+          method: "GET",
           headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + token,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
           },
         })
           .then((response) => response.json())
           .then((data) => {
             setFeedingSchedules(data);
             Swal.fire({
-              title: 'Success!',
-              text: 'Add Successfully',
-              icon: 'success',
+              title: "Success!",
+              text: "Add Successfully",
+              icon: "success",
             });
           });
       })
       .catch((error) => {
         setOpen(false);
         Swal.fire({
-          title: 'Fail!',
+          title: "Fail!",
           text: `${error.message}`,
-          icon: 'error',
+          icon: "error",
         });
       });
   };
@@ -154,15 +186,15 @@ export default function FeedingSchedule() {
       feedScheduleId: feedingSchedule.feedScheduleId,
       description: description,
       quantity: quantity,
-      foodId: foodId,
-      speciesId: speciesId,
+      foodId: selectedFoodId,
+      speciesId: selectedSpeciesId,
     };
     fetch(`${URL_FETCH_AZURE_SERVER}trainer/update-feedingSchedule`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
       },
       body: JSON.stringify(scheduleDto),
     })
@@ -176,14 +208,17 @@ export default function FeedingSchedule() {
       })
       .then(() => {
         setOpen(false);
-        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-feedingSchedule/${scheduleDto.feedScheduleId}`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + token,
-          },
-        })
+        fetch(
+          `${URL_FETCH_AZURE_SERVER}trainer/get-feedingSchedule/${scheduleDto.feedScheduleId}`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+          }
+        )
           .then((response) => response.json())
           .then((data) => {
             const updatedSchedule = data;
@@ -195,39 +230,39 @@ export default function FeedingSchedule() {
               });
             });
             Swal.fire({
-              title: 'Success!',
-              text: 'Update Successfully',
-              icon: 'success',
+              title: "Success!",
+              text: "Update Successfully",
+              icon: "success",
             });
           });
       })
       .catch((error) => {
         setOpen(false);
         Swal.fire({
-          title: 'Fail!',
+          title: "Fail!",
           text: `${error.message}`,
-          icon: 'error',
+          icon: "error",
         });
       });
   };
 
   const handleDeleteAction = (id) => {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'Are you sure?',
-      icon: 'warning',
+      title: "Are you sure?",
+      text: "Are you sure?",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#2e7d32',
-      cancelButtonColor: '#DDDDDD',
-      confirmButtonText: 'Yes!',
+      confirmButtonColor: "#2e7d32",
+      cancelButtonColor: "#DDDDDD",
+      confirmButtonText: "Yes!",
     }).then((result) => {
       if (result.isConfirmed) {
         fetch(`${URL_FETCH_AZURE_SERVER}trainer/remove-feedingSchedule/${id}`, {
-          method: 'DELETE',
+          method: "DELETE",
           headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + token,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
           },
         })
           .then((response) => {
@@ -237,19 +272,21 @@ export default function FeedingSchedule() {
               });
             }
             Swal.fire({
-              title: 'Success!',
-              text: 'Delete Successfully',
-              icon: 'success',
+              title: "Success!",
+              text: "Delete Successfully",
+              icon: "success",
             });
             setFeedingSchedules((schedules) => {
-              return schedules.filter((schedule) => schedule.feedScheduleId !== id);
+              return schedules.filter(
+                (schedule) => schedule.feedScheduleId !== id
+              );
             });
           })
           .catch((error) => {
             Swal.fire({
-              title: 'Fail!',
+              title: "Fail!",
               text: `${error.message}`,
-              icon: 'error',
+              icon: "error",
             });
           });
       }
@@ -258,28 +295,40 @@ export default function FeedingSchedule() {
 
   const columns = [
     {
-      name: '#',
+      name: "#",
       selector: (schedule, index) => <p>{index + 1}</p>,
     },
     {
-      name: 'Description',
+      name: "Description",
       selector: (schedule) => <p>{schedule.description}</p>,
     },
     {
-      name: 'Quantity',
+      name: "Quantity",
       selector: (schedule) => <p>{schedule.quantity}</p>,
     },
     {
-      name: 'Actions',
+      name: "Actions",
       selector: (schedule) => (
         <div>
-          <Button variant="contained" onClick={() => handleDeleteAction(schedule.feedScheduleId)}>
+          <Button
+            style={{ width: "70px" }}
+            variant="contained"
+            onClick={() => handleDeleteAction(schedule.feedScheduleId)}
+          >
             Delete
           </Button>
-          <Button variant="contained" onClick={() => handleOpenPopupUpdateAction(schedule.feedScheduleId)}>
+          <Button
+            style={{ width: "70px" }}
+            variant="contained"
+            onClick={() => handleOpenPopupUpdateAction(schedule.feedScheduleId)}
+          >
             Update
           </Button>
-          <Button variant="contained" onClick={() => handleOpenPopupDetail(schedule.feedScheduleId)}>
+          <Button
+            style={{ width: "70px" }}
+            variant="contained"
+            onClick={() => handleOpenPopupDetail(schedule.feedScheduleId)}
+          >
             Detail
           </Button>
         </div>
@@ -291,18 +340,54 @@ export default function FeedingSchedule() {
     <Container
       sx={{
         backgroundColor: (theme) =>
-          theme.palette.mode === 'light' ? theme.palette.background.default : theme.palette.grey[900],
+          theme.palette.mode === "light"
+            ? theme.palette.background.default
+            : theme.palette.grey[900],
         flexGrow: 1,
-        height: '100vh',
-        overflow: 'auto',
+        height: "100vh",
+        overflow: "auto",
       }}
     >
-      <Dialog open={feedingScheduleDetail !== null} onClose={() => setFeedingScheduleDetail(null)}>
-        <DialogTitle>Detail</DialogTitle>
-        <DialogContent>{/* Render the detail component here */}</DialogContent>
+      <Dialog
+        open={feedingScheduleDetail !== null}
+        onClose={() => setFeedingScheduleDetail(null)}
+      >
+        <DialogTitle>Feeding Schedule Detail</DialogTitle>
+        <DialogContent>
+          <p>
+            You may feed food for animal species based on description, groups
+          </p>
+          <p>
+            <strong>Description:</strong> {feedingScheduleDetail?.description}
+          </p>
+          <p>
+            <strong>Food Details: </strong>
+          </p>
+          <ul>
+            <li>Food Quantity: {feedingScheduleDetail?.quantity}</li>
+            <li>Food Name: {feedingScheduleDetail?.food.name}</li>
+            <li>Import Date: {feedingScheduleDetail?.food.importDate}</li>
+            <li>Description: {feedingScheduleDetail?.food.description}</li>
+          </ul>
+          <p>
+            <strong>Animal Species: </strong>
+            {feedingScheduleDetail?.species.groups}
+          </p>
+          {/* Render the detail component here */}
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setFeedingScheduleDetail(null)}
+            color="primary"
+          >
+            Close
+          </Button>
+        </DialogActions>
       </Dialog>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{feedingSchedule ? UPDATE_SCHEDULE_TITLE : ADD_SCHEDULE_TITLE}</DialogTitle>
+        <DialogTitle>
+          {feedingSchedule ? UPDATE_SCHEDULE_TITLE : ADD_SCHEDULE_TITLE}
+        </DialogTitle>
         <DialogContent>
           <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -328,26 +413,58 @@ export default function FeedingSchedule() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
+                <InputLabel id="select-label-specie">Select Food</InputLabel>
+                <Select
+                  labelId="select-label"
+                  id="select"
                   fullWidth
-                  id="foodId"
-                  label="Food ID"
-                  type="number"
-                  value={foodId}
-                  onChange={(e) => setFoodId(e.target.value)}
-                />
+                  defaultValue={
+                    !food
+                      ? ""
+                      : food?.foodId
+                      ? food.foodId
+                      : food
+                  }
+                  onChange={(e) => setSelectedFoodId(e.target.value)}
+                >
+                  {food?.map((food) => {
+                    return (
+                      <MenuItem
+                        key={food.foodId}
+                        value={food.foodId}
+                      >
+                        {food.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
+                <InputLabel id="select-label-specie">Select Species</InputLabel>
+                <Select
                   fullWidth
-                  id="speciesId"
-                  label="Species ID"
-                  type="number"
-                  value={speciesId}
-                  onChange={(e) => setSpeciesId(e.target.value)}
-                />
+                  labelId="select-label-specie"
+                  id="select-specie"
+                  defaultValue={
+                    !species
+                      ? ""
+                      : species?.speciesId
+                      ? species.speciesId
+                      : species
+                  }
+                  onChange={(e) => setSelectedSpeciesId(e.target.value)}
+                >
+                  {species?.map((species) => {
+                    return (
+                      <MenuItem
+                        key={species.speciesId}
+                        value={species.speciesId}
+                      >
+                        {species.groups}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
               </Grid>
             </Grid>
           </Box>
@@ -364,7 +481,7 @@ export default function FeedingSchedule() {
           </Button>
         </DialogActions>
       </Dialog>
-      <TableContainer component={Paper} sx={{ mt: '100px' }}>
+      <TableContainer component={Paper} sx={{ mt: "100px" }}>
         <DataTable
           columns={columns}
           data={feedingSchedules.map((item) => ({ ...item }))}
@@ -374,11 +491,7 @@ export default function FeedingSchedule() {
           paginationPerPage={5} // Number of rows per page
           paginationRowsPerPageOptions={[5, 10, 20, 50]} // Rows per page options
         />
-        <Button
-          onClick={handleOpenPopupAddAction}
-          color="primary"
-          fullWidth
-        >
+        <Button onClick={handleOpenPopupAddAction} color="primary" fullWidth>
           Add
         </Button>
       </TableContainer>

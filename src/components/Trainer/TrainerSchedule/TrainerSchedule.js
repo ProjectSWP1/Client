@@ -70,12 +70,13 @@ const TrainerSchedule = () => {
                     return {
                         title: schedule.description,
                         date: schedule.workDay,
-                        id: schedule.trainerScheduleId
+                        id: schedule.trainerScheduleId,
+                        color: schedule?.shift == 1 ? '#3995b1' : '#255645',
                     }
                 })}
             />
             <Dialog open={open} onClose={() => setOpen(false)} >
-                <DialogTitle>Detail</DialogTitle>
+                <DialogTitle>Job Schedule Detail</DialogTitle>
                 <DialogContent>
                     <Box component="form" noValidate sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
@@ -84,7 +85,7 @@ const TrainerSchedule = () => {
                                     required
                                     fullWidth
                                     id="species"
-                                    label="species"
+                                    label="Species"
                                     value={schedule?.species?.groups ? schedule?.species?.groups : schedule?.species}
                                 />
                             </Grid>
@@ -102,8 +103,17 @@ const TrainerSchedule = () => {
                                     required
                                     fullWidth
                                     id="date"
-                                    label="date"
+                                    label="Date"
                                     value={schedule?.workDay}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="shift"
+                                    label="Shift"
+                                    value={schedule?.shift == 1 ? "7:00 AM - 12:00 PM" : "12:30 PM - 5:30 PM"}
                                 />
                             </Grid>
                         </Grid>
