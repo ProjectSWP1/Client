@@ -11,13 +11,19 @@ import {
   RadioGroup,
   TableContainer,
   TextField,
+  DialogActions,
+  Dialog,
+  DialogTitle,
+  DialogContent,
 } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { defaultTheme } from "../Theme/Theme";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
+import DiscountIcon from '@mui/icons-material/Discount';
 import { getItemWithTimeout } from "../auth/setTimeOut";
 import dayjs from "dayjs";
 import DataTable, { createTheme } from "react-data-table-component";
@@ -53,6 +59,8 @@ export default function UserProfile() {
   const [address, setAddress] = useState("");
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [isOrderDetailsModalOpen, setOrderDetailsModalOpen] = useState(false);
 
   const [changed, setChanged] = useState(false);
   const [openProfile, setOpenProfile] = useState(true);
@@ -226,12 +234,109 @@ export default function UserProfile() {
     }
   };
 
+  const fetchOrderDetails = (orderID) => {
+    fetch(`${URL_FETCH_AZURE_SERVER}order/get-order/${orderID}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + accessToken,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch order details");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setSelectedOrder(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const handleProfile = () => {
     setOpenProfile(true);
   };
 
   const handleOrders = () => {
     setOpenProfile(false);
+  };
+
+  const handleCloseOrderDetailsModal = () => {
+    setOrderDetailsModalOpen(false);
+  };
+
+  const viewOrderDetails = (orderID) => {
+    fetchOrderDetails(orderID);
+    setOrderDetailsModalOpen(true);
+  };
+
+  // Define the OrderDetailsModal component
+  const OrderDetailsModal = ({ order, open, onClose }) => {
+    return (
+      <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <CheckCircleIcon
+            style={{ marginTop: "10px", marginLeft: "30px", fontSize: "30px", color: "green" }}
+          />
+          <DialogTitle
+            style={{
+              fontFamily: "Trebuchet MS, sans-serif",
+              fontSize: "25px",
+              marginTop: "10px",
+              fontWeight: "bold",
+              color: "green"
+            }}
+          >
+            Order Details
+          </DialogTitle>
+        </div>
+        <h6 style={{ marginLeft: "30px" }}>Customer: {order?.email ? order.email : null}</h6>
+        <DialogContent>
+          {order && (
+            <div>
+              <hr />
+              <p><strong>Order ID:</strong> {order.orderID}</p>
+              <p><strong>Ticket:</strong></p>
+              <ul>
+                <p><strong>Adult Ticket Amount:</strong> {order.quantity} = {order.ticket.ticketPrice * order.quantity} VND</p>
+                <p><strong>Children Ticket Amount:</strong> {order.childrenQuantity} = {order.ticket.childrenTicketPrice * order.childrenQuantity} VND</p>
+              </ul>
+              <p><strong>Order Date:</strong> {order.orderDate}</p>
+              <p><strong>Date of visit: </strong> {order.ticket.visitDate}</p>
+              <p>
+                <DiscountIcon/>{" "}
+                <strong>Discount:</strong>{" "}
+                {order.orderVoucher?.coupon ? order.orderVoucher.coupon*100 + "%" : "You didn't apply discount for this payment"}
+              </p>
+              <p>
+                <strong>Total price paid:</strong>{" "}
+                {order.orderVoucher?.coupon
+                  ? `${(
+                      (order.quantity * order.ticket.ticketPrice +
+                        order.childrenQuantity *
+                          order.ticket.childrenTicketPrice) *
+                      (1 - order.orderVoucher.coupon)
+                    ).toFixed(2)} VND`
+                  : `${(
+                      order.quantity * order.ticket.ticketPrice +
+                      order.childrenQuantity * order.ticket.childrenTicketPrice
+                    ).toFixed(2)} VND`}
+              </p>
+              <hr />
+            </div>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
   };
 
   const columns = [
@@ -269,9 +374,27 @@ export default function UserProfile() {
         return (
           <p>
             {order.orderVoucher?.coupon
-          ? `${(((order.quantity * order.ticket.ticketPrice) + (order.childrenQuantity * order.ticket.childrenTicketPrice)) * (1 - order.orderVoucher.coupon)).toFixed(2)} VND`
-          : `${((order.quantity * order.ticket.ticketPrice) + (order.childrenQuantity * order.ticket.childrenTicketPrice)).toFixed(2)} VND`}
-      </p>
+              ? `${(
+                  (order.quantity * order.ticket.ticketPrice +
+                    order.childrenQuantity * order.ticket.childrenTicketPrice) *
+                  (1 - order.orderVoucher.coupon)
+                ).toFixed(2)} VND`
+              : `${(
+                  order.quantity * order.ticket.ticketPrice +
+                  order.childrenQuantity * order.ticket.childrenTicketPrice
+                ).toFixed(2)} VND`}
+          </p>
+        );
+      },
+    },
+    {
+      id: 5,
+      name: "View Details",
+      selector: (order) => {
+        return (
+          <Button onClick={() => viewOrderDetails(order.orderID)}>
+            View Details
+          </Button>
         );
       },
     },
@@ -307,6 +430,11 @@ export default function UserProfile() {
               ) : (
                 ""
               )}
+              <OrderDetailsModal
+                order={selectedOrder}
+                open={isOrderDetailsModalOpen}
+                onClose={handleCloseOrderDetailsModal}
+              />
             </div>
             <div className="profile-right">
               {openProfile ? (
