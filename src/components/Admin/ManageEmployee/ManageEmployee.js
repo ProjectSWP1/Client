@@ -58,6 +58,51 @@ export default function ManageEmployee() {
         setOpen(false);
     };
 
+    const handleDisactiveAction = (email) => {
+        setChanged(false)
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Are you sure?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#2e7d32',
+            cancelButtonColor: '#DDDDDD',
+            confirmButtonText: 'Yes!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`${URL_FETCH_AZURE_SERVER}admin/deactivate-account/${email}`, {
+                    method: 'PUT',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': "Bearer " + token,
+                    },
+                }).then(response => {
+                    if (!response.ok) {
+                        return response.text().then((message) => {
+                            throw new Error(message);
+                        });
+                    }
+                    return response.text()
+                }).then(data => {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: `${data}`,
+                        icon: 'success',
+                    });
+                    setChanged(true)
+                })
+                    .catch(error => {
+                        Swal.fire({
+                            title: 'Fail!',
+                            text: `${error.message}`,
+                            icon: 'error',
+                        });
+                    });
+            }
+        });
+    }
+
     const handleOpenPopupUpdateAction = (account) => {
         setEmployee(account)
         setSelectedZooArea(account?.zooArea?.zooAreaId || account?.zooArea)
@@ -115,7 +160,8 @@ export default function ManageEmployee() {
         {
             id: 1,
             name: 'ID',
-            selector: (employee, index) => {
+            width: '100px',
+            selector: (employee) => {
                 return (
                     <p>{employee.empId}</p>
                 )
@@ -153,9 +199,11 @@ export default function ManageEmployee() {
         {
             id: 5,
             name: 'Zoo Area',
+            width: '200px',
             selector: employee => {
                 return (
-                    <p>{employee.zooArea?.zooAreaId ? employee.zooArea.zooAreaId : employee.zooArea}</p>
+                    <p>{employee.zooArea?.zooAreaId ? employee.zooArea.description :
+                        (zooAreas.find(item => item.zooAreaId === employee.zooArea)?.description)}</p>
                 )
             }
         },
@@ -175,6 +223,7 @@ export default function ManageEmployee() {
             selector: employee => {
                 return (
                     <Box sx={{ '& button': { m: 1 } }}>
+                        <Button variant="contained" size='small' onClick={() => handleDisactiveAction(employee.email)}>Disactive</Button>
                         <Button variant="contained" size='small' onClick={() => handleOpenPopupUpdateAction(employee)}>Update</Button>
                     </Box>
                 )
@@ -234,7 +283,7 @@ export default function ManageEmployee() {
                                     <MenuItem value={null}></MenuItem>
                                     {staffAccounts.map(staff => {
                                         return (
-                                            <MenuItem key={staff.empId} value={staff.empId}>{staff.empId}</MenuItem>
+                                            <MenuItem key={staff.empId} value={staff.empId}>{staff.name}</MenuItem>
                                         )
                                     })}
                                 </Select>

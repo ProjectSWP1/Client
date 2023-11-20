@@ -5,57 +5,87 @@ import Swal from 'sweetalert2';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import { URL_FETCH_AZURE_SERVER } from '../../../config';
 
 export default function AnimalCage() {
     const [cages, setCages] = useState([]);
     const [zooAreas, setZooAreas] = useState([]);
+    const [employee, setEmployee] = useState(null);
     const [capacity, setCapacity] = useState(1);
     const [description, setDescription] = useState("");
     const [cageId, setCageId] = useState("");
     const [selectedZooArea, setSelectedZooArea] = useState("");
+
     const [open, setOpen] = useState(false);
     const ADD_CAGE_TITLE = "Add animal cage";
     const UPDATE_CAGE_TITLE = "Update animal cage";
     const [popUpTitle, setPopupTitle] = useState(ADD_CAGE_TITLE);
+    const [changed, setChanged] = useState(false)
+
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
+    const email = !token
+        ? null
+        : JSON.parse(atob(token.split(".")[1]))?.email;
+
     useEffect(() => {
-        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-cage`, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token,
-            }
-        }).then(response => {
-            if (!response.ok) return [];
-            return response.json();
-        }).then(data => {
-            console.log(data);
-            setCages(data);
-        })
-        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-zoo-area`, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token,
-            }
-        }).then(response => {
-            if (!response.ok) return [];
-            return response.json();
-        }).then(data => {
-            setZooAreas(data);
-        })
-    }, []);
+        if (email) {
+            fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-employee-by/${email}`, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token,
+                }
+            }).then(response => {
+                if (!response.ok) return { employee: null };
+                return response.json();
+            }).then(data => {
+                setEmployee(data)
+                console.log(data);
+            });
+
+            fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-zoo-area`, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token,
+                }
+            }).then(response => {
+                if (!response.ok) return [];
+                return response.json();
+            }).then(data => {
+                setZooAreas(data);
+            })
+        }
+    }, [email, token])
+
+    useEffect(() => {
+        if (employee && employee.zooArea && employee.zooArea.zooAreaId) {
+            fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-cage/${employee.zooArea.zooAreaId}`, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token,
+                }
+            }).then(response => {
+                if (!response.ok) return [];
+                return response.json();
+            }).then(data => {
+                setCages(data);
+                console.log(data);
+            })
+        }
+    }, [changed, employee]);
 
     const handleClose = () => {
         setOpen(false);
     };
 
     const handleOpenPopupUpdateAction = (id) => {
+        setChanged(false)
         const cageById = cages.filter(cage => {
             return cage.cageID === id;
         })[0];
@@ -68,6 +98,7 @@ export default function AnimalCage() {
     }
 
     const handleOpenPopupAddAction = () => {
+        setChanged(false)
         setOpen(true);
         setDescription("");
         setCapacity(1);
@@ -109,14 +140,7 @@ export default function AnimalCage() {
             return response.text();
         }).then(data => {
             setOpen(false);
-            setCages([...cages, {
-                cageID: cageDto.cageID,
-                description: cageDto.description,
-                capacity: cageDto.capacity,
-                zooArea: {
-                    zooAreaId: selectedZooArea
-                }
-            }]);
+            setChanged(true)
             Swal.fire({
                 title: 'Success!',
                 text: `${data}`,
@@ -156,17 +180,7 @@ export default function AnimalCage() {
             return response.text();
         }).then(data => {
             setOpen(false);
-            setCages(cages.map(cage => {
-                if (cage.cageID === cageDto.cageID) return {
-                    ...cage,
-                    description: cageDto.description,
-                    capacity: cageDto.capacity,
-                    zooArea: {
-                        zooAreaId: selectedZooArea
-                    }
-                };
-                return cage;
-            }));
+            setChanged(true)
             Swal.fire({
                 title: 'Success!',
                 text: `${data}`,
@@ -261,7 +275,8 @@ export default function AnimalCage() {
             name: 'Zoo Area',
             selector: cage => {
                 return (
-                    <p>{cage.zooArea?.zooAreaId ? cage.zooArea.zooAreaId : cage.zooArea}</p>
+                    <p>{cage.zooArea?.zooAreaId ? cage.zooArea.description :
+                        (zooAreas.find(item => item.zooAreaId === cage.zooArea)?.description)}</p>
                 )
             }
         },
@@ -271,8 +286,8 @@ export default function AnimalCage() {
             selector: cage => {
                 return (
                     <div>
-                        <Button variant="contained" onClick={() => handleDeleteAction(cage.cageID)}>Delete</Button>
-                        <Button variant="contained" onClick={() => handleOpenPopupUpdateAction(cage.cageID)}>Update</Button>
+                        <Button size='small' sx={{ mr: "10px" }} variant="contained" onClick={() => handleDeleteAction(cage.cageID)}>Delete</Button>
+                        <Button size='small' variant="contained" onClick={() => handleOpenPopupUpdateAction(cage.cageID)}>Update</Button>
                     </div>
                 )
             }
@@ -329,12 +344,17 @@ export default function AnimalCage() {
                                 <Select
                                     labelId="select-label"
                                     id="select"
+                                    fullWidth
                                     value={selectedZooArea}
                                     onChange={(e) => setSelectedZooArea(e.target.value)}
                                 >
                                     {zooAreas.map(area => {
                                         return (
-                                            <MenuItem key={area.zooAreaId} value={area.zooAreaId}>{area.zooAreaId}</MenuItem>
+                                            <MenuItem
+                                                // style={{
+                                                //     width: '250px'
+                                                // }}
+                                                key={area.zooAreaId} value={area.zooAreaId}>{area.description}</MenuItem>
                                         )
                                     })}
                                 </Select>
@@ -361,7 +381,7 @@ export default function AnimalCage() {
                     pagination
                     keyField='cageID'
                     paginationPerPage={5} // Number of rows per page
-                    paginationRowsPerPageOptions={[5, 10, 20, 50]} // Rows per page options
+                    paginationRowsPerPageOptions={[5, 10, 15]} // Rows per page options
                 />
                 <Button onClick={handleOpenPopupAddAction} color="primary" fullWidth>
                     Add

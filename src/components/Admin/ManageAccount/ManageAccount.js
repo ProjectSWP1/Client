@@ -210,50 +210,7 @@ export default function ManageAccount() {
     });
   }
 
-  const handleDisactiveAction = (email) => {
-    setChanged(false)
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'Are you sure?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#2e7d32',
-      cancelButtonColor: '#DDDDDD',
-      confirmButtonText: 'Yes!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        fetch(`${URL_FETCH_AZURE_SERVER}admin/deactivate-account/${email}`, {
-          method: 'PUT',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': "Bearer " + token,
-          },
-        }).then(response => {
-          if (!response.ok) {
-            return response.text().then((message) => {
-              throw new Error(message);
-            });
-          }
-          return response.text()
-        }).then(data => {
-          Swal.fire({
-            title: 'Success!',
-            text: `${data}`,
-            icon: 'success',
-          });
-          setChanged(true)
-        })
-          .catch(error => {
-            Swal.fire({
-              title: 'Fail!',
-              text: `${error.message}`,
-              icon: 'error',
-            });
-          });
-      }
-    });
-  }
+  
 
   const columns = [
     {
@@ -300,7 +257,6 @@ export default function ManageAccount() {
       selector: account => {
         return (
           <Box sx={{ '& button': { m: 1 } }}>
-            <Button variant="contained" size='small' onClick={() => handleDisactiveAction(account.email)}>Disactive</Button>
             <Button variant="contained" size='small' onClick={() => handleOpenPopupUpdateAction(account)}>Change Role</Button>
           </Box>
         )
@@ -361,6 +317,7 @@ export default function ManageAccount() {
                   <Grid item xs={6}>
                     <InputLabel id="select-label">Select role</InputLabel>
                     <Select
+                      fullWidth
                       labelId="select-label"
                       id="select"
                       value={role}
@@ -373,6 +330,7 @@ export default function ManageAccount() {
                   {role == 'ZT' ? <Grid item xs={6}>
                     <InputLabel id="select-label">Select an zoo area</InputLabel>
                     <Select
+                      fullWidth
                       labelId="select-label"
                       id="select"
                       value={selectedZooArea}
@@ -396,7 +354,7 @@ export default function ManageAccount() {
                       value={name}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <FormLabel id="gender">Gender</FormLabel>
                     <RadioGroup
                       row
@@ -409,7 +367,7 @@ export default function ManageAccount() {
                       <FormControlLabel value="male" control={<Radio />} label="Male" />
                     </RadioGroup>
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DemoContainer components={['DatePicker']} >
                         <DatePicker label="Date of Birth"
@@ -451,6 +409,7 @@ export default function ManageAccount() {
                   <Grid item xs={6}>
                     <InputLabel id="select-label">Select role</InputLabel>
                     <Select
+                      fullWidth
                       labelId="select-label"
                       id="select"
                       value={role}
@@ -466,6 +425,7 @@ export default function ManageAccount() {
                   {role == 'ZT' ? <Grid item xs={6}>
                     <InputLabel id="select-label">Select a zoo area</InputLabel>
                     <Select
+                      fullWidth
                       labelId="select-label"
                       id="select"
                       value={selectedZooArea}
@@ -473,7 +433,7 @@ export default function ManageAccount() {
                     >
                       {zooAreas.map(area => {
                         return (
-                          <MenuItem key={area.zooAreaId} value={area.zooAreaId}>{area.zooAreaId}</MenuItem>
+                          <MenuItem key={area.zooAreaId} value={area.zooAreaId}>{area.description}</MenuItem>
                         )
                       })}
                     </Select>

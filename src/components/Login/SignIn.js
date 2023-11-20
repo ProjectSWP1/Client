@@ -50,6 +50,7 @@ export default function SignIn() {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "https://zookay-web.vercel.app",
+          // "Access-Control-Allow-Origin": "http://localhost:3000",
           // Add any other necessary headers
         },
       });

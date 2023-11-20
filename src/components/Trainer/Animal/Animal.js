@@ -1,4 +1,4 @@
-import { Box, Button, Container, Grid, Paper, TableContainer, TextField, Select, MenuItem, InputLabel } from '@mui/material';
+import { Box, Button, Container, Grid, Paper, TableContainer, TextField, Select, MenuItem, InputLabel, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
 import Swal from 'sweetalert2';
@@ -12,6 +12,7 @@ import { URL_FETCH_AZURE_SERVER } from '../../../config';
 export default function Animal() {
     const genders = ["male", "female"];
     const [animals, setAnimals] = useState([]);
+    const [employee, setEmployee] = useState(null);
     const [description, setDescription] = useState("");
     const [name, setName] = useState("");
     const [age, setAge] = useState(1);
@@ -28,7 +29,59 @@ export default function Animal() {
     const UPDATE_ANIMAL_TITLE = "Update animal";
     const [animal, setAnimal] = useState(null);
     const [popUpTitle, setPopupTitle] = useState(ADD_ANIMAL_TITLE);
+
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
+    const email = !token
+        ? null
+        : JSON.parse(atob(token.split(".")[1]))?.email;
+    useEffect(() => {
+        if (email) {
+            fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-employee-by/${email}`, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token,
+                }
+            }).then(response => {
+                if (!response.ok) return { employee: null };
+                return response.json();
+            }).then(data => {
+                setEmployee(data)
+                console.log(data);
+            });
+
+
+
+            fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-cage`, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token,
+                }
+            }).then(response => {
+                if (!response.ok) return [];
+                return response.json();
+            }).then(data => {
+                setCages(data);
+            });
+            fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-all-animalSpecies`, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token,
+                }
+            }).then(response => {
+                if (!response.ok) return [];
+                return response.json();
+            }).then(data => {
+                setSpecies(data);
+            });
+        }
+    }, [email, token])
+
     useEffect(() => {
         fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-animal`, {
             method: 'GET',
@@ -41,34 +94,15 @@ export default function Animal() {
             if (!response.ok) return { animal: [] };
             return response.json();
         }).then(data => {
-            setAnimals(data.animal);
+            // setAnimals(data.animal);
+            // console.log(data.animal);
+            const sortedAnimal = data.animal.sort(
+                (a, b) => b.animalId - a.animalId
+            );
+
+            setAnimals(sortedAnimal);
         });
-        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-cage/ascending`, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token,
-            }
-        }).then(response => {
-            if (!response.ok) return [];
-            return response.json();
-        }).then(data => {
-            setCages(data);
-        });
-        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-all-animalSpecies`, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token,
-            }
-        }).then(response => {
-            if (!response.ok) return [];
-            return response.json();
-        }).then(data => {
-            setSpecies(data);
-        });
+
     }, [])
 
     const handleClose = () => {
@@ -278,10 +312,10 @@ export default function Animal() {
     const columns = [
         {
             id: 1,
-            name: '#',
-            selector: (animal, index) => {
+            name: 'ID',
+            selector: (animal) => {
                 return (
-                    <p>{index + 1}</p>
+                    <p>{animal.animalId}</p>
                 )
             }
         },
@@ -295,14 +329,24 @@ export default function Animal() {
             }
         },
         {
-            id: 10,
+            id: 3,
+            name: 'Cage',
+            selector: animal => {
+                return (
+                    <p>{animal.cage?.description ? animal.cage.description :
+                        (cages.find(item => item.cageID === animal.cageID)?.description)}</p>
+                )
+            }
+        },
+        {
+            id: 4,
             name: 'Actions',
             selector: animal => {
                 return (
                     <div>
-                        <Button variant="contained" onClick={() => handleDeleteAction(animal.animalId)}>Delete</Button>
-                        <Button variant="contained" onClick={() => handleOpenPopupUpdateAction(animal.animalId)}>Update</Button>
-                        <Button variant="contained" onClick={() => handleOpenPopupDetail(animal.animalId)}>Detail</Button>
+                        <Button size='small' sx={{ mr: "10px" }} variant="contained" onClick={() => handleDeleteAction(animal.animalId)}>Delete</Button>
+                        <Button size='small' sx={{ mr: "10px" }} variant="contained" onClick={() => handleOpenPopupUpdateAction(animal.animalId)}>Update</Button>
+                        <Button size='small' variant="contained" onClick={() => handleOpenPopupDetail(animal.animalId)}>Detail</Button>
                     </div>
                 )
             }
@@ -333,13 +377,23 @@ export default function Animal() {
                                 <TextField
                                     required
                                     fullWidth
+                                    label="name"
+                                    id="name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
                                     id="description"
                                     label="description"
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={4}>
                                 <TextField
                                     required
                                     fullWidth
@@ -350,29 +404,29 @@ export default function Animal() {
                                     onChange={(e) => setAge(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={4}>
                                 <TextField
                                     required
                                     fullWidth
                                     id="weight"
-                                    label="weight"
+                                    label="weight(kg)"
                                     type='number'
                                     value={weight}
                                     onChange={(e) => setWeight(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={4}>
                                 <TextField
                                     required
                                     fullWidth
                                     id="height"
-                                    label="height"
+                                    label="height(m)"
                                     type='number'
                                     value={height}
                                     onChange={(e) => setHeight(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <InputLabel id="select-label-gender">Select Gender</InputLabel>
                                 <Select
                                     labelId="select-label-gender"
@@ -386,20 +440,25 @@ export default function Animal() {
                                         )
                                     })}
                                 </Select>
-                            </Grid>
+                            </Grid> */}
                             <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    label="name"
-                                    id="name"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                />
+                                <FormLabel id="gender">Gender</FormLabel>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="gender"
+                                    name="Gender"
+                                    onChange={(e) => setGender(e.target.value)}
+                                    value={gender}
+                                >
+                                    <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                                    <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                                    <FormControlLabel value="Mixed" control={<Radio />} label="Mixed" />
+                                </RadioGroup>
                             </Grid>
                             <Grid item xs={12}>
                                 <InputLabel id="select-label-cage">Select Cage</InputLabel>
                                 <Select
+                                    fullWidth
                                     labelId="select-label-cage"
                                     id="select-cage"
                                     defaultValue={!animal ? '' : animal.cage?.cageID ? animal.cage.cageID : animal.cage}
@@ -407,7 +466,7 @@ export default function Animal() {
                                 >
                                     {cages.map(cage => {
                                         return (
-                                            <MenuItem key={cage.cageID} value={cage.cageID}>{cage.cageID}</MenuItem>
+                                            <MenuItem key={cage.cageID} value={cage.cageID}>{cage.description}</MenuItem>
                                         )
                                     })}
                                 </Select>
@@ -415,6 +474,7 @@ export default function Animal() {
                             <Grid item xs={12}>
                                 <InputLabel id="select-label-specie">Select Specie</InputLabel>
                                 <Select
+                                    fullWidth
                                     labelId="select-label-specie"
                                     id="select-specie"
                                     defaultValue={!animal ? '' : animal.species?.speciesId ? animal.species.speciesId : animal.species}

@@ -1,4 +1,4 @@
-export const NEW_TIMEOUT_IN_SECONDS = 15 * 60
+export const NEW_TIMEOUT_IN_SECONDS = 30 * 60
 
 export function setItemWithTimeout(key, value, timeoutInSeconds) {
 	const item = {
