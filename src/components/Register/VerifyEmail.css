@@ -51,3 +51,10 @@
     border-radius: 20px;
     padding: 20px;
 }
+.otp-text {
+    font-size: 20px;
+}
+.otp-text1 {
+    font-size: 20px;
+    font-weight: bold;
+}

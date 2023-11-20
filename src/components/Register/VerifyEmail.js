@@ -41,7 +41,13 @@ export default function VerifyEmail() {
   return (
     <div className='verify-container'>
       <div className='verify'>
-        <p>Enter your OTP: </p>
+        <h2 style={{textAlign:"center",color:"#2e7d32",marginBottom:"20px" }}>Email Verification</h2>
+        <div className='otp-text'>
+           <p>We have sent the OTP Verification to your email, please check your mail box</p>
+           <p>If you don't receive any OTP code, <a>click here </a> to resend </p>
+        </div>
+        <div className='otp-text1'> <p>Enter your OTP: </p> </div>
+        
         <form className='verify-form' onSubmit={(event) => event.preventDefault()}>
           <input type='text' className='enter-otp' onChange={(event) => setOtp(event.target.value)} />
           <input type='Submit' className='submit-otp' onClick={handleSubmit} />
