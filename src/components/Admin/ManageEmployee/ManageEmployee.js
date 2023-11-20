@@ -59,6 +59,7 @@ export default function ManageEmployee() {
     };
 
     const handleDisactiveAction = (email) => {
+        console.log(email);
         setChanged(false)
         Swal.fire({
             title: 'Are you sure?',
@@ -223,7 +224,7 @@ export default function ManageEmployee() {
             selector: employee => {
                 return (
                     <Box sx={{ '& button': { m: 1 } }}>
-                        <Button variant="contained" size='small' onClick={() => handleDisactiveAction(employee.email)}>Disactive</Button>
+                        <Button variant="contained" size='small' onClick={() => handleDisactiveAction(employee.email.email)}>Disactive</Button>
                         <Button variant="contained" size='small' onClick={() => handleOpenPopupUpdateAction(employee)}>Update</Button>
                     </Box>
                 )

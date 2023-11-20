@@ -29,6 +29,7 @@ export default function Animal() {
     const UPDATE_ANIMAL_TITLE = "Update animal";
     const [animal, setAnimal] = useState(null);
     const [popUpTitle, setPopupTitle] = useState(ADD_ANIMAL_TITLE);
+    const [changed, setChanged] = useState(false)
 
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
     const email = !token
@@ -85,8 +86,8 @@ export default function Animal() {
     }, [employee]);
 
     useEffect(() => {
-        if (cages) {
-            fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-animal`, {
+        if (employee && employee.zooArea && employee.zooArea.zooAreaId) {
+            fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-animal-by-zooArea/${employee.zooArea.zooAreaId}`, {
                 method: 'GET',
                 headers: {
                     Accept: 'application/json',
@@ -99,16 +100,13 @@ export default function Animal() {
             }).then(data => {
                 // setAnimals(data.animal);
                 // console.log(data.animal);
-                const sortedAnimal = data.animal.sort(
+                const sortedAnimal = data.sort(
                     (a, b) => b.animalId - a.animalId
                 );
-                const listAnimals = sortedAnimal.filter(animal => {
-                    return cages.some(cage => cage.cageID === animal.cageID)
-                })
-                setAnimals(listAnimals);
+                setAnimals(sortedAnimal);
             });
         }
-    }, [cages])
+    }, [changed, cages])
 
     const handleClose = () => {
         setOpen(false);
@@ -159,6 +157,7 @@ export default function Animal() {
     }
 
     const handleAddSave = () => {
+        setChanged(false)
         const animalDto = {
             age: age,
             weight: weight,
@@ -187,20 +186,12 @@ export default function Animal() {
         })
             .then(data => {
                 setOpen(false);
-                fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-animal`, {
-                    method: 'GET',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': "Bearer " + token,
-                    }
-                }).then(response => response.json()).then(data => {
-                    setAnimals(data.animal);
-                    Swal.fire({
-                        title: 'Success!',
-                        text: `Add Successfully`,
-                        icon: 'success',
-                    });
+                setAnimals(data.animal);
+                setChanged(true)
+                Swal.fire({
+                    title: 'Success!',
+                    text: `Add Successfully`,
+                    icon: 'success',
                 });
             }).catch(error => {
                 setOpen(false);
@@ -213,6 +204,7 @@ export default function Animal() {
     }
 
     const handleUpdateSave = () => {
+        setChanged(false)
         const animalDto = {
             animalId: animal.animalId,
             age: age,
@@ -241,24 +233,11 @@ export default function Animal() {
             return response.text();
         }).then(data => {
             setOpen(false);
-            fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-animal/${animalDto.animalId}`, {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': "Bearer " + token,
-                }
-            }).then(response => response.json()).then(data => {
-                const updatedAnimal = data;
-                setAnimals(animals.map(animal => {
-                    if (animal.animalId === animalDto.animalId) return updatedAnimal;
-                    return animal;
-                }));
-                Swal.fire({
-                    title: 'Success!',
-                    text: `Update Successfully`,
-                    icon: 'success',
-                });
+            setChanged(true)
+            Swal.fire({
+                title: 'Success!',
+                text: `Update Successfully`,
+                icon: 'success',
             });
         }).catch(error => {
             setOpen(false);
@@ -508,7 +487,7 @@ export default function Animal() {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <TableContainer component={Paper} sx={{ mt: '100px' }}>
+            {animals ? <TableContainer component={Paper} sx={{ mt: '100px' }}>
                 <DataTable
                     columns={columns}
                     data={animals.map(item => ({
@@ -523,7 +502,7 @@ export default function Animal() {
                 <Button onClick={handleOpenPopupAddAction} color="primary" fullWidth>
                     Add
                 </Button>
-            </TableContainer>
+            </TableContainer> : ""}
         </Container>
     )
 }
