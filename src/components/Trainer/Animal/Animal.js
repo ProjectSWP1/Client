@@ -48,24 +48,8 @@ export default function Animal() {
                 return response.json();
             }).then(data => {
                 setEmployee(data)
-                console.log(data);
             });
 
-
-
-            fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-cage`, {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': "Bearer " + token,
-                }
-            }).then(response => {
-                if (!response.ok) return [];
-                return response.json();
-            }).then(data => {
-                setCages(data);
-            });
             fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-all-animalSpecies`, {
                 method: 'GET',
                 headers: {
@@ -83,27 +67,48 @@ export default function Animal() {
     }, [email, token])
 
     useEffect(() => {
-        fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-animal`, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token,
-            }
-        }).then(response => {
-            if (!response.ok) return { animal: [] };
-            return response.json();
-        }).then(data => {
-            // setAnimals(data.animal);
-            // console.log(data.animal);
-            const sortedAnimal = data.animal.sort(
-                (a, b) => b.animalId - a.animalId
-            );
+        if (employee && employee.zooArea && employee.zooArea.zooAreaId) {
+            fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-cage/${employee.zooArea.zooAreaId}`, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token,
+                }
+            }).then(response => {
+                if (!response.ok) return [];
+                return response.json();
+            }).then(data => {
+                setCages(data);
+            })
+        }
+    }, [employee]);
 
-            setAnimals(sortedAnimal);
-        });
-
-    }, [])
+    useEffect(() => {
+        if (cages) {
+            fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-animal`, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token,
+                }
+            }).then(response => {
+                if (!response.ok) return { animal: [] };
+                return response.json();
+            }).then(data => {
+                // setAnimals(data.animal);
+                // console.log(data.animal);
+                const sortedAnimal = data.animal.sort(
+                    (a, b) => b.animalId - a.animalId
+                );
+                const listAnimals = sortedAnimal.filter(animal => {
+                    return cages.some(cage => cage.cageID === animal.cageID)
+                })
+                setAnimals(listAnimals);
+            });
+        }
+    }, [cages])
 
     const handleClose = () => {
         setOpen(false);
@@ -363,10 +368,14 @@ export default function Animal() {
             overflow: 'auto',
         }}>
             <Dialog open={animalDetail !== null} onClose={() => setAnimalDetail(null)} >
-                <DialogTitle>Detail</DialogTitle>
                 <DialogContent>
                     <AnimalDetail animalDetail={animalDetail} />
                 </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setAnimalDetail(null)} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
             </Dialog>
             <Dialog open={open} onClose={handleClose} >
                 <DialogTitle>{popUpTitle}</DialogTitle>
