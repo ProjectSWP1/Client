@@ -41,16 +41,24 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
   const [userEmail, setUserEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [voucherIdInput, setVoucherIdInput] = useState("");
-  const [voucher, setVoucher] = useState([]);
+  const [voucher, setVoucher] = useState(null);
   const [numberTicketError, setNumberTicketError] = useState("");
   const [numberTicket, setNumberTicket] = useState(1); // Initialize with 1 ticket
+  const [numberChildrenTicket, setNumberChildrenTicket] = useState(0);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("");
 
   const handleDecrement = () => {
-    if (numberTicket > 1) {
+    if (numberTicket > 1 && numberTicket < 100) {
       setNumberTicket(numberTicket - 1);
+      setNumberTicketError("");
+    }
+  };
+
+  const handleDecrementChildren = () => {
+    if (numberChildrenTicket > 0 && numberTicket < 100) {
+      setNumberChildrenTicket(numberChildrenTicket - 1);
       setNumberTicketError("");
     }
   };
@@ -63,8 +71,17 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
   };
 
   const handleIncrement = () => {
-    setNumberTicket(numberTicket + 1);
-    setNumberTicketError("");
+    if (numberTicket < 99) {
+      setNumberTicket(numberTicket + 1);
+      setNumberTicketError("");
+    }
+  };
+
+  const handleIncrementChildren = () => {
+    if (numberTicket < 99) {
+      setNumberChildrenTicket(numberChildrenTicket + 1);
+      setNumberTicketError("");
+    }
   };
 
   useEffect(() => {
@@ -109,7 +126,9 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
         setSnackbarOpen(true);
       } else {
         // Voucher not found
-        setSnackbarMessage(`Voucher not found: ${voucherIdInput}`);
+        setSnackbarMessage(
+          `Voucher not found: ${voucherIdInput}, this voucher does not exist or has expired.`
+        );
         setSnackbarSeverity("error");
         setSnackbarOpen(true);
       }
@@ -126,6 +145,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
       }
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -134,7 +154,12 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
     setNumberTicketError("");
 
     // Validate input fields
-    if (numberTicket < 1) {
+    if (numberTicket < 1 && numberTicket > 99) {
+      setNumberTicketError("Please enter a valid number of tickets.");
+      return;
+    }
+
+    if(numberChildrenTicket > 99) {
       setNumberTicketError("Please enter a valid number of tickets.");
       return;
     }
@@ -148,11 +173,13 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
       ticketId: ticket.ticketId,
       email: email || userEmail,
       //phoneNumber: phone,
-      voucherId: voucher.voucherId, // Add voucherId
+      voucherId: voucher?.voucherId || null, // Add voucherId
       ticketQuantity: parseInt(numberTicket, 10),
+      ticketChildrenQuantity: parseInt(numberChildrenTicket, 10),
       visitDate: ticket.visitDate,
       description: ticket.description,
     };
+    console.log(ordersDto);
     fetch(`${URL_FETCH_AZURE_SERVER}order/create-order?token=${token}`, {
       method: "POST",
       headers: {
@@ -212,47 +239,92 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
               />
             </Box>
             <Typography variant="h6">
-              Price: {newPrice === 0 ? ticket?.ticketPrice : newPrice} VNĐ
+              Price:{" "}
+              {voucher && voucher.coupon
+                ? (ticket?.ticketPrice * numberTicket +
+                    ticket?.childrenTicketPrice * numberChildrenTicket) *
+                  (1 - voucher.coupon) // If voucher applied
+                : ticket?.ticketPrice * numberTicket +
+                  ticket?.childrenTicketPrice * numberChildrenTicket}{" "}
+              VNĐ
             </Typography>
+
+            {voucher && (
+              <Typography variant="body2">
+                Applied Voucher: {voucher.coupon * 100}% off
+              </Typography>
+            )}
+
             {/* Numeric input with Material-UI components */}
             <div
               style={{
-                display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 marginTop: "20px",
               }}
             >
-              <Button onClick={handleDecrement}>
-                <RemoveIcon />
-              </Button>
-              <TextField
-                type="number"
-                value={numberTicket}
-                onChange={(e) => setNumberTicket(parseInt(e.target.value, 10))}
-                InputProps={{ inputProps: { min: 1 } }}
-              />
-              <Button onClick={handleIncrement}>
-                <AddIcon />
-              </Button>
-              <TextField
-                style={{ width: "500px" }}
-                id="voucher-id"
-                label="Voucher ID"
-                variant="outlined"
-                name="voucherId"
-                type="text"
-                value={voucherIdInput}
-                onChange={(e) => setVoucherIdInput(e.target.value)}
-              />
+              <div style={{ marginTop: "20px" }}>
+                <Button onClick={handleDecrement}>
+                  <RemoveIcon />
+                </Button>
+                <TextField
+                  type="number"
+                  label="Adult Ticket"
+                  value={numberTicket}
+                  onChange={(e) =>
+                    setNumberTicket(parseInt(e.target.value, 10))
+                  }
+                  InputProps={{ inputProps: { min: 1, max: 99 } }}
+                />
+                <Button onClick={handleIncrement}>
+                  <AddIcon />
+                </Button>
+              </div>
+              <div style={{ marginTop: "20px" }}>
+                <Button onClick={handleDecrementChildren}>
+                  <RemoveIcon />
+                </Button>
+                <TextField
+                  type="number"
+                  label="Children Ticket"
+                  value={numberChildrenTicket}
+                  onChange={(e) =>
+                    setNumberChildrenTicket(parseInt(e.target.value, 10))
+                  }
+                  InputProps={{ inputProps: { min: 0, max: 99 } }}
+                />
+                <Button onClick={handleIncrementChildren}>
+                  <AddIcon />
+                </Button>
+              </div>
 
-              <Button
-                style={{ margin: "10px", backgroundColor: green[500] }}
-                variant="contained"
-                onClick={applyVoucher}
+              <div
+                style={{
+                  marginTop: "20px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
-                Apply Voucher
-              </Button>
+                <TextField
+                  style={{ width: "300px" }}
+                  id="voucher-id"
+                  label="Voucher ID"
+                  variant="outlined"
+                  name="voucherId"
+                  type="text"
+                  value={voucherIdInput}
+                  onChange={(e) => setVoucherIdInput(e.target.value)}
+                />
+
+                <Button
+                  style={{ margin: "20px", backgroundColor: green[500] }}
+                  variant="contained"
+                  onClick={applyVoucher}
+                >
+                  Apply Voucher
+                </Button>
+              </div>
             </div>
             {numberTicketError && (
               <Typography variant="body2" color="error">

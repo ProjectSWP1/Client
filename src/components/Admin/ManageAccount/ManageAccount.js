@@ -170,6 +170,7 @@ export default function ManageAccount() {
     setEmail(account.email);
     setUsername(account.username)
     setRole(account.role.roleID)
+    
     setPopupTitle(UPDATE_ROLE_TITLE);
   }
 

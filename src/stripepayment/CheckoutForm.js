@@ -31,10 +31,13 @@ export default function CheckoutForm({ orderData, intentID }) {
   const calculateTotalAmount = () => {
     const ticketPrice = orderData.ticket.ticketPrice || 0;
     const quantity = orderData.quantity || 0;
+
+    const childrenTicketPrice = orderData.ticket.childrenTicketPrice;
+    const childrenQuantity = orderData.childrenQuantity;
     const coupon = orderData.orderVoucher ? orderData.orderVoucher.coupon : 0;
 
     // Calculate the total amount without discount
-    const totalAmountWithoutDiscount = ticketPrice * quantity;
+    const totalAmountWithoutDiscount = (ticketPrice * quantity) + (childrenTicketPrice * childrenQuantity);
 
     // Calculate the discounted price
     const discountedPrice = calculateDiscountedPrice(
@@ -231,7 +234,10 @@ export default function CheckoutForm({ orderData, intentID }) {
                 <strong>Description:</strong> {orderData.description}
               </p> */}
               <p>
-                <strong>Ticket quantity:</strong> {orderData.quantity}
+                <strong>Adult ticket:</strong> {orderData.quantity}
+              </p>
+              <p>
+                <strong>Children ticket:</strong> {orderData.childrenQuantity}
               </p>
               <p>
                 <strong>Email:</strong> {orderData.email}

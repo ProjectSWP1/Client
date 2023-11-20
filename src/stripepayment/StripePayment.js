@@ -48,24 +48,24 @@ export default function StripePayment() {
             setIntentId(data.intentId);
             setClientSecret(data.clientSecret);
 
-            fetch(
-              `${URL_FETCH_AZURE_SERVER}qrcode/generateAndDownloadQRCode/350/350`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ orderID }), // Include the orderID in the request body
-              }
-            )
-              .then((res) => {
-                if (!res.ok) {
-                  throw new Error(`HTTP error! Status: ${res.status}`);
-                }
-              })
-              .catch((error) => {
-                console.error("Error fetching and creating QR code:", error);
-              });
+            // fetch(
+            //   `${URL_FETCH_AZURE_SERVER}qrcode/generateAndDownloadQRCode/350/350`,
+            //   {
+            //     method: "POST",
+            //     headers: {
+            //       "Content-Type": "application/json",
+            //     },
+            //     body: JSON.stringify({ orderID }), // Include the orderID in the request body
+            //   }
+            // )
+            //   .then((res) => {
+            //     if (!res.ok) {
+            //       throw new Error(`HTTP error! Status: ${res.status}`);
+            //     }
+            //   })
+            //   .catch((error) => {
+            //     console.error("Error fetching and creating QR code:", error);
+            //   });
           })
           .catch((error) => {
             console.error("Error fetching clientSecret:", error);
