@@ -73,6 +73,7 @@ export default class Confirm extends Component {
       .then((data) => {
         // Handle the response from the backend, if needed
         //   alert(`Register success!! Welcome ${values.email}`);
+        // call the api to send email with OTP to verify account
         return fetch(`${URL_FETCH_AZURE_SERVER}user/send-email`, {
           method: "POST",
           headers: {
