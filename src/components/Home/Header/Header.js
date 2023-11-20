@@ -104,8 +104,9 @@ export default function Header() {
                 {/* menu */}
                 <div className="nav-menu">
                     <ul className="nav-menu__list">
+
                         <li className="nav-menu__item">
-                            <Link to={"/register"} className="nav-menu__link">Membership</Link>
+                            <Link to={"/Membership"} className="nav-menu__link">Membership</Link>
                         </li>
                         <li className="nav-menu__item">
                             <Link to={'/buy-ticket'} className="nav-menu__link">
