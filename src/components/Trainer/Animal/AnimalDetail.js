@@ -7,42 +7,46 @@ const AnimalDetail = ({ animalDetail }) => {
         <Paper sx={{
             padding: "10px",
         }}>
-            <Typography variant="h6">Animal Details</Typography>
+            <Typography style={{
+                fontSize: '30px',
+                fontWeight: 'bolder',
+                color: 'green',
+            }}>Animal Details</Typography>
 
             <div className={{
                 marginBottom: "10px",
             }}>
-                <Typography variant="subtitle1">Name: {animalDetail?.name}</Typography>
+                <Typography variant="subtitle1"><b>Name:</b> {animalDetail?.name}</Typography>
             </div>
 
             <div className={{
                 marginBottom: "10px",
             }}>
-                <Typography variant="subtitle1">Age: {animalDetail?.age}</Typography>
+                <Typography variant="subtitle1"><b>Age:</b> {animalDetail?.age}</Typography>
             </div>
 
             <div className={{
                 marginBottom: "10px",
             }}>
-                <Typography variant="subtitle1">Gender: {animalDetail?.gender}</Typography>
+                <Typography variant="subtitle1"><b>Gender:</b> {animalDetail?.gender}</Typography>
             </div>
 
             <div className={{
                 marginBottom: "10px",
             }}>
-                <Typography variant="subtitle1">Description: {animalDetail?.description}</Typography>
+                <Typography variant="subtitle1"><b>Description:</b> {animalDetail?.description}</Typography>
             </div>
 
             <div className={{
                 marginBottom: "10px",
             }}>
-                <Typography variant="subtitle1">Height: {animalDetail?.height} cm</Typography>
+                <Typography variant="subtitle1"><b>Height:</b> {animalDetail?.height} m</Typography>
             </div>
 
             <div className={{
                 marginBottom: "10px",
             }}>
-                <Typography variant="subtitle1">Weight: {animalDetail?.weight} kg</Typography>
+                <Typography variant="subtitle1"><b>Weight:</b> {animalDetail?.weight} kg</Typography>
             </div>
 
             <div className={{

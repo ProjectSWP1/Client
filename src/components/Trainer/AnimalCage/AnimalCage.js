@@ -42,7 +42,6 @@ export default function AnimalCage() {
                 return response.json();
             }).then(data => {
                 setEmployee(data)
-                console.log(data);
             });
 
             fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-zoo-area`, {
@@ -75,7 +74,6 @@ export default function AnimalCage() {
                 return response.json();
             }).then(data => {
                 setCages(data);
-                console.log(data);
             })
         }
     }, [changed, employee]);
@@ -339,26 +337,39 @@ export default function AnimalCage() {
                                     onChange={handleCapacityChange}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
-                                <InputLabel id="select-label">Select an zoo area</InputLabel>
-                                <Select
-                                    labelId="select-label"
-                                    id="select"
-                                    fullWidth
-                                    value={selectedZooArea}
-                                    onChange={(e) => setSelectedZooArea(e.target.value)}
-                                >
-                                    {zooAreas.map(area => {
-                                        return (
-                                            <MenuItem
-                                                // style={{
-                                                //     width: '250px'
-                                                // }}
-                                                key={area.zooAreaId} value={area.zooAreaId}>{area.description}</MenuItem>
-                                        )
-                                    })}
-                                </Select>
-                            </Grid>
+                            {popUpTitle === ADD_CAGE_TITLE ?
+                                <Grid item xs={12}>
+                                    <InputLabel id="select-label">Select an zoo area</InputLabel>
+                                    <Select
+                                        labelId="select-label"
+                                        id="select"
+                                        fullWidth
+                                        value={selectedZooArea}
+                                        onChange={(e) => setSelectedZooArea(e.target.value)}
+                                    >
+                                        <MenuItem value={employee?.zooArea?.zooAreaId}>{employee?.zooArea?.description}</MenuItem>
+                                    </Select>
+                                </Grid> :
+                                <Grid item xs={12}>
+                                    <InputLabel id="select-label">Select an zoo area</InputLabel>
+                                    <Select
+                                        labelId="select-label"
+                                        id="select"
+                                        fullWidth
+                                        value={selectedZooArea}
+                                        onChange={(e) => setSelectedZooArea(e.target.value)}
+                                    >
+                                        {zooAreas.map(area => {
+                                            return (
+                                                <MenuItem
+                                                    // style={{
+                                                    //     width: '250px'
+                                                    // }}
+                                                    key={area.zooAreaId} value={area.zooAreaId}>{area.description}</MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                </Grid>}
                         </Grid>
                     </Box>
                 </DialogContent>

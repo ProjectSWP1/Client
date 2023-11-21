@@ -30,7 +30,8 @@ export default function AnimalSpecies() {
             if (!response.ok) return [];
             return response.json();
         }).then(data => {
-            setSpecies(data);
+            const sortedSpecies = data.sort((a, b) => b.speciesId - a.speciesId)
+            setSpecies(sortedSpecies);
         })
     }, [changed]);
 
@@ -213,8 +214,8 @@ export default function AnimalSpecies() {
             selector: specie => {
                 return (
                     <div>
-                        <Button variant="contained" onClick={() => handleDeleteAction(specie.speciesId)}>Delete</Button>
-                        <Button variant="contained" onClick={() => handleOpenPopupUpdateAction(specie.speciesId)}>Update</Button>
+                        <Button sx={{mr: '10px'}} size='small' variant="contained" onClick={() => handleDeleteAction(specie.speciesId)}>Delete</Button>
+                        <Button sx={{mr: '10px'}} size='small' variant="contained" onClick={() => handleOpenPopupUpdateAction(specie.speciesId)}>Update</Button>
                     </div>
                 )
             }

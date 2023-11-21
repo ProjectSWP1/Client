@@ -51,7 +51,7 @@ export default function Orders() {
     },
     {
       id: 2,
-      name: 'Orderer',
+      name: 'Customer',
       selector: (order) => {
         return (
           <p>{order.email}</p>
