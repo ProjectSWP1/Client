@@ -3,13 +3,26 @@
     flex-direction: column;
     align-items: center;
 }
+.row-member {
+    display: flex;
+    align-items: center;
+    max-width: 1000px; /* Set a maximum width for the container */
+    margin: 0 auto; /* Center the container horizontally */
+    padding: 0 20px; /* Add padding to the sides */
+}
 
 .membership-text {
+    font-family: "Gill Sans Extrabold", sans-serif;
     margin-top: 20px;
-    font-size: 80px;
-    font-weight: bold;
-    color: #2e7d32;
+    font-size: 70px;
+    font-weight: bold; /* Make the text bold for emphasis */
+    text-transform: uppercase; /* Convert text to uppercase */
+    letter-spacing: 2px; /* Add some letter spacing for a spaced-out look */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Add a subtle text shadow for depth */
+    /* Add any other styling properties you prefer */
+    color: #a70303;
 }
+
 .join-now-button {
     align-items: center;
     margin-top: 15px;
@@ -79,4 +92,26 @@
 .col-md-4:nth-child(3) h3 {
     color: rgb(213, 213, 0); /* Change to your desired color for Access to Order History */
 }
+.membership-description {
+    margin-left: 200px;
+    margin-right: 200px;
+    margin-bottom: 100px;
+}
+.membership-info {
+    margin-bottom: 20px; /* Add bottom margin to create space */
+}
+.join-now {
+    margin-left: 200px;
+    margin-right: 200px;
+    margin-bottom: 100px;
+}
+.col-md-4 h3 {
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Change to your desired cursor style */
+    &:hover {
+    color: #ff0062;
+    transform: scale(1.1);
+    }
+}
+
 
