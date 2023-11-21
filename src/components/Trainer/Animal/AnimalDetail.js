@@ -52,13 +52,13 @@ const AnimalDetail = ({ animalDetail }) => {
             <div className={{
                 marginBottom: "10px",
             }}>
-                <Typography variant="subtitle1">Cage : {animalDetail?.cage?.cageID} - {animalDetail?.cage?.description}</Typography>
+                <Typography variant="subtitle1"><b>Cage:</b> {animalDetail?.cage?.cageID} - {animalDetail?.cage?.description}</Typography>
             </div>
 
             <div className={{
                 marginBottom: "10px",
             }}>
-                <Typography variant="subtitle1">Species : {animalDetail?.species?.groups}</Typography>
+                <Typography variant="subtitle1"><b>Species:</b> {animalDetail?.species?.groups}</Typography>
             </div>
         </Paper>
     );
