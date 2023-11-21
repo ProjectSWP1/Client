@@ -120,7 +120,7 @@ export default function ManageAccount() {
     }
     // const roleID = role
     // }
-    fetch(`${URL_FETCH_AZURE_SERVER}admin/create-accunt?roleId=${role}&zooArea_Id=${selectedZooArea}`, {
+    fetch(`${URL_FETCH_AZURE_SERVER}admin/create-account?roleId=${role}&zooArea_Id=${selectedZooArea}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

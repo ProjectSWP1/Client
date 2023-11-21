@@ -28,6 +28,7 @@ import TicketLayout from "./components/Ticket/TicketLayout.js";
 import FeedingSchedule from "./components/Trainer/WorkAssignTrainer/FeedingSchedule.js";
 import PostNews from "./components/Staff/PostNews/PostNews.js";
 import CompleteOrder from "./stripepayment/completionOrder.js";
+import Membership from "./components/Register/Membership.js";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/verifyemail" element={<VerifyEmail />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/Membership" element={<Membership />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
         <Route path="/profile" element={<UserProfile />} />
