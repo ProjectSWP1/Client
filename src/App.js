@@ -29,6 +29,7 @@ import FeedingSchedule from "./components/Trainer/WorkAssignTrainer/FeedingSched
 import PostNews from "./components/Staff/PostNews/PostNews.js";
 import CompleteOrder from "./stripepayment/completionOrder.js";
 import Membership from "./components/Register/Membership.js";
+import Configuration from "./components/Admin/SystemConfiguration/Configuration.js";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
           <Route exact path="dashboard" element={<Dash />} />
           <Route path="manage-account" element={<ManageAccount />} />
           <Route path="manage-employee" element={<ManageEmployee />} />
+          <Route path="configuration" element={<Configuration/>}/>
         </Route>
         <Route path="/staff" element={<Staff />}>
           <Route exact path="zooarea" element={<ZooArea />} />

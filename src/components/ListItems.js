@@ -9,6 +9,7 @@ import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import HouseSidingIcon from '@mui/icons-material/HouseSiding';
 import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import PetsIcon from '@mui/icons-material/Pets';
+import DnsOutlinedIcon from '@mui/icons-material/DnsOutlined';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
@@ -67,6 +68,18 @@ export const adminListItems = (
           <SupervisedUserCircleIcon />
         </ListItemIcon>
         <ListItemText primary="Manage Employee" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
+    <ListItemButton>
+      <Link to={'/admin/configuration'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <DnsOutlinedIcon/>
+        </ListItemIcon>
+        <ListItemText primary="System Configuration" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
   </React.Fragment>

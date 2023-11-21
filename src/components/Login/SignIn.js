@@ -20,6 +20,7 @@ import {
   NEW_TIMEOUT_IN_SECONDS,
   setItemWithTimeout,
 } from "../auth/setTimeOut.js";
+import { REACT_APP_API_URL } from "../../config.js";
 import { URL_FETCH_AZURE_SERVER } from "../../config.js";
 
 export default function SignIn() {
@@ -46,18 +47,16 @@ export default function SignIn() {
     try {
       // Create an axios instance with CORS configuration
       const axiosInstance = axios.create({
-        withCredentials: true, // Include credentials (cookies)
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "https://zookay-web.vercel.app",
-          // "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
           // Add any other necessary headers
         },
       });
 
       // Use the axios instance for the request
       const response = await axiosInstance.post(
-        `${URL_FETCH_AZURE_SERVER}user/login`,
+        `${REACT_APP_API_URL}user/login`,
         { email, password }
       );
 
