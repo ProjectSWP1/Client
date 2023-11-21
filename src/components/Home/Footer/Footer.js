@@ -9,7 +9,7 @@ export default function Footer() {
         <div className='top-btn'>
             <Link to={'/'} className='menu-btn'>HOME</Link>
             <Link to={'/login'} className='menu-btn'>LOGIN</Link>
-            <Link to={'/register'} className='menu-btn'>MEMBERSHIP</Link>
+            <Link to={'/Membership'} className='menu-btn'>MEMBERSHIP</Link>
             <Link to={'/buy-ticket'} className='menu-btn'>BUY TICKET</Link>
         </div>
         <p className='contact-us'>CONTACT US</p>
