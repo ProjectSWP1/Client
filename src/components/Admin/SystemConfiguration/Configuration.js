@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button } from "@mui/material";
 import DataTable from "react-data-table-component";
-import { REACT_APP_API_URL } from "../../../config";
+import { URL_FETCH_AZURE_SERVER } from "../../../config";
 
 export default function Configuration() {
   const [timeUntilMonday, setTimeUntilMonday] = useState('');
@@ -73,7 +73,7 @@ export default function Configuration() {
     try {
       // Fetch tickets with updated prices
       const ticketsResponse = await fetch(
-        `${REACT_APP_API_URL}admin/gen-ticket/${adultTicketPrice}/${childTicketPrice}`,
+        `${URL_FETCH_AZURE_SERVER}admin/gen-ticket/${adultTicketPrice}/${childTicketPrice}`,
         {
           method: "POST",
           headers: {
@@ -85,7 +85,7 @@ export default function Configuration() {
 
       // Fetch vouchers with updated coupon
       const vouchersResponse = await fetch(
-        `${REACT_APP_API_URL}admin/gen-voucher/${voucherCoupon}`,
+        `${URL_FETCH_AZURE_SERVER}admin/gen-voucher/${voucherCoupon}`,
         {
           method: "POST",
           headers: {
@@ -105,10 +105,12 @@ export default function Configuration() {
 
   const removeTicket = (ticket) => {
     // Implement the logic to remove a ticket
+    // fetch remove
   };
 
   const updateTicket = (ticket) => {
     // Implement the logic to update a ticket
+    // fetch update
   };
 
   const removeVoucher = (voucher) => {
@@ -123,7 +125,7 @@ export default function Configuration() {
     try {
       // Fetch all available tickets
       const ticketsResponse = await fetch(
-        `${REACT_APP_API_URL}admin/get-ticket`,
+        `${URL_FETCH_AZURE_SERVER}admin/get-ticket`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -137,7 +139,7 @@ export default function Configuration() {
 
       // Fetch all available vouchers
       const vouchersResponse = await fetch(
-        `${REACT_APP_API_URL}user/get-all-voucher`,
+        `${URL_FETCH_AZURE_SERVER}user/get-all-voucher`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
