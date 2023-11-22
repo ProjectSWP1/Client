@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import DataTable from "react-data-table-component";
 import { REACT_APP_API_URL } from "../../../config";
+
+import './Configuration.css'
 
 export default function Configuration() {
   const [timeUntilMonday, setTimeUntilMonday] = useState('');
@@ -162,16 +164,19 @@ export default function Configuration() {
     {
       name: "Ticket ID",
       selector: (ticket) => <p>{ticket.ticketId}</p>,
+      width: '150px'
     },
     {
       name: "Adult Price",
       selector: (ticket) => <p>{ticket.ticketPrice.toLocaleString()} VND</p>,
+      width: '180px'
     },
     {
       name: "Children Price",
       selector: (ticket) => (
         <p>{ticket.childrenTicketPrice.toLocaleString()} VND</p>
       ),
+      width: '180px'
     },
     {
       name: "Actions",
@@ -201,10 +206,12 @@ export default function Configuration() {
     {
       name: "Voucher ID",
       selector: (voucher) => <p>{voucher.voucherId}</p>,
+      width: '100px'
     },
     {
       name: "Coupon",
       selector: (voucher) => <p>{voucher.coupon}</p>,
+      width: '100px'
     },
     {
       name: "Expired Date",
@@ -235,67 +242,114 @@ export default function Configuration() {
   ];
 
   return (
-    <div>
-      <h1>Configuration Page</h1>
-      <p style={{ marginTop: "30px" }}>
-        Time until Monday: {timeUntilMonday}
-      </p>
-      <div>
-        <label>
-          Adult Ticket Price:
-          <input
-            type="number"
-            value={adultTicketPrice}
-            onChange={(e) => setAdultTicketPrice(Number(e.target.value))}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Child Ticket Price:
-          <input
-            type="number"
-            value={childTicketPrice}
-            onChange={(e) => setChildTicketPrice(Number(e.target.value))}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Voucher Coupon:
-          <input
-            type="number"
-            step="0.01"
-            value={voucherCoupon}
-            onChange={(e) => setVoucherCoupon(Number(e.target.value))}
-          />
-        </label>
-      </div>
-      <button onClick={generateTicketsAndVouchers}>Force Generate</button>
+    <div style={{width: '100%'}}>
+      <h1 style={{ marginTop: '70px', marginBottom: '30px', marginLeft: '20px' }}>Time until Monday: {timeUntilMonday}</h1>
+      <div className="system-configuration">
+        <div className="generate-ticket">
+          <div className="generate-ticket-content">
+            {/* <p style={{ marginTop: "30px", position: 'absolute', top: '-14%', left: '13%', background: 'white', fontSize: '18px', color: 'darkgreen' }}>
+              Time until Monday: {timeUntilMonday}
+            </p> */}
+            <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+              <label>
+                Adult Ticket Price:
+                {/* <input
+              type="number"
+              value={adultTicketPrice}
+              onChange={(e) => setAdultTicketPrice(Number(e.target.value))}
+            /> */}
+                <TextField
+                  hiddenLabel
+                  defaultValue="Small"
+                  size="small"
+                  type="number"
+                  value={adultTicketPrice}
+                  onChange={(e) => setAdultTicketPrice(Number(e.target.value))}
+                  style={{ marginLeft: '10px' }}
+                  fullWidth
+                />
+              </label>
+            </div>
+            <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+              <label>
+                Child Ticket Price:
+                {/* <input
+                type="number"
+                value={childTicketPrice}
+                onChange={(e) => setChildTicketPrice(Number(e.target.value))}
+              /> */}
+                <TextField
+                  hiddenLabel
+                  defaultValue="Small"
+                  size="small"
+                  type="number"
+                  value={childTicketPrice}
+                  onChange={(e) => setChildTicketPrice(Number(e.target.value))}
+                  style={{ marginLeft: '10px' }}
+                  fullWidth
+                />
+              </label>
+            </div>
+            <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+              <label>
+                Voucher Coupon:
+                {/* <input
+                type="number"
+                step="0.01"
+                value={voucherCoupon}
+                onChange={(e) => setVoucherCoupon(Number(e.target.value))}
+              /> */}
+                <TextField
+                  hiddenLabel
+                  defaultValue="Small"
+                  size="small"
+                  type="number"
+                  step="0.01"
+                  value={voucherCoupon}
+                  onChange={(e) => setVoucherCoupon(Number(e.target.value))}
+                  style={{ marginLeft: '10px' }}
+                  fullWidth
+                />
+              </label>
+            </div>
+            {/* <button onClick={generateTicketsAndVouchers}>Force Generate</button> */}
+            <Button
+              variant="contained"
+              size="small"
+              onClick={generateTicketsAndVouchers}
+              style={{ marginTop: '20px', width: '100%' }}
+            >
+              Force Generate
+            </Button>
+          </div>
+        </div>
 
-      <div>
-        <h2>Available Tickets</h2>
-        <DataTable
-          columns={ticketColumns}
-          data={ticketData}
-          pagination
-          paginationPerPage={5}
-          paginationRowsPerPageOptions={[5, 10, 20, 50]}
-        />
-      </div>
+        <div style={{ width: '65%' }}>
+          <div style={{width: '100%'}}>
+            <h2>Available Tickets</h2>
+            <DataTable
+              columns={ticketColumns}
+              data={ticketData}
+              pagination
+              paginationPerPage={5}
+              paginationRowsPerPageOptions={[5, 10, 20, 50]}
+              style={{width: '100%'}}
+            />
+          </div>
 
-      <div>
-        <h2>Available Vouchers</h2>
-        <DataTable
-          columns={voucherColumns}
-          data={voucherData}
-          pagination
-          paginationPerPage={5}
-          paginationRowsPerPageOptions={[5, 10, 20, 50]}
-        />
+          <div style={{width: '100%'}}>  
+            <h2>Available Vouchers</h2>
+            <DataTable
+              columns={voucherColumns}
+              data={voucherData}
+              pagination
+              paginationPerPage={5}
+              paginationRowsPerPageOptions={[5, 10, 20, 50]}
+            />
+          </div>
+        </div>
+        {/* Other content of your Configuration component */}
       </div>
-
-      {/* Other content of your Configuration component */}
     </div>
   );
 }
