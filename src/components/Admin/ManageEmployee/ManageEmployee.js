@@ -59,7 +59,6 @@ export default function ManageEmployee() {
     };
 
     const handleDisactiveAction = (email) => {
-        console.log(email);
         setChanged(false)
         Swal.fire({
             title: 'Are you sure?',
@@ -125,7 +124,6 @@ export default function ManageEmployee() {
             managedByEmpID: selectedStaff,
             email: employee.email?.email
         }
-        console.log(employeeDTO);
         fetch(`${URL_FETCH_AZURE_SERVER}trainer/update-profile`, {
             method: 'PUT',
             headers: {
@@ -256,9 +254,10 @@ export default function ManageEmployee() {
                                 value={employee?.email?.email}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12}>
                             <InputLabel id="select-label">Select an zoo area</InputLabel>
                             <Select
+                                fullWidth
                                 labelId="select-label"
                                 id="select"
                                 value={selectedZooArea}
@@ -273,9 +272,10 @@ export default function ManageEmployee() {
                             </Select>
                         </Grid>
                         {employee?.email?.role?.roleID === "ZT" ?
-                            <Grid item xs={6}>
+                            <Grid item xs={12}>
                                 <InputLabel id="select-label">Managed by: </InputLabel>
                                 <Select
+                                    fullWidth
                                     labelId="select-label"
                                     id="select"
                                     value={selectedStaff}
@@ -290,6 +290,33 @@ export default function ManageEmployee() {
                                 </Select>
                             </Grid>
                             : ""}
+                        {/* {employee?.active ? "" :
+                            <Grid item xs={12}>
+                                <FormLabel id="active">Active</FormLabel>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="active"
+                                    name="Active"
+                                    onChange={(e) => setAc(e.target.value)}
+                                    value={gender}
+                                >
+                                    <FormControlLabel
+                                        value="Female"
+                                        control={<Radio />}
+                                        label="Female"
+                                    />
+                                    <FormControlLabel
+                                        value="Male"
+                                        control={<Radio />}
+                                        label="Male"
+                                    />
+                                    <FormControlLabel
+                                        value="Mixed"
+                                        control={<Radio />}
+                                        label="Mixed"
+                                    />
+                                </RadioGroup>
+                            </Grid>} */}
                     </Box>
                 </DialogContent>
                 <DialogActions>

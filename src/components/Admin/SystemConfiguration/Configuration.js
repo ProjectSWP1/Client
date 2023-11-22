@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, Grid, TextField } from "@mui/material";
 import DataTable from "react-data-table-component";
 import { URL_FETCH_AZURE_SERVER } from "../../../config";
 
 import './Configuration.css'
+import Swal from "sweetalert2";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 export default function Configuration() {
   const [timeUntilMonday, setTimeUntilMonday] = useState('');
@@ -12,6 +17,17 @@ export default function Configuration() {
   const [voucherCoupon, setVoucherCoupon] = useState(0.25);
   const [ticketData, setTicketData] = useState([]);
   const [voucherData, setVoucherData] = useState([]);
+  const [changed, setChanged] = useState(false)
+
+  //update
+  const [openTicketDialog, setOpenTicketDialog] = useState(false)
+  const [ticketId, setTicketId] = useState("")
+  const [ticketPrice, setTicketPrice] = useState(0)
+  const [expDate, setExpDate] = useState("")
+  const [description, setDescription] = useState("")
+
+  const [openVoucherDialog, setOpenVoucherDialog] = useState(false)
+
   const [token, setToken] = useState(
     localStorage.getItem("token")
       ? JSON.parse(localStorage.getItem("token")).value
@@ -38,7 +54,7 @@ export default function Configuration() {
   useEffect(() => {
     // Fetch available tickets and vouchers when the component mounts
     fetchTicketsAndVouchers();
-  }, [token]);
+  }, [token, changed]);
 
   function calculateTimeUntilMonday() {
     const now = new Date();
@@ -83,7 +99,7 @@ export default function Configuration() {
           },
         }
       );
-      const ticketsData = await ticketsResponse.json();
+      const ticketsData = await ticketsResponse.text();
 
       // Fetch vouchers with updated coupon
       const vouchersResponse = await fetch(
@@ -95,32 +111,127 @@ export default function Configuration() {
           },
         }
       );
-      const vouchersData = await vouchersResponse.json();
+      const vouchersData = await vouchersResponse.text();
 
-      // Update state with the fetched data
-      setTicketData(ticketsData);
-      setVoucherData(vouchersData);
     } catch (error) {
       console.error("Error fetching data from the backend:", error);
     }
   }
 
   const removeTicket = (ticket) => {
-    // Implement the logic to remove a ticket
-    // fetch remove
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Are you sure?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#2e7d32',
+      cancelButtonColor: '#DDDDDD',
+      confirmButtonText: 'Yes!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`${URL_FETCH_AZURE_SERVER}admin/remove-ticket/${ticket.ticketId}`, {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + token,
+          },
+        }).then(response => {
+          if (!response.ok) {
+            return response.text().then((message) => {
+              throw new Error(message);
+            });
+          }
+          return response.text()
+        }).then(data => {
+          Swal.fire({
+            title: 'Success!',
+            text: `${data}`,
+            icon: 'success',
+          });
+          setTicketData(ticketData.filter(item => {
+            return item.ticketId !== ticket.ticketId
+          }))
+        })
+          .catch(error => {
+            Swal.fire({
+              title: 'Fail!',
+              text: `${error.message}`,
+              icon: 'error',
+            });
+          });
+      }
+    });
   };
 
   const updateTicket = (ticket) => {
     // Implement the logic to update a ticket
     // fetch update
+    setOpenTicketDialog(true)
+    setTicketId(ticket.ticketId)
+    setTicketPrice(ticket.ticketPrice)
+    setExpDate(ticket.expDate)
+    setDescription(ticket.description)
   };
+
+  const handleUpdateTicket = () => {
+
+  }
 
   const removeVoucher = (voucher) => {
     // Implement the logic to remove a voucher
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Are you sure?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#2e7d32',
+      cancelButtonColor: '#DDDDDD',
+      confirmButtonText: 'Yes!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`${URL_FETCH_AZURE_SERVER}admin/delete-voucher/${voucher.voucherId}`, {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + token,
+          },
+        }).then(response => {
+          if (!response.ok) {
+            return response.text().then((message) => {
+              throw new Error(message);
+            });
+          }
+          return response.text()
+        }).then(data => {
+          Swal.fire({
+            title: 'Success!',
+            text: `${data}`,
+            icon: 'success',
+          });
+          setVoucherData(voucherData.filter(item => {
+            return item.voucherId !== voucher.voucherId
+          }))
+        })
+          .catch(error => {
+            Swal.fire({
+              title: 'Fail!',
+              text: `${error.message}`,
+              icon: 'error',
+            });
+          });
+      }
+    });
   };
 
   const updateVoucher = (voucher) => {
     // Implement the logic to update a voucher
+  };
+
+  const handleClose = () => {
+    setOpenTicketDialog(false);
+    setOpenVoucherDialog(false)
   };
 
   async function fetchTicketsAndVouchers() {
@@ -154,8 +265,14 @@ export default function Configuration() {
       console.log("Vouchers Data:", vouchersData);
 
       // Update state with the fetched data
-      setTicketData(ticketsData);
-      setVoucherData(vouchersData);
+      const sortedTickets = ticketsData.sort(
+        (a, b) => new Date(b.visitDate) - new Date(a.visitDate)
+      )
+      const sortedVouchers = vouchersData.sort(
+        (a, b) => new Date(b.expirationDate) - new Date(a.expirationDate)
+      )
+      setTicketData(sortedTickets);
+      setVoucherData(sortedVouchers);
     } catch (error) {
       console.error("Error fetching data from the backend:", error);
     }
@@ -166,19 +283,26 @@ export default function Configuration() {
     {
       name: "Ticket ID",
       selector: (ticket) => <p>{ticket.ticketId}</p>,
-      width: '150px'
+      width: '100px'
     },
     {
       name: "Adult Price",
       selector: (ticket) => <p>{ticket.ticketPrice.toLocaleString()} VND</p>,
-      width: '180px'
+      width: '150px'
     },
     {
       name: "Children Price",
       selector: (ticket) => (
         <p>{ticket.childrenTicketPrice.toLocaleString()} VND</p>
       ),
-      width: '180px'
+      width: '150px'
+    },
+    {
+      name: "Visit Date",
+      selector: (ticket) => (
+        <p>{ticket.visitDate}</p>
+      ),
+      width: '150px'
     },
     {
       name: "Actions",
@@ -244,8 +368,11 @@ export default function Configuration() {
   ];
 
   return (
-    <div style={{width: '100%'}}>
-      <h1 style={{ marginTop: '70px', marginBottom: '30px', marginLeft: '20px' }}>Time until Monday: {timeUntilMonday}</h1>
+    <div style={{ width: '100%' }}>
+      <h1 style={{
+        marginTop: '70px', marginBottom: '30px', marginLeft: '20px'
+        , color: "green", fontWeight: 'bolder'
+      }}>Time until Monday: {timeUntilMonday}</h1>
       <div className="system-configuration">
         <div className="generate-ticket">
           <div className="generate-ticket-content">
@@ -254,7 +381,7 @@ export default function Configuration() {
             </p> */}
             <div style={{ textAlign: 'center', marginBottom: '10px' }}>
               <label>
-                Adult Ticket Price:
+                <b>Adult Ticket Price:</b>
                 {/* <input
               type="number"
               value={adultTicketPrice}
@@ -274,7 +401,7 @@ export default function Configuration() {
             </div>
             <div style={{ textAlign: 'center', marginBottom: '10px' }}>
               <label>
-                Child Ticket Price:
+                <b>Child Ticket Price:</b>
                 {/* <input
                 type="number"
                 value={childTicketPrice}
@@ -294,7 +421,7 @@ export default function Configuration() {
             </div>
             <div style={{ textAlign: 'center', marginBottom: '10px' }}>
               <label>
-                Voucher Coupon:
+                <b>Voucher Coupon:</b>
                 {/* <input
                 type="number"
                 step="0.01"
@@ -327,23 +454,27 @@ export default function Configuration() {
         </div>
 
         <div style={{ width: '65%' }}>
-          <div style={{width: '100%'}}>
+          <div style={{ width: '100%' }}>
             <h2>Available Tickets</h2>
             <DataTable
               columns={ticketColumns}
-              data={ticketData}
+              data={ticketData.map(item => ({
+                ...item,
+              }))}
               pagination
               paginationPerPage={5}
               paginationRowsPerPageOptions={[5, 10, 20, 50]}
-              style={{width: '100%'}}
+              style={{ width: '100%' }}
             />
           </div>
 
-          <div style={{width: '100%'}}>  
+          <div style={{ width: '100%' }}>
             <h2>Available Vouchers</h2>
             <DataTable
               columns={voucherColumns}
-              data={voucherData}
+              data={voucherData.map(item => ({
+                ...item,
+              }))}
               pagination
               paginationPerPage={5}
               paginationRowsPerPageOptions={[5, 10, 20, 50]}
@@ -352,6 +483,106 @@ export default function Configuration() {
         </div>
         {/* Other content of your Configuration component */}
       </div>
+      <Dialog open={openTicketDialog} onClose={handleClose}
+        style={{ p: '20px' }}>
+        <div style={{
+          margin: '15px',
+          fontSize: '20px',
+          fontWeight: 'bolder',
+          color: 'green',
+        }}>Upate ticket {ticketId}</div>
+        <DialogContent>
+          <Box component="form" noValidate sx={{ pl: '40px', pr: '40px' }}>
+            <Grid item xs={12} sx={{ mt: '15px' }}>
+              <TextField
+                fullWidth
+                type='number'
+                label="Price"
+                value={ticketPrice}
+                onChange={(e) => setTicketPrice(e)}
+              />
+            </Grid>
+            <Grid item xs={6} sx={{ mt: '10px' }}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DatePicker']} >
+                  <DatePicker label="Visit Date"
+                    value={dayjs(expDate)}
+                    onChange={(e) => setExpDate(`${e.$y}/${e.$M + 1}/${e.$D}`)}
+                    format='YYYY/MM/DD'
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+            </Grid>
+            <Grid item xs={12} sx={{ mt: '15px' }}>
+              <TextField
+                fullWidth
+                type='text'
+                label="Description"
+                value={description}
+                onChange={(e) => setDescription(e)}
+              />
+            </Grid>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Close
+          </Button>
+          <Button onClick={handleUpdateTicket} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={openVoucherDialog} onClose={handleClose}
+        style={{ p: '20px' }}>
+        <div style={{
+          margin: '15px',
+          fontSize: '20px',
+          fontWeight: 'bolder',
+          color: 'green',
+        }}>Upate voucher</div>
+        <DialogContent>
+          <Box component="form" noValidate sx={{ pl: '40px', pr: '40px' }}>
+            <Grid item xs={12} sx={{ mt: '15px' }}>
+              <TextField
+                fullWidth
+                type='number'
+                label="Price"
+                value={ticketPrice}
+                onChange={(e) => setTicketPrice(e)}
+              />
+            </Grid>
+            <Grid item xs={6} sx={{ mt: '10px' }}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DatePicker']} >
+                  <DatePicker label="Visit Date"
+                    value={dayjs(expDate)}
+                    onChange={(e) => setExpDate(`${e.$y}/${e.$M + 1}/${e.$D}`)}
+                    format='YYYY/MM/DD'
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+            </Grid>
+            <Grid item xs={12} sx={{ mt: '15px' }}>
+              <TextField
+                fullWidth
+                type='text'
+                label="Description"
+                value={description}
+                onChange={(e) => setDescription(e)}
+              />
+            </Grid>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Close
+          </Button>
+          <Button onClick={handleUpdateTicket} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

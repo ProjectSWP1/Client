@@ -407,7 +407,7 @@ export default function ManageAccount() {
                       disabled
                     />
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid item xs={12}>
                     <InputLabel id="select-label">Select role</InputLabel>
                     <Select
                       fullWidth
@@ -423,22 +423,6 @@ export default function ManageAccount() {
                       })}
                     </Select>
                   </Grid>
-                  {role == 'ZT' ? <Grid item xs={6}>
-                    <InputLabel id="select-label">Select a zoo area</InputLabel>
-                    <Select
-                      fullWidth
-                      labelId="select-label"
-                      id="select"
-                      value={selectedZooArea}
-                      onChange={(e) => setSelectedZooArea(e.target.value)}
-                    >
-                      {zooAreas.map(area => {
-                        return (
-                          <MenuItem key={area.zooAreaId} value={area.zooAreaId}>{area.description}</MenuItem>
-                        )
-                      })}
-                    </Select>
-                  </Grid> : ""}
                 </>}
             </Grid>
           </Box>
