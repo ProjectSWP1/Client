@@ -14,6 +14,7 @@ export default function CompleteOrder() {
   const redirectStatus = queryParams.get("redirect_status");
   const orderID = queryParams.get("orderID");
   const [orderData, setOrderData] = useState(null);
+  const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
 
   // Calculate the discounted total based on the coupon
   const calculateDiscountedTotal = () => {
@@ -115,13 +116,16 @@ export default function CompleteOrder() {
                       />
                       Go back to Main Page
                     </Link>
-                    <Link to="/profile" className="completed-order-thank-you-btn">
+                    {
+                      token ? <Link to="/profile" className="completed-order-thank-you-btn">
                       <ReviewsIcon
                         className="completed-order-thank-you-icon"
                         style={{ marginRight: "10px" }}
                       />
                       View Order History
-                    </Link>
+                      </Link>
+                      : ""
+                    }
                   </div>
                   <div className="completed-order-thank-you-footer">
                     <Link className="social-btn">

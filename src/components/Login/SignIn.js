@@ -47,8 +47,10 @@ export default function SignIn() {
     try {
       // Create an axios instance with CORS configuration
       const axiosInstance = axios.create({
+        //withCredentials: true, // Include credentials (cookies)
         headers: {
           "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "https://zookay-web.vercel.app",
           "Access-Control-Allow-Origin": "http://localhost:3000",
           // Add any other necessary headers
         },
@@ -56,7 +58,7 @@ export default function SignIn() {
 
       // Use the axios instance for the request
       const response = await axiosInstance.post(
-        `${REACT_APP_API_URL}user/login`,
+        `${URL_FETCH_AZURE_SERVER}user/login`,
         { email, password }
       );
 
