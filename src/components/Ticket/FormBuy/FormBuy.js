@@ -256,8 +256,8 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
               </Typography>
             )}
 
-            {/* Numeric input with Material-UI components */}
-            <div
+
+            <div // Numeric input with Material-UI components
               style={{
                 alignItems: "center",
                 justifyContent: "center",
@@ -357,9 +357,9 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
                 onChange={(e) => setUserEmail(e.target.value)}
               />
             )}
-            {/* Display error messages */}
+
             {!token && emailError && (
-              <div style={{ color: "red" }}>{emailError}</div>
+              <div style={{ color: "red" }}>{emailError}</div> // Display error messages
             )}
 
             <Container
@@ -395,7 +395,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
         >
           {snackbarMessage}
         </MuiAlert>
-      </Snackbar>
+      </Snackbar> 
     </ThemeProvider>
   );
 }

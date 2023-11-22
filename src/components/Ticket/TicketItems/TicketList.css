@@ -1,0 +1,123 @@
+.ticket-list-container{
+    width: 100%;
+    padding: 40px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.ticket-list-left{
+    width: 35%;
+    margin-top: 70px;
+}
+.ticket-list-left img{
+    width: 450px;
+    height: 610px;
+}
+
+.ticket-list-right{
+    width: 65%;
+    margin-top: 60px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+}
+
+.ticket-list-right-title{
+    width: 100%;
+    color: green;
+    text-align: center;
+}
+.ticket-list-right-underline{
+    border-top: 4px solid green;
+    width: 50%;
+}
+
+.ticket-list-right-content{
+    margin-top: 20px;
+    width: 100%;
+    color: rgb(64, 63, 63);
+}
+.ticket-list-right-content h4{
+    color: darkgreen;
+    word-spacing: 3px;
+}
+.ticket-list-right-content p{
+    margin-bottom: 5px;
+}
+
+.ticket-list-right-underneath{
+    width: 100%;
+}
+
+.ticket-list-right-underneath-header{
+    display: flex;
+}
+.ticket-list-right-underneath-header img{
+    width: 50px;
+    height: 50px;
+}
+.ticket-list-right-underneath-header h2{
+    margin: 5px 0 10px 10px;
+}
+
+.ticket-list-right-available-ticket{
+    width: 100%;
+    display: flex;
+}
+.ticket-list-right-underneath-A{
+    width: 30%;
+    background-color: #e1f8c5;
+    padding: 15px;
+}
+.ticket-list-right-underneath-A h4{
+    font-weight: bold;
+    text-align: center;
+}
+.ticket-list-right-underneath-A-date{
+    text-align: center;
+    margin-bottom: 40px
+}
+.ticket-list-right-underneath-A-price{
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.ticket-list-right-underneath-B{
+    width: 70%;
+}
+.ticket-list-right-underneath-B-content{
+    margin: 10px 0 10px 10px;
+    padding: 10px;
+    background-color: darkgreen;
+    color: white;
+    width: 70%;
+    height: 20%;
+    display: flex;
+    font-weight: 600;
+}
+.ticket-list-right-underneath-B-date{
+    width: 40%;
+    margin-left: 20px;
+}
+.ticket-list-right-underneath-B-price{
+    width: 30%
+}
+
+.ticket-list-right-underneath-B-btn{
+    margin: 10px 10px 10px 0;
+    width: 30%;
+    height: 20%;
+}
+.ticket-list-right-underneath-B-btn :hover{
+    background-color: rgb(52, 210, 52) !important;
+}
+
+.ticket-list-right-underneath-B-member-btn{
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+}
+.ticket-list-right-underneath-B-member-btn :hover{
+    background-color: rgb(19, 170, 19) !important;
+}
