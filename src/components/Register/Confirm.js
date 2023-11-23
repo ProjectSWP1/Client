@@ -7,11 +7,12 @@ import Container from "@mui/material/Container";
 import { ThemeProvider } from "@mui/material/styles";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import { ListItemText } from "@mui/material";
+import { Avatar, IconButton, ListItemText, Tooltip } from "@mui/material";
 import { Copyright, defaultTheme } from "../Theme/Theme.js";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import CircularProgress from "@mui/material/CircularProgress";
+import HomeIcon from '@mui/icons-material/Home';
 import { URL_FETCH_AZURE_SERVER } from "../../config.js";
 
 export default class Confirm extends Component {
@@ -27,7 +28,7 @@ export default class Confirm extends Component {
     event.preventDefault();
     this.props.prevStep();
   };
-  
+
 
   handleSubmit = (event) => {
     event.preventDefault();
@@ -107,7 +108,7 @@ export default class Confirm extends Component {
 
     setTimeout(() => {
       this.setState({ loading: false });
-    }, 40000); 
+    }, 40000);
   };
   render() {
     const {
@@ -115,19 +116,24 @@ export default class Confirm extends Component {
     } = this.props;
     return (
       <ThemeProvider theme={defaultTheme}>
+        <Tooltip style={{
+          margin: '10px'
+        }}>
+          <IconButton>
+            <Link to={'/'}><HomeIcon fontSize='large' color='success' /></Link>
+          </IconButton>
+        </Tooltip>
         <Container component="main" maxWidth="xs">
+          <h1 style={{ color: 'darkgreen', textAlign: 'center' }}>Confirm</h1>
           <CssBaseline />
           <Box
             sx={{
-              marginTop: 8,
+              marginTop: 2,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
             }}
           >
-            <Typography component="h1" variant="h5">
-              Confirm
-            </Typography>
             <List>
               <ListItem>
                 <ListItemText primary="Email" secondary={email} />
@@ -189,7 +195,7 @@ export default class Confirm extends Component {
                     flexDirection: "column",
                   }}
                 >
-                  <CircularProgress size={50} style={{ color: "#FFFFFF80" }}/>
+                  <CircularProgress size={50} style={{ color: "#FFFFFF80" }} />
                   <p
                     style={{
                       marginTop: "20px",

@@ -10,6 +10,8 @@ import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import { Copyright, defaultTheme } from '../Theme/Theme.js';
 import { Link } from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
+import { IconButton, Tooltip } from '@mui/material';
 
 export default class UserForm extends Component {
     // componentDidMount() {
@@ -28,9 +30,16 @@ export default class UserForm extends Component {
         const email = window.location.href.split('=')[1]
         return (
             <ThemeProvider theme={defaultTheme}>
+                <Tooltip style={{
+                    margin: '10px'
+                }}>
+                    <IconButton>
+                        <Link to={'/'}><HomeIcon fontSize='large' color='success' /></Link>
+                    </IconButton>
+                </Tooltip>
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
-                    <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+                    <Box sx={{ marginTop: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
                         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                             <LockOutlinedIcon />
                         </Avatar>
@@ -44,7 +53,7 @@ export default class UserForm extends Component {
                                         id="email"
                                         label="Email Address"
                                         onChange={handleChange('email')}
-                                        value={email? email : values.email}
+                                        value={email ? email : values.email}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>

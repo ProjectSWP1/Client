@@ -44,7 +44,7 @@ export default class SignUp extends Component {
             
         switch(step) {
             case 1:
-                return (
+                return (    
                    <UserForm 
                         nextStep = {this.nextStep}
                         handleChange = {this.handleChange}

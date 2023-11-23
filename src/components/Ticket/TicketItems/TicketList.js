@@ -17,10 +17,12 @@ import { defaultTheme } from "../../Theme/Theme";
 import { URL_FETCH_AZURE_SERVER } from "../../../config";
 
 import './TicketList.css'
+import { Link } from "react-router-dom";
 
 export default function TicketList() {
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
+  const currentDay = new Date()
 
   const accessToken = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
 
@@ -28,7 +30,16 @@ export default function TicketList() {
     axios
       .get(`${URL_FETCH_AZURE_SERVER}user/by-visit-date-asc`)
       .then((response) => {
-        setTickets(response.data);
+        const tickets = response.data.filter(ticket => {
+          const ticketDate = new Date(ticket.visitDate)
+          if (ticketDate.getDate() === currentDay.getDate() &&
+            currentDay.getHours() >= 15) {
+            return false
+          }
+          return ticketDate > currentDay
+        }).slice(0, 5)
+        console.log(tickets);
+        setTickets(tickets);
       })
       .catch((error) => {
         console.error("Error fetching tickets:", error);
@@ -56,65 +67,6 @@ export default function TicketList() {
     <>
       <FormBuy ticket={selectedTicket} setSelectedTicket={setSelectedTicket} token={accessToken} />
       <ThemeProvider theme={defaultTheme}>
-        {/* <Container
-          disableGutters
-          maxWidth="sm"
-          component="main"
-          sx={{ pt: 16, pb: 6 }}
-        >
-          <Typography
-            variant="h2"
-            align="center"
-            color={defaultTheme.palette.primary.dark}
-            gutterBottom
-          >
-            Tickets Pricing
-          </Typography>
-          <Typography
-            variant="h5"
-            align="center"
-            color="text.secondary"
-          >
-            Open the gates to animal love, get your tickets now and enjoy
-            limitless joy
-          </Typography>
-        </Container>
-        <Container maxWidth="md" component="main">
-          <Grid container spacing={3}>
-            {tickets.map((ticket) => (
-              <Grid item xs={12} sm={6} md={4} key={ticket.ticketId}>
-                <Card>
-                  <CardMedia
-                    component="img"
-                    height="194"
-                    image={
-                      "https://icons.iconarchive.com/icons/custom-icon-design/flatastic-8/512/Ticket-icon.png"
-                    }
-                    alt="Ticket"
-                  />
-                  <CardContent>
-                    <Typography variant="body2" color="text.secondary">
-                      <strong>Visit Date:</strong>{" "}
-                      {ticket.visitDate}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      <strong>Price:</strong> {ticket.ticketPrice} VND
-                    </Typography>
-                    <Button
-                      style={{ marginTop: "10px", backgroundColor: green[500] }}
-                      variant="contained"
-                      // href="#contained-buttons"
-                      onClick={() => setSelectedTicket(ticket)}
-                    >
-                      Buy Ticket
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container> */}
-
         <div className="ticket-list-container">
           <div className="ticket-list-left">
             <img src="assets/images/ticket-list-image.jpg" />
@@ -132,116 +84,82 @@ export default function TicketList() {
               <p> &#8250; We will send QR code to your email after successful payment, you can also gift QR code to others</p>
               <p> &#8250; Zoo gates will automatically scan your QR code</p>
             </div>
-
-            <div className="ticket-list-right-underneath">
-              <div className="ticket-list-right-underneath-header">
-                <img src="assets/images/ticket-list-icon.png" />
-                <h2>Here available tickets</h2>
-              </div>
-              <div className="ticket-list-right-available-ticket">
-                <div className="ticket-list-right-underneath-A">
-                  <h4>TODAY</h4>
-                  <p className="ticket-list-right-underneath-A-date">2023-11-22</p>
-                  <p className="ticket-list-right-underneath-A-price">Adult Price: 50,000 VNĐ</p>
-                  <p className="ticket-list-right-underneath-A-price">Children Price: 30,000 VNĐ</p>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    fullWidth
-                    style={{ marginTop: '50px' }}
-                  >
-                    BUY NOW
-                  </Button>
+            {tickets.length > 0 && (
+              <div className="ticket-list-right-underneath">
+                <div className="ticket-list-right-underneath-header">
+                  <img src="assets/images/ticket-list-icon.png" />
+                  <h2>Here available tickets</h2>
                 </div>
-                <div className="ticket-list-right-underneath-B">
-                  <div style={{ width: '100%', display: 'flex' }}>
-                    <div className="ticket-list-right-underneath-B-content">
-                      <div className="ticket-list-right-underneath-B-date">
-                        2023-11-23
-                      </div>
-                      <div className="ticket-list-right-underneath-B-price">
-                        A: 50K
-                      </div>
-                      <div className="ticket-list-right-underneath-B-price">
-                        C: 30K
-                      </div>
-                    </div>
-                    <div className="ticket-list-right-underneath-B-btn">
-                      <Button
-                        variant="contained"
-                        size="small"
-                        fullWidth
-                        style={{ height: '43px', backgroundColor: 'lightgreen', color: 'darkgreen' }}
-                      >
-                        BUY
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div style={{ width: '100%', display: 'flex' }}>
-                    <div className="ticket-list-right-underneath-B-content">
-                      <div className="ticket-list-right-underneath-B-date">
-                        2023-11-24
-                      </div>
-                      <div className="ticket-list-right-underneath-B-price">
-                        A: 50K
-                      </div>
-                      <div className="ticket-list-right-underneath-B-price">
-                        C: 30K
-                      </div>
-                    </div>
-                    <div className="ticket-list-right-underneath-B-btn">
-                      <Button
-                        variant="contained"
-                        size="small"
-                        fullWidth
-                        style={{ height: '43px', backgroundColor: 'lightgreen', color: 'darkgreen' }}
-                      >
-                        BUY
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div style={{ width: '100%', display: 'flex' }}>
-                    <div className="ticket-list-right-underneath-B-content">
-                      <div className="ticket-list-right-underneath-B-date">
-                        2023-11-25
-                      </div>
-                      <div className="ticket-list-right-underneath-B-price">
-                        A: 50K
-                      </div>
-                      <div className="ticket-list-right-underneath-B-price">
-                        C: 30K
-                      </div>
-                    </div>
-                    <div className="ticket-list-right-underneath-B-btn">
-                      <Button
-                        variant="contained"
-                        size="small"
-                        fullWidth
-                        style={{ height: '43px', backgroundColor: 'lightgreen', color: 'darkgreen' }}
-                      >
-                        BUY
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div className="ticket-list-right-underneath-B-member-btn">
+                <div className="ticket-list-right-available-ticket">
+                  <div className="ticket-list-right-underneath-A">
+                    <h4>Recent days</h4>
+                    <p className="ticket-list-right-underneath-A-date">{tickets[0].visitDate}</p>
+                    <p className="ticket-list-right-underneath-A-price">Adult Price: {tickets[0].ticketPrice.toLocaleString()} VNĐ</p>
+                    <p className="ticket-list-right-underneath-A-price">Children Price: {tickets[0].childrenTicketPrice.toLocaleString()} VNĐ</p>
                     <Button
                       variant="contained"
                       size="small"
-                      style={{ width: '90%',height: '55px', 
-                               backgroundColor: 'green', color: 'white',
-                               textTransform: 'none', fontWeight: 'bold',
-                               fontSize: '14px'}}
+                      fullWidth
+                      style={{ marginTop: '50px' }}
+                      onClick={() => setSelectedTicket(tickets[0])}
                     >
-                      You will receive benefits from buying tickets
-                      <br />Click here to begin become a member
+                      BUY NOW
                     </Button>
                   </div>
+                  <div className="ticket-list-right-underneath-B">
+                    {tickets.map((ticket, index) => (
+                      <div key={index}>
+                        {index !== 0 && (
+                          <div style={{ width: '100%', display: 'flex' }}>
+                            <div className="ticket-list-right-underneath-B-content">
+                              <div className="ticket-list-right-underneath-B-date">
+                                {ticket.visitDate}
+                              </div>
+                              <div className="ticket-list-right-underneath-B-price">
+                                A: {ticket.ticketPrice.toLocaleString()} VNĐ
+                              </div>
+                              <div className="ticket-list-right-underneath-B-price">
+                                C: {ticket.childrenTicketPrice.toLocaleString()} VNĐ
+                              </div>
+                            </div>
+                            <div className="ticket-list-right-underneath-B-btn">
+                              <Button
+                                variant="contained"
+                                size="small"
+                                fullWidth
+                                onClick={() => setSelectedTicket(ticket)}
+                                style={{ height: '43px', backgroundColor: 'lightgreen', color: 'darkgreen' }}
+                              >
+                                BUY
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </div>
+                <div className="ticket-list-right-underneath-B-member-btn">
+                  {!accessToken && (
+                    <Button
+                      variant="contained"
+                      size="small"
+                      style={{
+                        width: '90%', height: '55px',
+                        backgroundColor: 'green', color: 'white',
+                        textTransform: 'none', fontWeight: 'bold',
+                        fontSize: '14px'
+                      }}
+                    >
+                      <Link to={'/register'}
+                        style={{ textDecoration: 'none', color: 'white' }}>
+                        You will receive benefits from buying tickets
+                        <br />Click here to begin become a member
+                      </Link>
+                    </Button>
+                  )}
+                </div>
+              </div>)}
           </div>
         </div>
       </ThemeProvider>

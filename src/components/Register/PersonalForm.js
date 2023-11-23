@@ -9,12 +9,14 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import { Copyright, defaultTheme } from '../Theme/Theme.js';
-import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
+import { FormControlLabel, FormLabel, IconButton, Radio, RadioGroup, Tooltip } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import { Link } from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
 
 export default class PersonalForm extends Component {
     continue = e => {
@@ -29,11 +31,18 @@ export default class PersonalForm extends Component {
         const { values, handleChange } = this.props
         return (
             <ThemeProvider theme={defaultTheme}>
+                <Tooltip style={{
+                    margin: '10px'
+                }}>
+                    <IconButton>
+                        <Link to={'/'}><HomeIcon fontSize='large' color='success' /></Link>
+                    </IconButton>
+                </Tooltip>
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <Box
                         sx={{
-                            marginTop: 8,
+                            marginTop: 2,
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
@@ -54,18 +63,18 @@ export default class PersonalForm extends Component {
                                         onChange={handleChange('gender')}
                                         value={values.gender}
                                     >
-                                        <FormControlLabel value="female" control={<Radio />} label="Female"/>
+                                        <FormControlLabel value="female" control={<Radio />} label="Female" />
                                         <FormControlLabel value="male" control={<Radio />} label="Male" />
                                     </RadioGroup>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DemoContainer components={['DatePicker']} >
-                                            <DatePicker label="Date of Birth" 
-                                                        value={dayjs(values.dob)}   
-                                                        onChange={handleChange('dob')}
-                                                        format='MM/DD/YYYY'
-                                                        />
+                                            <DatePicker label="Date of Birth"
+                                                value={dayjs(values.dob)}
+                                                onChange={handleChange('dob')}
+                                                format='MM/DD/YYYY'
+                                            />
                                         </DemoContainer>
                                     </LocalizationProvider>
                                 </Grid>
