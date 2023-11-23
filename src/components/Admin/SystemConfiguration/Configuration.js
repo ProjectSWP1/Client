@@ -19,14 +19,19 @@ export default function Configuration() {
   const [voucherData, setVoucherData] = useState([]);
   const [changed, setChanged] = useState(false)
 
-  //update
+  //update ticket
   const [openTicketDialog, setOpenTicketDialog] = useState(false)
   const [ticketId, setTicketId] = useState("")
   const [ticketPrice, setTicketPrice] = useState(0)
-  const [expDate, setExpDate] = useState("")
+  const [ticketChildren, setTicketChildren] = useState(0)
+  const [visitDate, setVisitDate] = useState("")
   const [description, setDescription] = useState("")
 
+  //update voucher
   const [openVoucherDialog, setOpenVoucherDialog] = useState(false)
+  const [voucherId, setVoucherId] = useState("")
+  const [coupon, setCoupon] = useState(0)
+  const [expDate, setExpDate] = useState("")
 
   const [token, setToken] = useState(
     localStorage.getItem("token")
@@ -167,15 +172,53 @@ export default function Configuration() {
   const updateTicket = (ticket) => {
     // Implement the logic to update a ticket
     // fetch update
+    setChanged(false)
     setOpenTicketDialog(true)
     setTicketId(ticket.ticketId)
     setTicketPrice(ticket.ticketPrice)
-    setExpDate(ticket.expDate)
-    setDescription(ticket.description)
+    setTicketChildren(ticket.childrenTicketPrice)
+    setVisitDate(ticket.visitDate)
+    setDescription("")
   };
 
   const handleUpdateTicket = () => {
-
+    setOpenTicketDialog(false)
+    const ticketDto = {
+      ticketId: ticketId,
+      ticketPrice: ticketPrice,
+      childrenTicketPrice: ticketChildren,
+      visitDate: visitDate,
+      description: description
+    }
+    fetch(`${URL_FETCH_AZURE_SERVER}admin/update-ticket`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer " + token,
+      },
+      body: JSON.stringify(ticketDto)
+    }).then(response => {
+      if (!response.ok) {
+        return response.text().then((message) => {
+          throw new Error(message);
+        });
+      }
+      return response.text();
+    }).then(data => {
+      Swal.fire({
+        title: 'Success!',
+        text: `${data}`,
+        icon: 'success',
+      });
+      setChanged(true)
+    }).catch(error => {
+      Swal.fire({
+        title: 'Fail!',
+        text: `${error}`,
+        icon: 'error',
+      });
+    })
   }
 
   const removeVoucher = (voucher) => {
@@ -227,7 +270,52 @@ export default function Configuration() {
 
   const updateVoucher = (voucher) => {
     // Implement the logic to update a voucher
+    setChanged(false)
+    setOpenVoucherDialog(true)
+    setVoucherId(voucher.voucherId)
+    setCoupon(voucher.coupon)
+    setExpDate(voucher.expirationDate)
+    setDescription("")
   };
+
+  const handleUpdateVoucher = () => {
+    setOpenVoucherDialog(false)
+    const voucherDto = {
+      voucherId: voucherId,
+      coupon: coupon,
+      expirationDate: expDate,
+      description: description
+    }
+    fetch(`${URL_FETCH_AZURE_SERVER}admin/update-voucher`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer " + token,
+      },
+      body: JSON.stringify(voucherDto)
+    }).then(response => {
+      if (!response.ok) {
+        return response.text().then((message) => {
+          throw new Error(message);
+        });
+      }
+      return response.text();
+    }).then(data => {
+      Swal.fire({
+        title: 'Success!',
+        text: `${data}`,
+        icon: 'success',
+      });
+      setChanged(true)
+    }).catch(error => {
+      Swal.fire({
+        title: 'Fail!',
+        text: `${error}`,
+        icon: 'error',
+      });
+    })
+  }
 
   const handleClose = () => {
     setOpenTicketDialog(false);
@@ -497,17 +585,26 @@ export default function Configuration() {
               <TextField
                 fullWidth
                 type='number'
-                label="Price"
+                label="Adult Ticket Price"
                 value={ticketPrice}
-                onChange={(e) => setTicketPrice(e)}
+                onChange={(e) => setTicketPrice(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ mt: '15px' }}>
+              <TextField
+                fullWidth
+                type='number'
+                label="Children Ticket Price"
+                value={ticketChildren}
+                onChange={(e) => setTicketChildren(e.target.value)}
               />
             </Grid>
             <Grid item xs={6} sx={{ mt: '10px' }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['DatePicker']} >
                   <DatePicker label="Visit Date"
-                    value={dayjs(expDate)}
-                    onChange={(e) => setExpDate(`${e.$y}/${e.$M + 1}/${e.$D}`)}
+                    value={dayjs(visitDate)}
+                    onChange={(e) => setVisitDate(`${e.$y}-${e.$M + 1}-${e.$D}`)}
                     format='YYYY/MM/DD'
                   />
                 </DemoContainer>
@@ -519,7 +616,7 @@ export default function Configuration() {
                 type='text'
                 label="Description"
                 value={description}
-                onChange={(e) => setDescription(e)}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </Grid>
           </Box>
@@ -540,16 +637,16 @@ export default function Configuration() {
           fontSize: '20px',
           fontWeight: 'bolder',
           color: 'green',
-        }}>Upate voucher</div>
+        }}>Upate voucher {voucherId}</div>
         <DialogContent>
           <Box component="form" noValidate sx={{ pl: '40px', pr: '40px' }}>
             <Grid item xs={12} sx={{ mt: '15px' }}>
               <TextField
                 fullWidth
                 type='number'
-                label="Price"
-                value={ticketPrice}
-                onChange={(e) => setTicketPrice(e)}
+                label="Coupon"
+                value={coupon}
+                onChange={(e) => setCoupon(e.target.value)}
               />
             </Grid>
             <Grid item xs={6} sx={{ mt: '10px' }}>
@@ -557,7 +654,7 @@ export default function Configuration() {
                 <DemoContainer components={['DatePicker']} >
                   <DatePicker label="Visit Date"
                     value={dayjs(expDate)}
-                    onChange={(e) => setExpDate(`${e.$y}/${e.$M + 1}/${e.$D}`)}
+                    onChange={(e) => setExpDate(`${e.$y}-${e.$M + 1}-${e.$D}`)}
                     format='YYYY/MM/DD'
                   />
                 </DemoContainer>
@@ -569,7 +666,7 @@ export default function Configuration() {
                 type='text'
                 label="Description"
                 value={description}
-                onChange={(e) => setDescription(e)}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </Grid>
           </Box>
@@ -578,7 +675,7 @@ export default function Configuration() {
           <Button onClick={handleClose} color="primary">
             Close
           </Button>
-          <Button onClick={handleUpdateTicket} color="primary">
+          <Button onClick={handleUpdateVoucher} color="primary">
             Save
           </Button>
         </DialogActions>
