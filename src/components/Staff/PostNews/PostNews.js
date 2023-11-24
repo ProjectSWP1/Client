@@ -12,8 +12,13 @@ export default function PostNews() {
   const [changed, setChanged] = useState(false)
   const [open, setOpen] = useState(false)
 
+  const [newsId, setNewsId] = useState("")
   const [content, setContent] = useState("")
   const [description, setDescription] = useState("")
+  const [createDate, setCreateDate] = useState("")
+  const UPDATE_TITLE = "Update news"
+  const POST_TITLE = "Create news"
+  const [title, setTitle] = useState(POST_TITLE)
 
   const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
   const email = !token ? null : JSON.parse(atob(token.split('.')[1])).email;
@@ -28,7 +33,6 @@ export default function PostNews() {
       }
     }).then(response => response.json())
       .then(data => {
-        setListNews(data)
         const sortedNews = data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
         setListNews(sortedNews);
       })
@@ -50,9 +54,112 @@ export default function PostNews() {
 
   const handlePostNews = () => {
     setOpen(true)
+    setTitle(POST_TITLE)
     setChanged(false)
     setContent("")
     setDescription("")
+  }
+
+  const handleUpdateNews = (news) => {
+    setOpen(true)
+    setChanged(false)
+    setTitle(UPDATE_TITLE)
+    setContent(news.content)
+    setDescription(news.description)
+    setNewsId(news.newsId)
+    setCreateDate(news.dateCreated)
+  }
+
+  const handleDeleteNews = (newsId) => {
+    const newsDto = {
+      newsId: newsId
+    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Are you sure?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#2e7d32",
+      cancelButtonColor: "#DDDDDD",
+      confirmButtonText: "Yes!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`${URL_FETCH_AZURE_SERVER}staff/deletenews`, {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify(newsDto)
+        })
+          .then((response) => {
+            if (!response.ok) {
+              return response.text().then((message) => {
+                throw new Error(message);
+              });
+            }
+            Swal.fire({
+              title: "Success!",
+              text: `Delete Successfully`,
+              icon: "success",
+            });
+            setListNews(
+              listNews.filter((news) => {
+                return news.newsId != newsId;
+              })
+            );
+          })
+          .catch((error) => {
+            Swal.fire({
+              title: "Fail!",
+              text: `${error.message}`,
+              icon: "error",
+            });
+          });
+      }
+    });
+  }
+
+  const handleUpdateNewsButton = () => {
+    const newsDto = {
+      newsId: newsId,
+      empId: employee.empId,
+      dateCreated: createDate,
+      content: content,
+      description: description
+    }
+    fetch(`${URL_FETCH_AZURE_SERVER}staff/editnews`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer " + token,
+      },
+      body: JSON.stringify(newsDto)
+    }).then(response => {
+      if (!response.ok) {
+        return response.text().then((message) => {
+          throw new Error(message);
+        });
+      }
+      return response.text();
+    }).then(data => {
+      setOpen(false);
+      setChanged(true)
+      Swal.fire({
+        title: 'Success!',
+        text: `${data}`,
+        icon: 'success',
+      });
+    }).catch(error => {
+      setOpen(false);
+      Swal.fire({
+        title: 'Fail!',
+        text: `${error}`,
+        icon: 'error',
+      });
+    });
   }
 
   const handlePostButton = () => {
@@ -125,6 +232,18 @@ export default function PostNews() {
           <p>{news.dateCreated}</p>
         )
       }
+    },
+    {
+      id: 4,
+      name: 'Actions',
+      selector: (news) => {
+        return (
+          <div>
+            <Button variant='contained' size='small' sx={{ mr: '10px' }} onClick={() => handleDeleteNews(news.newsId)}>Remove</Button>
+            <Button variant='contained' size='small' sx={{ mr: '10px' }} onClick={() => handleUpdateNews(news)}>Update</Button>
+          </div>
+        )
+      }
     }
   ]
 
@@ -181,7 +300,8 @@ export default function PostNews() {
               </Grid>
             </form>
             <div className='staff-news-footer'>
-              <Button className='staff-news-footer-btn' onClick={handlePostButton}>Post</Button>
+              {title === POST_TITLE ? <Button className='staff-news-footer-btn' onClick={handlePostButton}>Post</Button> :
+                <Button className='staff-news-footer-btn' onClick={handleUpdateNewsButton}>Update</Button>}
               <Button className='staff-news-footer-btn' onClick={handleCancelButton}>Cancel</Button>
             </div>
           </div>
