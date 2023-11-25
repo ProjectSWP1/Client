@@ -245,7 +245,7 @@ export default function CheckoutForm({ orderData, intentID }) {
               <hr></hr>
               <h2 style={{ marginTop: "30px", textAlign: "center" }}>
                 <strong style={{ color: "#2e7d32" }}>Total:</strong>{" "}
-                {calculateTotalAmount()} VND
+                {calculateTotalAmount().toLocaleString()} VND
               </h2>
             </div>
             <Copyright />

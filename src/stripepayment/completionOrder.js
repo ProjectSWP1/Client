@@ -167,8 +167,8 @@ export default function CompleteOrder() {
                   <div style={{ marginBottom: "10px" }}>
                     <Typography variant="body1">
                       Subtotal:{" "}
-                      {orderData.quantity * orderData.ticket.ticketPrice +
-                        orderData.childrenQuantity * orderData.ticket.childrenTicketPrice}{" "}
+                      {(orderData.quantity * orderData.ticket.ticketPrice +
+                        orderData.childrenQuantity * orderData.ticket.childrenTicketPrice).toLocaleString()}{" "}
                       VND
                     </Typography>
                     {orderData.orderVoucher && (
@@ -186,7 +186,7 @@ export default function CompleteOrder() {
                   ></div>
                   <div style={{ marginBottom: "270px" }}>
                     <Typography style={{ fontSize: "30px" }}>
-                      Total Price: {calculateDiscountedTotal()} VND
+                      Total Price: {calculateDiscountedTotal().toLocaleString()} VND
                     </Typography>
                     <Typography variant="body1" style={{ color: "darkgreen" }}>
                       <PaidIcon />
