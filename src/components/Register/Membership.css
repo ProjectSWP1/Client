@@ -1,4 +1,4 @@
-.membership-text {
+/* .membership-text {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -6,20 +6,20 @@
 .row-member {
     display: flex;
     align-items: center;
-    max-width: 1000px; /* Set a maximum width for the container */
-    margin: 0 auto; /* Center the container horizontally */
-    padding: 0 20px; /* Add padding to the sides */
+    max-width: 1000px; 
+    margin: 0 auto; 
+    padding: 0 20px; 
 }
 
 .membership-text {
     font-family: "Gill Sans Extrabold", sans-serif;
     margin-top: 20px;
     font-size: 70px;
-    font-weight: bold; /* Make the text bold for emphasis */
-    text-transform: uppercase; /* Convert text to uppercase */
-    letter-spacing: 2px; /* Add some letter spacing for a spaced-out look */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Add a subtle text shadow for depth */
-    /* Add any other styling properties you prefer */
+    font-weight: bold; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); 
+    
     color: #a70303;
 }
 
@@ -32,40 +32,40 @@
     background-color: #007bff;
     color: #fff;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Add transitions for background color and transform */
+    transition: background-color 0.3s ease, transform 0.3s ease; 
     border-radius: 5%;
 
-    /* Hover effect */
+    
     &:hover {
         background-color: #0056b3;
-        transform: scale(1.1); /* Enlarge the button on hover */
+        transform: scale(1.1); 
     }
 
-    /* Add any other styling you want for the button */
+    
     .separator-line {
-        border-top: 1px solid #ccc; /* Adjust the color and style of the separator line */
-        margin-top: 20px; /* Adjust the distance between the sections */
+        border-top: 1px solid #ccc; 
+        margin-top: 20px;
     }
 }
 .membership-intro {
-    font-size: 28px; /* Adjust the font size as needed */
-    font-weight: bold; /* Make the text bold */
+    font-size: 28px; 
+    font-weight: bold;
     margin-top: 100px;
     margin-left: 100px;
-    /* Add any other styling you want for the membership-intro text */
+    
 }
 .membership-description {
     margin-left: 100px;
 }
 .membership-image img {
-    border-radius: 75%; /* Make the image circular */
-    width: 100%; /* Ensure the image takes up the entire container */
-    height: auto; /* Maintain the aspect ratio of the image */
-    /* Add any other styling you want for the circular image */
+    border-radius: 75%; 
+    width: 100%; 
+    height: auto; 
+    
 }
 .why-become-member{
-    font-size: 28px; /* Adjust the font size as needed */
-    font-weight: bold; /* Make the text bold */
+    font-size: 28px; 
+    font-weight: bold; 
     margin-top: 100px;
     color: #2e7d32;
 }
@@ -76,21 +76,21 @@
     margin: 30px 100px 30px 100px;
 }
 .membership-intro {
-    font-size: 30px; /* Adjust the font size as needed */
+    font-size: 30px; 
     font-weight: bold;
     color: #2e7d32;
     margin-right: 50px;
 }
 .col-md-4 h3 {
-    color: rgb(205, 7, 7); /* Change to your desired color for Exclusive Discounts */
+    color: rgb(205, 7, 7); 
 }
 
 .col-md-4:nth-child(2) h3 {
-    color: rgb(232, 154, 9); /* Change to your desired color for Stay Informed */
+    color: rgb(232, 154, 9); 
 }
 
 .col-md-4:nth-child(3) h3 {
-    color: rgb(213, 213, 0); /* Change to your desired color for Access to Order History */
+    color: rgb(213, 213, 0); 
 }
 .membership-description {
     margin-left: 200px;
@@ -98,7 +98,7 @@
     margin-bottom: 100px;
 }
 .membership-info {
-    margin-bottom: 20px; /* Add bottom margin to create space */
+    margin-bottom: 20px;
 }
 .join-now {
     margin-left: 200px;
@@ -107,11 +107,124 @@
 }
 .col-md-4 h3 {
     cursor: pointer;
-    transition: transform 0.3s ease; /* Change to your desired cursor style */
+    transition: transform 0.3s ease; 
     &:hover {
     color: #ff0062;
     transform: scale(1.1);
     }
 }
 
+ */
 
+
+.membership-container{
+    
+}
+/* .membership-header{
+    
+}
+.membership-header h1{
+   text-align: center;
+   color: darkgreen;
+   font-weight: bold;
+} */
+.membership-body{
+    background-image: url('./../../../public/assets/images/membership-page.jpg');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 1470px;
+    height: 1500px;
+}
+.membership-content1{
+    padding-top: 50px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.membership-content1-title {
+    color: rgb(219, 255, 208);
+    text-align: center;
+    padding-top: 30px;
+    width: 100%;
+    text-shadow: 2px 1px 1px black;
+}
+.membership-unlock{
+    background-color: aliceblue;
+    opacity: 0.8;
+    border-radius: 20px;
+    margin-top: 20px;
+}
+.membership-unlock p{
+    padding: 20px 50px;
+    width: 800px;
+    color: black;
+    font-size: 20px; 
+}
+
+.membership-content2{
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.membership-content2-title {
+    color: rgb(219, 255, 208);
+    text-align: center;
+    padding-top: 30px;
+    width: 100%;
+    text-shadow: 2px 1px 1px black;
+}
+.membership-content2-body{
+    margin-top: 10px;
+    padding: 20px 50px;
+    width: 1200px;
+    background-color: aliceblue;
+    opacity: 0.85;
+    border-radius: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.membership-content2-benefit{
+    width: 31%;
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid gray;
+    box-shadow: 1px 1px 1px gray;
+    background-color: aliceblue;
+    opacity: 1;
+}
+.membership-content2-benefit:hover{
+    background-color: lightcyan;
+}
+
+.membership-content3{
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.membership-content3-title {
+    color: rgb(219, 255, 208);
+    text-align: center;
+    padding-top: 30px;
+    width: 100%;
+    text-shadow: 2px 1px 1px black;
+}
+.membership-content3-body{
+    background-color: aliceblue;
+    opacity: 0.85;
+    padding: 20px 50px;
+    width: 800px;
+    border-radius: 20px;
+    font-size: 18px;
+}
+
+.membership-to-register{
+    text-decoration: none;
+    color: lightseagreen;
+    font-weight: bold;
+}
+.membership-to-register:hover{
+    text-decoration: underline;
+}
