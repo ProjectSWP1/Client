@@ -1,4 +1,4 @@
-.newImage {
+/* .newImage {
   margin-bottom: 50px;
 }
 
@@ -50,7 +50,6 @@
 
 .text-news {
   color: white;
-  /* font-size: 20px; */
   position: absolute;
   top: 50%;
   left: 50%;
@@ -60,7 +59,6 @@
 
 @media (max-width: 930px) {
   .news-container {
-    /* margin-right: 50px !important; */
     display: flex !important;
     justify-content: center !important;
   }
@@ -89,4 +87,18 @@
   .text-news {
     font-size: 17px !important;
   }
+} */
+
+
+.news-title {
+  font-size: 1.4cm;
+  font-weight: bold;
+  text-align: center;
+  color: rgb(83, 105, 49);
+  margin-bottom: 30px;
+}
+
+.news-all-cards{
+  width: 100%;
+  margin-bottom: 30px;
 }
