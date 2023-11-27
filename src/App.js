@@ -31,6 +31,7 @@ import PostNews from "./components/Staff/PostNews/PostNews.js";
 import CompleteOrder from "./stripepayment/completionOrder.js";
 import Membership from "./components/Register/Membership.js";
 import Configuration from "./components/Admin/SystemConfiguration/Configuration.js";
+import ManageTrainerSchedule from "./components/Staff/TrainerSchedule/ManageTrainerSchedule.js";
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
           <Route path="trainers" element={<ZooTrainer />} />
           <Route path="post-news" element={<PostNews />}/>
           <Route path="data-statistics" element={<DataStatistics/>} />
+          <Route path="trainer-schedule" element={<ManageTrainerSchedule/>} />
         </Route>
         <Route path="/trainer" element={<Trainer />}>
           <Route exact path="cages" element={<AnimalCage />} />

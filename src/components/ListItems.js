@@ -114,6 +114,18 @@ export const staffListItems = (
         <ListItemText primary="Zoo Trainer Page" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
+    {/* <ListItemButton>
+      <Link to={'/staff/trainer-schedule'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <CalendarMonthIcon />
+        </ListItemIcon>
+        <ListItemText primary="Trainer Schedule" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton> */}
     <ListItemButton>
       <Link to={'/staff/post-news'} style={{
         textDecoration: 'none',
@@ -191,7 +203,7 @@ export const trainerListItems = (
         <ListItemText primary="Animal Species Page" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
-    <ListItemButton>
+    {/* <ListItemButton>
       <Link to={'/trainer/schedule'} style={{
         textDecoration: 'none',
         color: 'grey',
@@ -202,7 +214,7 @@ export const trainerListItems = (
         </ListItemIcon>
         <ListItemText primary="Schedule" style={{ display: 'inline-block' }} />
       </Link>
-    </ListItemButton>
+    </ListItemButton> */}
     <ListItemButton>
       <Link to={'/trainer/feeding-schedule'} style={{
         textDecoration: 'none',
