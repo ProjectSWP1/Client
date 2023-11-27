@@ -43,7 +43,8 @@ function App() {
         <Route path="/Membership" element={<Membership />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
-        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/profile" element={<UserProfile openOrders={false}/>} />
+        <Route path="/your-orders" element={<UserProfile openOrders={true}  />} />
         <Route path="/buy-ticket" element={<TicketLayout />} />
         <Route path="/payment" element={<StripePayment />} />
         <Route path="/complete-order" element={<CompleteOrder/>}/>

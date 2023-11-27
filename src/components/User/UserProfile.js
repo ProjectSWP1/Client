@@ -2,13 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./UserProfile.css";
 import {
   Button,
-  Container,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
   Grid,
-  Radio,
-  RadioGroup,
   TableContainer,
   TextField,
   DialogActions,
@@ -51,7 +45,7 @@ createTheme(
   "dark"
 );
 
-export default function UserProfile() {
+export default function UserProfile({openOrders}) {
   const [orders, setOrders] = useState([]);
   const [employee, setEmployee] = useState(null);
   const [name, setName] = useState("");
@@ -412,18 +406,18 @@ export default function UserProfile() {
             </Link>
           </div>
           <div className="profile-body">
-            {openProfile ? (
-              <p className="profile-title">{token?.roles} Profile</p>
-            ) : (
+            {openOrders ? (
               <p className="profile-title">Your Orders</p>
+            ) : (
+              <p className="profile-title">{token?.roles} Profile</p>
             )}
             <div className="profile-left">
               {/* <img src="https://i.pinimg.com/736x/f0/f6/30/f0f63081e758c96e4051a865fb2293b8.jpg" /> */}
-              <Button className="profile-left-btn" onClick={handleProfile}>
-                My Profile
+              <Button className="profile-left-btn">
+                <Link to={'/profile'} style={{textDecoration: 'none', color:'green'}}>My Profile</Link>
               </Button>
-              <Button className="profile-left-btn" onClick={handleOrders}>
-                My Orders
+              <Button className="profile-left-btn">
+                <Link to={'/your-orders'} style={{textDecoration: 'none', color:'green'}}>My Orders</Link>
               </Button>
               {token?.roles === "Trainer" && openProfile ? (
                 <UploadImage employeeId={employee?.empId} />
@@ -437,7 +431,7 @@ export default function UserProfile() {
               />
             </div>
             <div className="profile-right">
-              {openProfile ? (
+              {!openOrders ? (
                 <form className="profile-form">
                   <Grid item xs={12}>
                     <TextField

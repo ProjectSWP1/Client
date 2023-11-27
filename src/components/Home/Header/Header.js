@@ -183,7 +183,7 @@ export default function Header() {
                                                         ) : (
                                                             <MenuItem>
                                                                 <div style={{ marginRight: "10px" }}><ListAltIcon /></div>
-                                                                <Link to={'/profile'}
+                                                                <Link to={'/your-orders'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
                                                                 >My Order</Link>
                                                             </MenuItem>
