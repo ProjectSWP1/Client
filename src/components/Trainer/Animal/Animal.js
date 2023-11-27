@@ -609,7 +609,7 @@ export default function Animal() {
                   {species.map((specie) => {
                     return (
                       <MenuItem key={specie.speciesId} value={specie.speciesId}>
-                        {specie.name}
+                        {specie.groups}
                       </MenuItem>
                     );
                   })}

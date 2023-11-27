@@ -203,7 +203,7 @@ export const trainerListItems = (
         <ListItemText primary="Animal Species Page" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
-    {/* <ListItemButton>
+    <ListItemButton>
       <Link to={'/trainer/schedule'} style={{
         textDecoration: 'none',
         color: 'grey',
@@ -214,7 +214,7 @@ export const trainerListItems = (
         </ListItemIcon>
         <ListItemText primary="Schedule" style={{ display: 'inline-block' }} />
       </Link>
-    </ListItemButton> */}
+    </ListItemButton>
     <ListItemButton>
       <Link to={'/trainer/feeding-schedule'} style={{
         textDecoration: 'none',
