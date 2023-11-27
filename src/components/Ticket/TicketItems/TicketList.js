@@ -37,7 +37,7 @@ export default function TicketList() {
             return false
           }
           return ticketDate > currentDay
-        }).slice(0, 5)
+        }).slice(0, 6)
         console.log(tickets);
         setTickets(tickets);
       })
