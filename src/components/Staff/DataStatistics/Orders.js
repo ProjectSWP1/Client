@@ -31,14 +31,14 @@ export default function Orders() {
       if (!response.ok) return [];
       return response.json();
     }).then(data => {
-      const sortedOrders = data.sort(
-        (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
-      )
-      const successOrders = sortedOrders.filter((order) => {
+      const successOrders = data.filter((order) => {
         return order.orderPayments?.success
       })
-      setOrders(successOrders);
-      console.log(successOrders);
+      const sortedOrders = successOrders.sort(
+        (a, b) => new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()
+      )
+      console.log(sortedOrders);
+      setOrders(sortedOrders);
     })
 
     fetch(`${URL_FETCH_AZURE_SERVER}user/get-all-voucher`, {
@@ -54,7 +54,6 @@ export default function Orders() {
       setVouchers(data);
     })
   }, [])
-
   const handleCloseOrderDetailsModal = () => {
     setOrderDetailsModalOpen(false);
   };

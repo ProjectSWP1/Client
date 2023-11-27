@@ -3,14 +3,16 @@ import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
 import Swal from 'sweetalert2';
 import { URL_FETCH_AZURE_SERVER } from '../../../config';
-export default function ZooTrainer() {
+export default function ManageTrainerSchedule() {
     const [zooTrainers, setZooTrainers] = useState([]);
+    const [schedules, setSchedules] = useState([]);
     const [employee, setEmployee] = useState(null)
     const [checkData, setCheckData] = useState(false)
     const [currentUpdatedTrainerEmail, setTrainerEmail] = useState("");
     const [selectedRole, setSelectedRole] = useState("");
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
     const email = !token ? null : JSON.parse(atob(token.split('.')[1]))?.email;
+    let isMounted = true;
     useEffect(() => {
         if (email) {
             fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-employee-by/${email}`, {
@@ -24,7 +26,6 @@ export default function ZooTrainer() {
                 if (!response.ok) return { employee: null };
                 return response.json();
             }).then(data => {
-                console.log(data);
                 setEmployee(data)
                 setCheckData(true)
             })
@@ -46,10 +47,48 @@ export default function ZooTrainer() {
             }).then(data => {
                 setCheckData(false)
                 setZooTrainers(data);
-                console.log(data);
             })
         }
     }, [employee]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+          setSchedules([])
+          try {
+            const requests = zooTrainers.map(async (emp) => {
+              const response = await fetch(`${URL_FETCH_AZURE_SERVER}staff?empId=${emp.empId}`, {
+                method: 'GET',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': "Bearer " + token,
+                }
+              });
+    
+              if (!response.ok) return [];
+    
+              const data = await response.json();
+              return data
+            });
+    
+            const results = await Promise.all(requests);
+            console.log(results);
+            setSchedules((prevSchedules) => [...prevSchedules, ...results]);
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        };
+    
+        if (isMounted) {
+          fetchData();
+          isMounted = false;
+        }
+    
+        // Cleanup function to handle unmounting
+        return () => {
+          isMounted = false;
+        };
+      }, [zooTrainers, checkData])
 
     const handleSaveRole = () => {
         if (selectedRole.length === 0) {

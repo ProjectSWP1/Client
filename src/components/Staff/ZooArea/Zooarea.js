@@ -20,7 +20,6 @@ export default function ZooArea() {
     }).then(data => {
       const sortedZooAreas = data.sort((a, b) => a.zooAreaId - b.zooAreaId);
       setZooAreas(sortedZooAreas);
-
     })
   }, []);
 
