@@ -5,8 +5,8 @@ import Title from '../Title';
 import { URL_FETCH_AZURE_SERVER } from '../../../config';
 import { ListItem } from '@mui/material';
 
-function createData(name, revenue) {
-  return { name, revenue };
+function createData(name, tickets) {
+  return { name, tickets };
 }
 
 export default function Chart() {
@@ -73,7 +73,7 @@ export default function Chart() {
           <YAxis />
           <Tooltip/>
           <Legend />
-          <Line type="monotone" dataKey="revenue" stroke="#8884d8" />
+          <Line type="monotone" dataKey="tickets" stroke="#8884d8" />
         </LineChart>
       </ResponsiveContainer>
     </React.Fragment>
