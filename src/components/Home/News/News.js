@@ -27,6 +27,7 @@ export default function News() {
       .then((data) => {
         setNews(data);
         setIsLoading(false);
+        console.log(data);
       })
       .catch((error) => {
         setIsLoading(false);
@@ -82,6 +83,7 @@ export default function News() {
                   id="panel1a-header"
                   style={{ backgroundColor: 'aliceblue', color: 'green' }}
                 >
+                  <Typography>[{item.dateCreated}]</Typography>
                   <Typography style={{fontWeight: 'bold'}}>✨ {item.content} ✨</Typography>
                 </AccordionSummary>
                 <AccordionDetails style={{textAlign: 'start', paddingLeft: '50px'}}>
