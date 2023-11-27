@@ -242,12 +242,15 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
             <Typography variant="h6">
               Price:{" "}
               {voucher && voucher.coupon
-                ? (ticket?.ticketPrice * numberTicket +
+                ? ((ticket?.ticketPrice * numberTicket +
                     ticket?.childrenTicketPrice * numberChildrenTicket) *
-                  (1 - voucher.coupon) // If voucher applied
-                : ticket?.ticketPrice * numberTicket +
-                  ticket?.childrenTicketPrice * numberChildrenTicket}{" "}
+                  (1 - voucher.coupon)).toLocaleString()
+                : (ticket?.ticketPrice * numberTicket +
+                  ticket?.childrenTicketPrice * numberChildrenTicket).toLocaleString()}{" "}
               VNĐ
+            </Typography>
+            <Typography variant="h6">
+              Visit Date:{" "} { ticket?.visitDate }
             </Typography>
 
             {voucher && (
@@ -281,7 +284,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
                   <AddIcon />
                 </Button>
                 <Typography mt={2}>
-                  Height from above 1.3m - {ticket?.ticketPrice} VND
+                  Height from above 1.3m - {ticket?.ticketPrice.toLocaleString()} VND
                 </Typography>
               </div>
               <div style={{ marginTop: "20px", display: "flex", justifyItems: "left" }}>
@@ -301,7 +304,7 @@ export default function FormBuy({ ticket, setSelectedTicket, token }) {
                   <AddIcon />
                 </Button>
                 <Typography mt={2}>
-                  Height from above 1m and below 1.3m - {ticket?.childrenTicketPrice} VND
+                  Height from above 1m and below 1.3m - {ticket?.childrenTicketPrice.toLocaleString()} VND
                 </Typography>
               </div>
 
