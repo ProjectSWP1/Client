@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import './News.css';
-import { Card, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Card, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
 import { URL_FETCH_AZURE_SERVER } from '../../../config';
 
 export default function News() {
@@ -53,7 +54,7 @@ export default function News() {
         <Container className='news-container'>
           {news.map(item => (
             <div key={item.newsId} className='news-all-cards'>
-              <Card sx={{ height: 'auto', width: '70%', mb: '10px' }} className='news-card'>
+              {/* <Card sx={{ height: 'auto', width: '70%', mb: '10px' }} className='news-card'>
                 <CardMedia
                   component="img"
                   height="100%"
@@ -70,7 +71,25 @@ export default function News() {
                 <Typography gutterBottom variant="h5" component="div" className='text-news'>
                   {item.description}
                 </Typography>
-              </div>
+              </div> */}
+
+
+              {/* <Button>{item.content}</Button> */}
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  style={{ backgroundColor: 'aliceblue', color: 'green' }}
+                >
+                  <Typography style={{fontWeight: 'bold'}}>✨ {item.content} ✨</Typography>
+                </AccordionSummary>
+                <AccordionDetails style={{textAlign: 'start', paddingLeft: '50px'}}>
+                  <Typography>
+                  💕 {item.description} 💕
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
             </div>
           ))}
         </Container>
