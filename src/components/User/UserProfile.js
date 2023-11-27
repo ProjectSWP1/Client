@@ -45,8 +45,9 @@ createTheme(
   "dark"
 );
 
-export default function UserProfile({openOrders}) {
+export default function UserProfile({ openOrders }) {
   const [orders, setOrders] = useState([]);
+  const [vouchers, setVouchers] = React.useState([])
   const [employee, setEmployee] = useState(null);
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -137,6 +138,19 @@ export default function UserProfile({openOrders}) {
       .catch((error) => {
         console.log(error);
       });
+
+    fetch(`${URL_FETCH_AZURE_SERVER}user/get-all-voucher`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }
+    }).then(response => {
+      if (!response.ok) return [];
+      return response.json();
+    }).then(data => {
+      setVouchers(data);
+    })
   }, []);
 
   const handleSubmit = () => {
@@ -302,23 +316,23 @@ export default function UserProfile({openOrders}) {
               <p><strong>Order Date:</strong> {order.orderDate}</p>
               <p><strong>Date of visit: </strong> {order.ticket.visitDate}</p>
               <p>
-                <DiscountIcon/>{" "}
+                <DiscountIcon />{" "}
                 <strong>Discount:</strong>{" "}
-                {order.orderVoucher?.coupon ? order.orderVoucher.coupon*100 + "%" : "You didn't apply discount for this payment"}
+                {order.orderVoucher?.coupon ? order.orderVoucher.coupon * 100 + "%" : "You didn't apply discount for this payment"}
               </p>
               <p>
                 <strong>Total price paid:</strong>{" "}
                 {order.orderVoucher?.coupon
                   ? `${(
-                      (order.quantity * order.ticket.ticketPrice +
-                        order.childrenQuantity *
-                          order.ticket.childrenTicketPrice) *
-                      (1 - order.orderVoucher.coupon)
-                    ).toLocaleString()} VND`
+                    (order.quantity * order.ticket.ticketPrice +
+                      order.childrenQuantity *
+                      order.ticket.childrenTicketPrice) *
+                    (1 - order.orderVoucher.coupon)
+                  ).toLocaleString()} VND`
                   : `${(
-                      order.quantity * order.ticket.ticketPrice +
-                      order.childrenQuantity * order.ticket.childrenTicketPrice
-                    ).toLocaleString()} VND`}
+                    order.quantity * order.ticket.ticketPrice +
+                    order.childrenQuantity * order.ticket.childrenTicketPrice
+                  ).toLocaleString()} VND`}
               </p>
               <hr />
             </div>
@@ -367,16 +381,24 @@ export default function UserProfile({openOrders}) {
       selector: (order) => {
         return (
           <p>
-            {order.orderVoucher?.coupon
-              ? `${(
+            {order.orderVoucher ?
+              order.orderVoucher.coupon ?
+                `${(
                   (order.quantity * order.ticket.ticketPrice +
-                    order.childrenQuantity * order.ticket.childrenTicketPrice) *
+                    order.childrenQuantity *
+                    order.ticket.childrenTicketPrice) *
                   (1 - order.orderVoucher.coupon)
+                ).toLocaleString()} VND` :
+                `${(
+                  (order.quantity * order.ticket.ticketPrice +
+                    order.childrenQuantity *
+                    order.ticket.childrenTicketPrice) *
+                  (1 - (vouchers.find(item => item.voucherId === order.orderVoucher)?.coupon))
                 ).toLocaleString()} VND`
               : `${(
-                  order.quantity * order.ticket.ticketPrice +
-                  order.childrenQuantity * order.ticket.childrenTicketPrice
-                ).toLocaleString()} VND`}
+                order.quantity * order.ticket.ticketPrice +
+                order.childrenQuantity * order.ticket.childrenTicketPrice
+              ).toLocaleString()} VND`}
           </p>
         );
       },
@@ -414,10 +436,10 @@ export default function UserProfile({openOrders}) {
             <div className="profile-left">
               {/* <img src="https://i.pinimg.com/736x/f0/f6/30/f0f63081e758c96e4051a865fb2293b8.jpg" /> */}
               <Button className="profile-left-btn">
-                <Link to={'/profile'} style={{textDecoration: 'none', color:'green'}}>My Profile</Link>
+                <Link to={'/profile'} style={{ textDecoration: 'none', color: 'green' }}>My Profile</Link>
               </Button>
               <Button className="profile-left-btn">
-                <Link to={'/your-orders'} style={{textDecoration: 'none', color:'green'}}>My Orders</Link>
+                <Link to={'/your-orders'} style={{ textDecoration: 'none', color: 'green' }}>My Orders</Link>
               </Button>
               {token?.roles === "Trainer" && openProfile ? (
                 <UploadImage employeeId={employee?.empId} />

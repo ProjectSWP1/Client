@@ -13,6 +13,7 @@ createTheme('solarized', {
 
 export default function Orders() {
   const [orders, setOrders] = React.useState([])
+  const [vouchers, setVouchers] = React.useState([])
   const [selectedOrder, setSelectedOrder] = React.useState(null);
   const [isOrderDetailsModalOpen, setOrderDetailsModalOpen] = React.useState(false);
 
@@ -37,6 +38,20 @@ export default function Orders() {
         return order.orderPayments?.success
       })
       setOrders(successOrders);
+      console.log(successOrders);
+    })
+
+    fetch(`${URL_FETCH_AZURE_SERVER}user/get-all-voucher`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }
+    }).then(response => {
+      if (!response.ok) return [];
+      return response.json();
+    }).then(data => {
+      setVouchers(data);
     })
   }, [])
 
@@ -169,7 +184,26 @@ export default function Orders() {
       name: 'Total',
       selector: (order) => {
         return (
-          <p>{(order.quantity * order.ticket.ticketPrice).toLocaleString()} VND</p>
+          <p>
+            {order.orderVoucher ?
+              order.orderVoucher.coupon ?
+                `${(
+                  (order.quantity * order.ticket.ticketPrice +
+                    order.childrenQuantity *
+                    order.ticket.childrenTicketPrice) *
+                  (1 - order.orderVoucher.coupon)
+                ).toLocaleString()} VND` :
+                `${(
+                  (order.quantity * order.ticket.ticketPrice +
+                    order.childrenQuantity *
+                    order.ticket.childrenTicketPrice) *
+                  (1 - (vouchers.find(item => item.voucherId === order.orderVoucher)?.coupon))
+                ).toLocaleString()} VND`
+              : `${(
+                order.quantity * order.ticket.ticketPrice +
+                order.childrenQuantity * order.ticket.childrenTicketPrice
+              ).toLocaleString()} VND`}
+          </p>
         )
       }
     },
