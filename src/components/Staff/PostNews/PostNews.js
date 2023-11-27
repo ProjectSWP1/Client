@@ -1,10 +1,11 @@
-import { Button, Container, Grid, Paper, TableContainer, TextField, ThemeProvider, Typography } from '@mui/material'
+import { Avatar, Button, Container, Grid, Paper, TableContainer, TextField, ThemeProvider, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import './PostNews.css'
 import { defaultTheme } from '../../Theme/Theme'
 import { URL_FETCH_AZURE_SERVER } from '../../../config'
 import DataTable from 'react-data-table-component'
 import Swal from 'sweetalert2'
+import { deepOrange } from '@mui/material/colors'
 
 export default function PostNews() {
   const [listNews, setListNews] = useState([])
@@ -35,6 +36,7 @@ export default function PostNews() {
       .then(data => {
         const sortedNews = data.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
         setListNews(sortedNews);
+        console.log(data);
       })
       .catch(error => console.log(error))
 
@@ -168,6 +170,7 @@ export default function PostNews() {
       content: content,
       description: description
     }
+    console.log(newsDto);
     fetch(`${URL_FETCH_AZURE_SERVER}staff/postnews`, {
       method: 'POST',
       headers: {
@@ -211,7 +214,7 @@ export default function PostNews() {
       name: 'Credit',
       selector: (news) => {
         return (
-          <p>{news.empId}</p>
+          <p>{news.employeesNews.name}</p>
         )
       }
     },
@@ -260,13 +263,14 @@ export default function PostNews() {
         marginTop: '100px'
       }}>
         {open ? <div className='staff-news-container'>
-          <Typography style={{ marginBottom: '20px', fontSize: '25px', fontWeight: '400' }}>Create News</Typography>
+          <Typography style={{ marginBottom: '20px', fontSize: '40px', fontWeight: 'bolder', color:'green'}}>{title}</Typography>
           <div className='staff-news-header'>
-            <div className='staff-news-header-left'>
+            {/* <div className='staff-news-header-left'>
               <img src="https://i.pinimg.com/736x/f0/f6/30/f0f63081e758c96e4051a865fb2293b8.jpg" />
-            </div>
+              <Avatar sx={{ bgcolor: deepOrange[500] }}>{employee.email.email.charAt(0)}{" "}</Avatar>
+            </div> */}
             <div className='staff-news-header-right'>
-              <Typography style={{ fontSize: '0.6cm' }}>{email}</Typography>
+              <Typography style={{ fontSize: '20px' }}><i>Credit:</i> {email}</Typography>
             </div>
           </div>
 

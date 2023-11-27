@@ -18,6 +18,7 @@ export default function AnimalSpecies() {
     const [popUpTitle, setPopupTitle] = useState(ADD_ANIMAL_SPECIES_TITLE);
     const [changed, setChanged] = useState(false)
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
+
     useEffect(() => {
         fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-all-animalSpecies`, {
             method: 'GET',
@@ -143,6 +144,7 @@ export default function AnimalSpecies() {
     }
 
     const handleDeleteAction = (id) => {
+        setChanged(false)
         Swal.fire({
             title: 'Are you sure?',
             text: 'Are you sure?',
@@ -174,9 +176,7 @@ export default function AnimalSpecies() {
                         text: `${data}`,
                         icon: 'success',
                     });
-                    setSpecies(species.filter(specie => {
-                        return specie.speciesId != id;
-                    }));
+                    setChanged(true)
                 })
                     .catch(error => {
                         Swal.fire({

@@ -10,6 +10,7 @@ import Trainer from "./pages/TrainerPage.js";
 import ManageAccount from "./components/Admin/ManageAccount/ManageAccount";
 import VerifyEmail from "./components/Register/VerifyEmail";
 import Dash from "./components/Admin/Dashboard/Dash";
+import DataStatistics from "./components/Staff/DataStatistics/Dash.js"
 import UserProfile from "./components/User/UserProfile";
 import { AuthProvider } from "./components/auth/auth";
 import ForgotPassword from "./components/Login/ForgotPassword";
@@ -56,7 +57,8 @@ function App() {
         <Route path="/staff" element={<Staff />}>
           <Route exact path="zooarea" element={<ZooArea />} />
           <Route path="trainers" element={<ZooTrainer />} />
-          <Route path="post-news" element={<PostNews />}></Route>
+          <Route path="post-news" element={<PostNews />}/>
+          <Route path="data-statistics" element={<DataStatistics/>} />
         </Route>
         <Route path="/trainer" element={<Trainer />}>
           <Route exact path="cages" element={<AnimalCage />} />

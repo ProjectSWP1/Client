@@ -126,6 +126,18 @@ export const staffListItems = (
         <ListItemText primary="Post News" style={{ display: 'inline-block' }} />
       </Link>
     </ListItemButton>
+    <ListItemButton>
+      <Link to={'/staff/data-statistics'} style={{
+        textDecoration: 'none',
+        color: 'grey',
+        width: '100%'
+      }}>
+        <ListItemIcon>
+          <LineAxisIcon />
+        </ListItemIcon>
+        <ListItemText primary="Data Statistics" style={{ display: 'inline-block' }} />
+      </Link>
+    </ListItemButton>
   </React.Fragment>
 );
 

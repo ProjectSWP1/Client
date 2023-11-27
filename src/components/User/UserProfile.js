@@ -302,8 +302,8 @@ export default function UserProfile() {
               <p><strong>Order ID:</strong> {order.orderID}</p>
               <p><strong>Ticket:</strong></p>
               <ul>
-                <p><strong>Adult Ticket Amount:</strong> {order.quantity} = {order.ticket.ticketPrice * order.quantity} VND</p>
-                <p><strong>Children Ticket Amount:</strong> {order.childrenQuantity} = {order.ticket.childrenTicketPrice * order.childrenQuantity} VND</p>
+                <p><strong>Adult Ticket Amount:</strong> {order.quantity} = {(order.ticket.ticketPrice * order.quantity).toLocaleString()} VND</p>
+                <p><strong>Children Ticket Amount:</strong> {order.childrenQuantity} = {(order.ticket.childrenTicketPrice * order.childrenQuantity).toLocaleString()} VND</p>
               </ul>
               <p><strong>Order Date:</strong> {order.orderDate}</p>
               <p><strong>Date of visit: </strong> {order.ticket.visitDate}</p>
@@ -320,11 +320,11 @@ export default function UserProfile() {
                         order.childrenQuantity *
                           order.ticket.childrenTicketPrice) *
                       (1 - order.orderVoucher.coupon)
-                    ).toFixed(2)} VND`
+                    ).toLocaleString()} VND`
                   : `${(
                       order.quantity * order.ticket.ticketPrice +
                       order.childrenQuantity * order.ticket.childrenTicketPrice
-                    ).toFixed(2)} VND`}
+                    ).toLocaleString()} VND`}
               </p>
               <hr />
             </div>
@@ -378,11 +378,11 @@ export default function UserProfile() {
                   (order.quantity * order.ticket.ticketPrice +
                     order.childrenQuantity * order.ticket.childrenTicketPrice) *
                   (1 - order.orderVoucher.coupon)
-                ).toFixed(2)} VND`
+                ).toLocaleString()} VND`
               : `${(
                   order.quantity * order.ticket.ticketPrice +
                   order.childrenQuantity * order.ticket.childrenTicketPrice
-                ).toFixed(2)} VND`}
+                ).toLocaleString()} VND`}
           </p>
         );
       },
@@ -418,7 +418,7 @@ export default function UserProfile() {
               <p className="profile-title">Your Orders</p>
             )}
             <div className="profile-left">
-              <img src="https://i.pinimg.com/736x/f0/f6/30/f0f63081e758c96e4051a865fb2293b8.jpg" />
+              {/* <img src="https://i.pinimg.com/736x/f0/f6/30/f0f63081e758c96e4051a865fb2293b8.jpg" /> */}
               <Button className="profile-left-btn" onClick={handleProfile}>
                 My Profile
               </Button>

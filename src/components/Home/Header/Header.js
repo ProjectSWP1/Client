@@ -19,12 +19,12 @@ export default function Header() {
 
     useEffect(() => {
         // Thêm một sự kiện lắng nghe cho việc cuộn trang
-        if(window.location.href.split('/')[3] === ""){
+        if (window.location.href.split('/')[3] === "") {
             window.addEventListener('scroll', handleScroll);
-        }else{
+        } else {
             setIsScrolled(true)
         }
-        
+
         return () => {
             // Loại bỏ sự kiện lắng nghe khi component bị hủy
             window.removeEventListener('scroll', handleScroll);
@@ -149,8 +149,11 @@ export default function Header() {
                                                     aria-labelledby="composition-button"
                                                     onKeyDown={handleListKeyDown}
                                                 >
+                                                    <MenuItem disabled>
+                                                        {user.email.split('@')[0].toUpperCase()} - {user.roles}
+                                                    </MenuItem>
                                                     <MenuItem>
-                                                        <div style={{marginRight: "10px"}}><AccountBoxIcon/></div>
+                                                        <div style={{ marginRight: "10px" }}><AccountBoxIcon /></div>
                                                         <Link to={'/profile'}
                                                             style={{ color: 'black', textDecoration: 'none' }}
                                                         >My Profile</Link>
@@ -158,28 +161,28 @@ export default function Header() {
                                                     {
                                                         user.roles === 'Admin' ? (
                                                             <MenuItem>
-                                                                <div style={{marginRight: "10px"}}><WorkIcon/></div>
+                                                                <div style={{ marginRight: "10px" }}><WorkIcon /></div>
                                                                 <Link to={'/admin/dashboard'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
                                                                 >My Management</Link>
                                                             </MenuItem>
-                                                    ) : user.roles === 'Staff' ? (
+                                                        ) : user.roles === 'Staff' ? (
                                                             <MenuItem>
-                                                                <div style={{marginRight: "10px"}}><WorkIcon/></div>
+                                                                <div style={{ marginRight: "10px" }}><WorkIcon /></div>
                                                                 <Link to={'/staff/zooarea'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
                                                                 >My Management</Link>
                                                             </MenuItem>
                                                         ) : user.roles === 'Trainer' ? (
                                                             <MenuItem>
-                                                                <div style={{marginRight: "10px"}}><WorkIcon/></div>
+                                                                <div style={{ marginRight: "10px" }}><WorkIcon /></div>
                                                                 <Link to={'/trainer/cages'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
                                                                 >My Management</Link>
                                                             </MenuItem>
                                                         ) : (
                                                             <MenuItem>
-                                                            <div style={{marginRight: "10px"}}><ListAltIcon/></div>
+                                                                <div style={{ marginRight: "10px" }}><ListAltIcon /></div>
                                                                 <Link to={'/profile'}
                                                                     style={{ color: 'black', textDecoration: 'none' }}
                                                                 >My Order</Link>
@@ -187,7 +190,7 @@ export default function Header() {
                                                         )
                                                     }
                                                     <MenuItem onClick={handleClose}>
-                                                    <div style={{marginRight: "10px"}}><LogoutIcon/></div>
+                                                        <div style={{ marginRight: "10px" }}><LogoutIcon /></div>
                                                         Logout
                                                     </MenuItem>
                                                 </MenuList>

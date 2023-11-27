@@ -5,26 +5,51 @@ import Swal from 'sweetalert2';
 import { URL_FETCH_AZURE_SERVER } from '../../../config';
 export default function ZooTrainer() {
     const [zooTrainers, setZooTrainers] = useState([]);
+    const [employee, setEmployee] = useState(null)
+    const [checkData, setCheckData] = useState(false)
     const [currentUpdatedTrainerEmail, setTrainerEmail] = useState("");
     const [selectedRole, setSelectedRole] = useState("");
     const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
+    const email = !token ? null : JSON.parse(atob(token.split('.')[1]))?.email;
+    useEffect(() => {
+        if (email) {
+            fetch(`${URL_FETCH_AZURE_SERVER}trainer/get-employee-by/${email}`, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token,
+                }
+            }).then(response => {
+                if (!response.ok) return { employee: null };
+                return response.json();
+            }).then(data => {
+                console.log(data);
+                setEmployee(data)
+                setCheckData(true)
+            })
+        }
+    }, [])
 
     useEffect(() => {
-        fetch(`${URL_FETCH_AZURE_SERVER}staff/view-trainer`, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token,
-            }
-        }).then(response => {
-            if (!response.ok) return [];
-            return response.json();
-        }).then(data => {
-            setZooTrainers(data);
-            console.log(data);
-        })
-    }, []);
+        if (employee) {
+            fetch(`${URL_FETCH_AZURE_SERVER}staff/get-trainer-employees-managed-by/${employee.empId}`, {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token,
+                }
+            }).then(response => {
+                if (!response.ok) return [];
+                return response.json();
+            }).then(data => {
+                setCheckData(false)
+                setZooTrainers(data);
+                console.log(data);
+            })
+        }
+    }, [employee]);
 
     const handleSaveRole = () => {
         if (selectedRole.length === 0) {
@@ -66,7 +91,7 @@ export default function ZooTrainer() {
                         icon: 'success',
                     });
                     setZooTrainers(zooTrainers.filter(trainer => {
-                        return trainer.email !== currentUpdatedTrainerEmail;
+                        return trainer.email.email !== currentUpdatedTrainerEmail;
                     }));
                 }).catch(error => {
                     Swal.fire({
@@ -96,7 +121,7 @@ export default function ZooTrainer() {
             name: 'Email',
             selector: zooTrainer => {
                 return (
-                    <p>{zooTrainer.email}</p>
+                    <p>{zooTrainer.email.email}</p>
                 )
             }
         },
@@ -110,7 +135,7 @@ export default function ZooTrainer() {
                     );
                 }
                 return (
-                    <p style={{ color: 'red', fontWeight: 'bold' }}>Deactive</p>
+                    <p style={{ color: 'red', fontWeight: 'bold' }}>Inactive</p>
                 );
             }
         },
@@ -118,7 +143,7 @@ export default function ZooTrainer() {
             id: 4,
             name: 'Role',
             selector: zooTrainer => {
-                if (zooTrainer.email === currentUpdatedTrainerEmail) {
+                if (zooTrainer.email.email === currentUpdatedTrainerEmail) {
                     return (
                         <div>
                             <InputLabel id="select-label">Select an role</InputLabel>
@@ -135,7 +160,7 @@ export default function ZooTrainer() {
                     );
                 }
                 return (
-                    <p>{zooTrainer.role.authority}</p>
+                    <p>{zooTrainer.email.role.authority}</p>
                 );
             }
         },
@@ -143,7 +168,7 @@ export default function ZooTrainer() {
             id: 5,
             name: 'Action',
             selector: zooTrainer => {
-                if (zooTrainer.email === currentUpdatedTrainerEmail) {
+                if (zooTrainer.email.email === currentUpdatedTrainerEmail) {
                     return (
                         <div>
                             <Button variant="contained" onClick={handleSaveRole}>Save</Button>
@@ -152,7 +177,7 @@ export default function ZooTrainer() {
                     )
                 }
                 return (
-                    <Button variant="contained" onClick={() => { setTrainerEmail(zooTrainer.email); setSelectedRole("") }}>Edit Role</Button>
+                    <Button variant="contained" onClick={() => { setTrainerEmail(zooTrainer.email.email); setSelectedRole("") }}>Edit Role</Button>
                 )
             }
         },
@@ -167,7 +192,7 @@ export default function ZooTrainer() {
             height: '100vh',
             overflow: 'auto',
         }}>
-            <TableContainer component={Paper} sx={{ mt: '100px' }}>
+            {zooTrainers && <TableContainer component={Paper} sx={{ mt: '100px' }}>
                 <DataTable
                     columns={columns}
                     data={zooTrainers.map(item => ({
@@ -175,11 +200,11 @@ export default function ZooTrainer() {
                     }))}
                     title="Zoo Trainers"
                     pagination
-                    keyField='email'
+                    keyField='empId'
                     paginationPerPage={5} // Number of rows per page
                     paginationRowsPerPageOptions={[5, 10, 20, 50]} // Rows per page options
                 />
-            </TableContainer>
+            </TableContainer>}
         </Container>
     )
 }
