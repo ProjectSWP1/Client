@@ -18,7 +18,6 @@ export default function Configuration() {
   const [ticketData, setTicketData] = useState([]);
   const [voucherData, setVoucherData] = useState([]);
   const [changed, setChanged] = useState(false)
-  const nowdate = new Date();
 
   //update ticket
   const [openTicketDialog, setOpenTicketDialog] = useState(false)
@@ -92,6 +91,8 @@ export default function Configuration() {
     // Check if the current day is Monday
     return new Date().getDay() === 1; // 0 is Sunday, 1 is Monday, and so on
   }
+
+  
 
   async function generateTicketsAndVouchers() {
     try {
@@ -532,7 +533,6 @@ export default function Configuration() {
             </div>
             {/* <button onClick={generateTicketsAndVouchers}>Force Generate</button> */}
             <Button
-              disabled={nowdate.getDay() >= 1 && nowdate.getDay() <= 6}
               variant="contained"
               size="small"
               onClick={generateTicketsAndVouchers}
