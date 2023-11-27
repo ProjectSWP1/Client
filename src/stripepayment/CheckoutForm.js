@@ -10,6 +10,9 @@ import { Button, ThemeProvider, Typography } from "@mui/material";
 import { defaultTheme, Copyright } from "../components/Theme/Theme";
 import HomeIcon from "@mui/icons-material/Home";
 import { URL_FETCH_AZURE_SERVER } from "../config.js";
+import PaidIcon from "@mui/icons-material/Paid";
+import DiscountIcon from '@mui/icons-material/Discount';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export default function CheckoutForm({ orderData, intentID }) {
   const [message, setMessage] = useState(null);
@@ -216,7 +219,7 @@ export default function CheckoutForm({ orderData, intentID }) {
         </Typography>
         <div className="content-container">
           <div className="order-details">
-            <div className="order-details-inside">
+            {/* <div className="order-details-inside">
               <h2
                 style={{
                   textAlign: "center",
@@ -230,9 +233,9 @@ export default function CheckoutForm({ orderData, intentID }) {
               <p>
                 <strong>Order ID:</strong> {orderData.orderID}
               </p>
-              {/* <p>
+              <p>
                 <strong>Description:</strong> {orderData.description}
-              </p> */}
+              </p>
               <p>
                 <strong>Adult ticket:</strong> {orderData.quantity}
               </p>
@@ -247,6 +250,48 @@ export default function CheckoutForm({ orderData, intentID }) {
                 <strong style={{ color: "#2e7d32" }}>Total:</strong>{" "}
                 {calculateTotalAmount().toLocaleString()} VND
               </h2>
+            </div> */}
+            <div className="order-details-inside" style={{ marginBottom: "10px" }}>
+              <h2
+                style={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  color: "#2e7d32",
+                }}
+              >
+                Order Details
+              </h2>
+              <hr />
+              <p><strong>Order ID:</strong> {orderData.orderID}</p>
+              <p><strong>Ticket:</strong></p>
+              <ul>
+                <p><strong>Adult Ticket Amount:</strong> {orderData.quantity} = {(orderData.ticket.ticketPrice * orderData.quantity).toLocaleString()} VND</p>
+                <p><strong>Children Ticket Amount:</strong> {orderData.childrenQuantity} = {(orderData.ticket.childrenTicketPrice * orderData.childrenQuantity).toLocaleString()} VND</p>
+              </ul>
+              <p><strong>Order Date:</strong> {orderData.orderDate}</p>
+              <p><strong>Date of visit: </strong> {orderData.ticket.visitDate}</p>
+              <p>
+                <DiscountIcon />{" "}
+                <strong>Discount:</strong>{" "}
+                {orderData.orderVoucher?.coupon ? orderData.orderVoucher.coupon * 100 + "%" : "You didn't apply discount for this payment"}
+              </p>
+              <hr></hr>
+              <Typography variant="body1" style={{ color: "darkgreen" }}>
+                <PaidIcon /> <strong>Total price paid:</strong>{" "}
+              </Typography>
+              <Typography variant="h4" textAlign={'end'}>
+                {orderData.orderVoucher?.coupon
+                  ? `${(
+                    (orderData.quantity * orderData.ticket.ticketPrice +
+                      orderData.childrenQuantity *
+                      orderData.ticket.childrenTicketPrice) *
+                    (1 - orderData.orderVoucher.coupon)
+                  ).toLocaleString()} VND`
+                  : `${(
+                    orderData.quantity * orderData.ticket.ticketPrice +
+                    orderData.childrenQuantity * orderData.ticket.childrenTicketPrice
+                  ).toLocaleString()} VND`}
+              </Typography>
             </div>
             <Copyright />
           </div>

@@ -1,18 +1,20 @@
 import * as React from 'react';
-import Title from '../Title';
 import { URL_FETCH_AZURE_SERVER } from '../../../config';
 import DataTable, { createTheme } from 'react-data-table-component';
-import { ListItem, TableContainer } from '@mui/material'
-// // Generate Order Data
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, ListItem, TableContainer } from '@mui/material'
+import DiscountIcon from '@mui/icons-material/Discount';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 createTheme('solarized', {
   background: {
-      default: '#f1f8e9'
+    default: '#f1f8e9'
   }
 }, 'dark');
 
 export default function Orders() {
   const [orders, setOrders] = React.useState([])
+  const [selectedOrder, setSelectedOrder] = React.useState(null);
+  const [isOrderDetailsModalOpen, setOrderDetailsModalOpen] = React.useState(false);
 
   const token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")).value : "";
 
@@ -22,7 +24,7 @@ export default function Orders() {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        
+
       }
     }).then(response => {
       if (!response.ok) return [];
@@ -37,6 +39,101 @@ export default function Orders() {
       setOrders(successOrders);
     })
   }, [])
+
+  const handleCloseOrderDetailsModal = () => {
+    setOrderDetailsModalOpen(false);
+  };
+
+  const viewOrderDetails = (orderID) => {
+    fetchOrderDetails(orderID);
+    setOrderDetailsModalOpen(true);
+  };
+  const fetchOrderDetails = (orderID) => {
+    fetch(`${URL_FETCH_AZURE_SERVER}order/get-order/${orderID}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch order details");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setSelectedOrder(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  // Define the OrderDetailsModal component
+  const OrderDetailsModal = ({ order, open, onClose }) => {
+    return (
+      <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <CheckCircleIcon
+            style={{ marginTop: "10px", marginLeft: "30px", fontSize: "30px", color: "green" }}
+          />
+          <DialogTitle
+            style={{
+              fontFamily: "Trebuchet MS, sans-serif",
+              fontSize: "25px",
+              marginTop: "10px",
+              fontWeight: "bold",
+              color: "green"
+            }}
+          >
+            Order Details
+          </DialogTitle>
+        </div>
+        <h6 style={{ marginLeft: "30px" }}>Customer: {order?.email ? order.email : null}</h6>
+        <DialogContent>
+          {order && (
+            <div>
+              <hr />
+              <p><strong>Order ID:</strong> {order.orderID}</p>
+              <p><strong>Ticket:</strong></p>
+              <ul>
+                <p><strong>Adult Ticket Amount:</strong> {order.quantity} = {(order.ticket.ticketPrice * order.quantity).toLocaleString()} VND</p>
+                <p><strong>Children Ticket Amount:</strong> {order.childrenQuantity} = {(order.ticket.childrenTicketPrice * order.childrenQuantity).toLocaleString()} VND</p>
+              </ul>
+              <p><strong>Order Date:</strong> {order.orderDate}</p>
+              <p><strong>Date of visit: </strong> {order.ticket.visitDate}</p>
+              <p>
+                <DiscountIcon />{" "}
+                <strong>Discount:</strong>{" "}
+                {order.orderVoucher?.coupon ? order.orderVoucher.coupon * 100 + "%" : "You didn't apply discount for this payment"}
+              </p>
+              <p>
+                <strong>Total price paid:</strong>{" "}
+                {order.orderVoucher?.coupon
+                  ? `${(
+                    (order.quantity * order.ticket.ticketPrice +
+                      order.childrenQuantity *
+                      order.ticket.childrenTicketPrice) *
+                    (1 - order.orderVoucher.coupon)
+                  ).toLocaleString()} VND`
+                  : `${(
+                    order.quantity * order.ticket.ticketPrice +
+                    order.childrenQuantity * order.ticket.childrenTicketPrice
+                  ).toLocaleString()} VND`}
+              </p>
+              <hr />
+            </div>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
 
   const columns = [
     {
@@ -60,35 +157,42 @@ export default function Orders() {
     },
     {
       id: 3,
-      name: 'Visit Date',
+      name: 'Order Date',
       selector: (order) => {
         return (
-          <p>{order.ticket.visitDate}</p>
+          <p>{order.orderDate}</p>
         )
       }
     },
     {
       id: 4,
-      name: 'Quantity',
-      selector: (order) => {
-        return (
-          <p>Adult: {order.quantity - order.childrenQuantity} - Children: {order.childrenQuantity}</p>
-        )
-      }
-    },
-    {
-      id: 5,
       name: 'Total',
       selector: (order) => {
         return (
           <p>{(order.quantity * order.ticket.ticketPrice).toLocaleString()} VND</p>
         )
       }
-    }
+    },
+    {
+      id: 6,
+      name: "View Details",
+      selector: (order) => {
+        return (
+          <Button onClick={() => viewOrderDetails(order.orderID)}>
+            View Details
+          </Button>
+        );
+      },
+    },
   ]
 
   return (
     <React.Fragment>
+      <OrderDetailsModal
+        order={selectedOrder}
+        open={isOrderDetailsModalOpen}
+        onClose={handleCloseOrderDetailsModal}
+      />
       <ListItem style={{
         fontSize: '20px',
         fontWeight: 'bolder',

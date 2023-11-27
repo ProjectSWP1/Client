@@ -7,6 +7,8 @@ import PaidIcon from "@mui/icons-material/Paid";
 import HomeIcon from "@mui/icons-material/Home";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import { URL_FETCH_AZURE_SERVER } from "../config.js";
+import DiscountIcon from '@mui/icons-material/Discount';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export default function CompleteOrder() {
   const location = useLocation();
@@ -64,7 +66,7 @@ export default function CompleteOrder() {
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
-              height: "800px",
+              height: "auto",
             }}
           >
             {/* <h2>Order Receipt</h2> */}
@@ -117,14 +119,14 @@ export default function CompleteOrder() {
                       Go back to Main Page
                     </Link>
                     {
-                      token ? <Link to="/profile" className="completed-order-thank-you-btn">
-                      <ReviewsIcon
-                        className="completed-order-thank-you-icon"
-                        style={{ marginRight: "10px" }}
-                      />
-                      View Order History
+                      token ? <Link to="/your-orders" className="completed-order-thank-you-btn">
+                        <ReviewsIcon
+                          className="completed-order-thank-you-icon"
+                          style={{ marginRight: "10px" }}
+                        />
+                        View Order History
                       </Link>
-                      : ""
+                        : ""
                     }
                   </div>
                   <div className="completed-order-thank-you-footer">
@@ -148,35 +150,38 @@ export default function CompleteOrder() {
                   >
                     Your Order
                   </Typography>
-                  <div style={{ padding: "40px 0" }}>
-                    <Typography variant="body1">
-                      Your Visit Date: {orderData.ticket.visitDate}
-                    </Typography>
-                    <Typography variant="body1">
-                      Ticket Quantity (1 ticket/person): {orderData.quantity}
-                    </Typography>
+                  <div style={{ marginBottom: "10px" }}>
+                    <hr />
+                    <p><strong>Order ID:</strong> {orderData.orderID}</p>
+                    <p><strong>Ticket:</strong></p>
+                    <ul>
+                      <p><strong>Adult Ticket Amount:</strong> {orderData.quantity} = {(orderData.ticket.ticketPrice * orderData.quantity).toLocaleString()} VND</p>
+                      <p><strong>Children Ticket Amount:</strong> {orderData.childrenQuantity} = {(orderData.ticket.childrenTicketPrice * orderData.childrenQuantity).toLocaleString()} VND</p>
+                    </ul>
+                    <p><strong>Order Date:</strong> {orderData.orderDate}</p>
+                    <p><strong>Date of visit: </strong> {orderData.ticket.visitDate}</p>
+                    <p>
+                      <DiscountIcon />{" "}
+                      <strong>Discount:</strong>{" "}
+                      {orderData.orderVoucher?.coupon ? orderData.orderVoucher.coupon * 100 + "%" : "You didn't apply discount for this payment"}
+                    </p>
                   </div>
-                  <div style={{ paddingBottom: "40px" }}>
+                  {/* <div style={{ paddingBottom: "40px" }}>
                     <Typography variant="body1">
                       Adult Ticket: {orderData.quantity}{" "}
                     </Typography>
                     <Typography variant="body1">
                       Children Ticket: {orderData.childrenQuantity}
                     </Typography>
-                  </div>
+                  </div> */}
                   <div style={{ marginBottom: "10px" }}>
-                    <Typography variant="body1">
+                    {/* <Typography variant="body1">
                       Subtotal:{" "}
                       {(orderData.quantity * orderData.ticket.ticketPrice +
                         orderData.childrenQuantity * orderData.ticket.childrenTicketPrice).toLocaleString()}{" "}
                       VND
-                    </Typography>
-                    {orderData.orderVoucher && (
-                      <Typography variant="body1">
-                        Voucher Discount: -{orderData.orderVoucher.coupon * 100}
-                        %{" "}
-                      </Typography>
-                    )}
+                    </Typography> */}
+
                   </div>
                   <div
                     style={{
@@ -184,12 +189,25 @@ export default function CompleteOrder() {
                       marginBottom: "40px",
                     }}
                   ></div>
-                  <div style={{ marginBottom: "270px" }}>
-                    <Typography style={{ fontSize: "30px" }}>
+                  <div style={{ marginBottom: "200px" }}>
+                    {/* <Typography style={{ fontSize: "30px" }}>
                       Total Price: {calculateDiscountedTotal().toLocaleString()} VND
-                    </Typography>
+                    </Typography> */}
                     <Typography variant="body1" style={{ color: "darkgreen" }}>
-                      <PaidIcon />
+                      <PaidIcon /> <strong>Total price paid:</strong>{" "}
+                    </Typography>
+                    <Typography variant="h4" textAlign={'end'}>
+                      {orderData.orderVoucher?.coupon
+                        ? `${(
+                          (orderData.quantity * orderData.ticket.ticketPrice +
+                            orderData.childrenQuantity *
+                            orderData.ticket.childrenTicketPrice) *
+                          (1 - orderData.orderVoucher.coupon)
+                        ).toLocaleString()} VND`
+                        : `${(
+                          orderData.quantity * orderData.ticket.ticketPrice +
+                          orderData.childrenQuantity * orderData.ticket.childrenTicketPrice
+                        ).toLocaleString()} VND`}
                     </Typography>
                   </div>
                 </div>
@@ -203,6 +221,6 @@ export default function CompleteOrder() {
           </div>
         )}
       </div>
-    </ThemeProvider>
+    </ThemeProvider >
   );
 }
